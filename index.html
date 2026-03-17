@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Guia introdutório de literatura fantástica para iniciantes, com autores renomados, nomes menos falados e trilhas de leitura.">
+    <title>Bosque da Fantasia</title>
+    <style>
+        :root {
+            --bg: #f8f4eb;
+            --mist: #edf4ee;
+            --card: rgba(255, 252, 246, 0.82);
+            --text: #223127;
+            --muted: #5d6c63;
+            --accent: #69856f;
+            --deep: #456055;
+            --gold: #b49a62;
+            --line: rgba(69, 96, 85, 0.14);
+            --shadow: 0 18px 50px rgba(34, 49, 39, 0.08);
+            --radius: 24px;
+            --max: 1120px;
+        }
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            margin: 0;
+            font-family: "Trebuchet MS", "Gill Sans", sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(180, 154, 98, 0.2), transparent 30%),
+                radial-gradient(circle at 85% 15%, rgba(105, 133, 111, 0.18), transparent 24%),
+                linear-gradient(180deg, #fbf8f2 0%, var(--mist) 55%, #f8f4eb 100%);
+            line-height: 1.6;
+        }
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background: linear-gradient(120deg, rgba(255,255,255,0.2), transparent 22%);
+        }
+        a { color: inherit; text-decoration: none; }
+        button { font: inherit; cursor: pointer; }
+        .container { width: min(var(--max), calc(100% - 2rem)); margin: 0 auto; }
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            backdrop-filter: blur(14px);
+            background: rgba(248, 244, 235, 0.78);
+            border-bottom: 1px solid rgba(69, 96, 85, 0.08);
+        }
+        .topbar-inner, .section-head, .footer-box {
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+        .topbar-inner { padding: 1rem 0; align-items: center; }
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            color: var(--deep);
+            font: 700 1.2rem/1 "Palatino Linotype", "Book Antiqua", Georgia, serif;
+            letter-spacing: 0.04em;
+        }
+        .brand-mark {
+            width: 2.3rem;
+            height: 2.3rem;
+            display: grid;
+            place-items: center;
+            border-radius: 999px;
+            background: linear-gradient(145deg, rgba(105,133,111,0.16), rgba(180,154,98,0.18));
+            border: 1px solid rgba(105,133,111,0.18);
+        }
+        nav { display: flex; flex-wrap: wrap; gap: 1rem; color: var(--muted); }
+        nav a:hover, nav a:focus-visible { color: var(--deep); }
+        .hero {
+            display: grid;
+            grid-template-columns: minmax(0, 1.15fr) minmax(300px, 0.9fr);
+            gap: 2rem;
+            padding: 4.5rem 0 3rem;
+            align-items: center;
+        }
+        .eyebrow, .mini-label {
+            margin: 0 0 0.9rem;
+            color: var(--deep);
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+        h1, h2, h3 {
+            margin: 0;
+            font-family: "Palatino Linotype", "Book Antiqua", Georgia, serif;
+            line-height: 1.08;
+        }
+        h1 { font-size: clamp(2.8rem, 5vw, 4.8rem); max-width: 12ch; }
+        .lead, .section-head p, .hero-card p, .card p, .tip p { color: var(--muted); }
+        .lead { max-width: 58ch; margin: 1.2rem 0 0; font-size: 1.08rem; }
+        .actions, .toggle-row { display: flex; flex-wrap: wrap; gap: 0.85rem; margin-top: 1.7rem; }
+        .button, .tab, .toggle {
+            border: 1px solid transparent;
+            border-radius: 999px;
+            padding: 0.85rem 1.2rem;
+            background: rgba(255, 252, 246, 0.6);
+            transition: transform 180ms ease, border-color 180ms ease;
+        }
+        .button:hover, .tab:hover, .toggle:hover,
+        .button:focus-visible, .tab:focus-visible, .toggle:focus-visible { transform: translateY(-2px); }
+        .button.primary {
+            background: linear-gradient(135deg, var(--deep), var(--accent));
+            color: #f8f6ef;
+            box-shadow: 0 14px 28px rgba(69, 96, 85, 0.18);
+        }
+        .button.secondary, .toggle, .tab { border-color: rgba(69, 96, 85, 0.16); color: var(--deep); }
+        .stats, .guide-grid, .author-grid, .pick-grid {
+            display: grid;
+            gap: 1rem;
+        }
+        .stats { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 1.9rem; }
+        .card, .hero-card, .panel, .shell {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(12px);
+        }
+        .stat, .card, .hero-card, .panel, .tip { padding: 1.4rem; }
+        .stat {
+            border-radius: 18px;
+            background: rgba(255, 252, 246, 0.56);
+            border: 1px solid rgba(69, 96, 85, 0.08);
+        }
+        .stat strong {
+            display: block;
+            color: var(--deep);
+            font: 700 1.35rem/1 "Palatino Linotype", "Book Antiqua", Georgia, serif;
+        }
+        .stat span { color: var(--muted); font-size: 0.92rem; }
+        .hero-card h2 { margin-top: 0.3rem; font-size: 2rem; }
+        .tip {
+            margin-top: 1.3rem;
+            border-radius: 18px;
+            background: rgba(105, 133, 111, 0.08);
+            border: 1px solid rgba(105, 133, 111, 0.12);
+        }
+        section { padding: 1rem 0 2.3rem; }
+        .section-head { margin-bottom: 1.3rem; }
+        .section-head h2 { font-size: clamp(2rem, 3vw, 3rem); max-width: 13ch; }
+        .section-head p { max-width: 56ch; margin: 0.5rem 0 0; }
+        .guide-grid, .pick-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .guide-index {
+            width: 2.2rem;
+            height: 2.2rem;
+            display: inline-grid;
+            place-items: center;
+            border-radius: 999px;
+            background: rgba(105, 133, 111, 0.14);
+            color: var(--deep);
+            font-weight: 700;
+        }
+        .card h3 { margin-top: 0.8rem; font-size: 1.45rem; }
+        .shell {
+            display: grid;
+            grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+            gap: 1rem;
+            padding: 1rem;
+        }
+        .tabs { display: grid; gap: 0.8rem; }
+        .tab, .toggle {
+            width: 100%;
+            text-align: left;
+            background: rgba(255, 252, 246, 0.62);
+        }
+        .tab small, .toggle small { display: block; margin-top: 0.18rem; color: var(--muted); }
+        .tab.is-active, .toggle.is-active {
+            background: linear-gradient(135deg, rgba(105,133,111,0.18), rgba(255,252,246,0.88));
+            border-color: rgba(69, 96, 85, 0.22);
+        }
+        .panel { position: relative; overflow: hidden; }
+        .panel::after {
+            content: "";
+            position: absolute;
+            right: -2rem;
+            bottom: -2rem;
+            width: 8rem;
+            height: 8rem;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(180,154,98,0.18), transparent 70%);
+        }
+        .panel h3 { margin-top: 0.4rem; font-size: clamp(1.8rem, 3vw, 2.5rem); }
+        .panel .summary { margin-top: 0.8rem; font-size: 1.03rem; color: var(--muted); }
+        .meta {
+            margin-top: 1.2rem;
+            display: grid;
+            gap: 0.8rem;
+        }
+        .meta-item {
+            padding: 0.9rem 1rem;
+            border-radius: 16px;
+            background: rgba(105, 133, 111, 0.08);
+        }
+        .meta-item strong {
+            display: block;
+            margin-bottom: 0.25rem;
+            color: var(--deep);
+            font-size: 0.84rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+        .toggle-row { margin-top: 0; }
+        .toggle { max-width: 21rem; }
+        .author-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .author-grid[hidden] { display: none; }
+        .chip {
+            display: inline-flex;
+            padding: 0.32rem 0.7rem;
+            border-radius: 999px;
+            background: rgba(180, 154, 98, 0.12);
+            color: var(--deep);
+            font-size: 0.8rem;
+        }
+        .author-note {
+            margin-top: 1rem;
+            padding-top: 0.95rem;
+            border-top: 1px solid rgba(69, 96, 85, 0.08);
+            font-size: 0.95rem;
+        }
+        .author-note strong { color: var(--deep); }
+        .footer-box {
+            padding: 1.2rem 1.4rem;
+            border-radius: 20px;
+            background: rgba(255, 252, 246, 0.76);
+            border: 1px solid rgba(69, 96, 85, 0.1);
+            box-shadow: var(--shadow);
+            margin-bottom: 3rem;
+        }
+        .mini-label { color: var(--gold); margin-bottom: 0.4rem; }
+        .fade { opacity: 0; transform: translateY(18px); animation: rise 700ms ease forwards; }
+        .delay-1 { animation-delay: 100ms; }
+        .delay-2 { animation-delay: 220ms; }
+        .delay-3 { animation-delay: 320ms; }
+        @keyframes rise { to { opacity: 1; transform: translateY(0); } }
+        @media (max-width: 980px) {
+            .hero, .shell, .guide-grid, .author-grid, .pick-grid { grid-template-columns: 1fr; }
+            .section-head, .footer-box { flex-direction: column; align-items: start; }
+        }
+        @media (max-width: 720px) {
+            .topbar-inner { flex-direction: column; align-items: start; }
+            nav, .actions, .toggle-row { width: 100%; }
+            .hero { padding-top: 3.4rem; }
+            .stats { grid-template-columns: 1fr; }
+            h1 { max-width: 10ch; }
+        }
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <div class="container topbar-inner">
+            <a class="brand" href="#inicio">
+                <span class="brand-mark">*</span>
+                <span>Bosque da Fantasia</span>
+            </a>
+            <nav aria-label="Seções principais">
+                <a href="#entrada">Comece aqui</a>
+                <a href="#trilhas">Trilhas</a>
+                <a href="#autores">Autores</a>
+                <a href="#agora">Para ler já</a>
+            </nav>
+        </div>
+    </header>
+
+    <main id="inicio">
+        <section class="container hero">
+            <div>
+                <p class="eyebrow fade">Fantasia sem labirinto</p>
+                <h1 class="fade delay-1">Um portal leve para quem vai entrar nesse mundo pela primeira vez.</h1>
+                <p class="lead fade delay-2">Nem toda fantasia começa com mapas enormes e guerras intermináveis. Ela também pode ser delicada, luminosa, misteriosa ou acolhedora. Esta página organiza o gênero de forma simples para você entender os tons, conhecer grandes nomes e descobrir vozes menos comentadas.</p>
+                <div class="actions fade delay-3">
+                    <a class="button primary" href="#entrada">Abrir o mapa inicial</a>
+                    <a class="button secondary" href="#autores">Explorar autores</a>
+                </div>
+                <div class="stats fade delay-3">
+                    <div class="stat"><strong>12</strong><span>autores para começar sem se perder</span></div>
+                    <div class="stat"><strong>4</strong><span>trilhas de leitura por atmosfera</span></div>
+                    <div class="stat"><strong>1</strong><span>guia intuitivo para a primeira escolha</span></div>
+                </div>
+            </div>
+            <aside class="hero-card fade delay-2">
+                <p class="eyebrow">Sussurro do bosque</p>
+                <h2>Comece pelo clima da história, não pelo tamanho da saga.</h2>
+                <p>Se você gosta de contos mais poéticos, há um caminho. Se prefere aventura clara e envolvente, há outro. O segredo é escolher a sensação que você quer sentir antes de escolher o autor.</p>
+                <div class="tip">
+                    <p class="mini-label">Primeira chave</p>
+                    <p>Fantasia é menos um bloco único e mais uma floresta de estilos: épica, lírica, acolhedora, política ou mítica.</p>
+                </div>
+            </aside>
+        </section>
+
+        <section id="entrada">
+            <div class="container">
+                <div class="section-head">
+                    <div>
+                        <p class="eyebrow">Comece aqui</p>
+                        <h2>Três passos para não se perder no gênero</h2>
+                    </div>
+                    <p>O universo fantástico fica mais amigável quando você olha primeiro para o tom da narrativa, depois para o ritmo e só então para o tamanho da série.</p>
+                </div>
+                <div class="guide-grid">
+                    <article class="card">
+                        <span class="guide-index">1</span>
+                        <h3>Escolha a atmosfera</h3>
+                        <p>Quer algo contemplativo, aventureiro, político ou mágico de um jeito suave? O clima muda completamente a porta de entrada ideal.</p>
+                    </article>
+                    <article class="card">
+                        <span class="guide-index">2</span>
+                        <h3>Prefira um livro-ponte</h3>
+                        <p>Começar por uma obra que apresenta o autor sem exigir compromisso com uma saga enorme torna a experiência mais leve.</p>
+                    </article>
+                    <article class="card">
+                        <span class="guide-index">3</span>
+                        <h3>Siga o encanto</h3>
+                        <p>Se um livro te ganhou pela linguagem, pela magia ou pelos personagens, use isso como bússola para a próxima leitura.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="trilhas">
+            <div class="container">
+                <div class="section-head">
+                    <div>
+                        <p class="eyebrow">Trilhas guiadas</p>
+                        <h2>Escolha o portal que combina com você</h2>
+                    </div>
+                    <p>Clique em um caminho e a página sugere um tipo de fantasia, um ponto de partida e o que esperar dessa jornada.</p>
+                </div>
+                <div class="shell">
+                    <div class="tabs" role="tablist" aria-label="Trilhas de fantasia">
+                        <button class="tab is-active" data-path="luminosa" role="tab" aria-selected="true">Luminosa e lírica<small>Magia delicada, beleza e sensação de encantamento.</small></button>
+                        <button class="tab" data-path="aventurosa" role="tab" aria-selected="false">Aventureira e clara<small>Ritmo envolvente, boas portas de entrada e jornada nítida.</small></button>
+                        <button class="tab" data-path="politica" role="tab" aria-selected="false">Política e intensa<small>Conflitos, poder, reinos e personagens em tensão.</small></button>
+                        <button class="tab" data-path="mitica" role="tab" aria-selected="false">Mítica e estranha<small>Textos que parecem lenda antiga ou sonho acordado.</small></button>
+                    </div>
+                    <article class="panel" aria-live="polite">
+                        <p class="mini-label">Portal aberto</p>
+                        <h3 id="path-title">Luminosa e lírica</h3>
+                        <p id="path-description" class="summary">Ideal para quem quer sentir maravilhamento antes de mergulhar em grandes conflitos. Aqui a fantasia aparece como algo antigo, belo e delicado, quase como uma música distante entre árvores.</p>
+                        <div class="meta">
+                            <div class="meta-item"><strong>Comece por</strong><span id="path-book">Um Mago de Terramar, de Ursula K. Le Guin</span></div>
+                            <div class="meta-item"><strong>Você vai encontrar</strong><span id="path-vibe">Linguagem elegante, crescimento interior e magia com peso simbólico.</span></div>
+                            <div class="meta-item"><strong>Depois avance para</strong><span id="path-next">Patricia A. McKillip ou Peter S. Beagle, se quiser manter o encanto rarefeito.</span></div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="autores">
+            <div class="container">
+                <div class="section-head">
+                    <div>
+                        <p class="eyebrow">Autores em destaque</p>
+                        <h2>Grandes nomes e descobertas menos faladas</h2>
+                    </div>
+                    <div class="toggle-row" role="tablist" aria-label="Categorias de autores">
+                        <button class="toggle is-active" data-group="renomados" role="tab" aria-selected="true">Renomados<small>Para entender as bases do gênero.</small></button>
+                        <button class="toggle" data-group="menos-falados" role="tab" aria-selected="false">Menos falados<small>Para encontrar vozes queridas por leitores experientes.</small></button>
+                    </div>
+                </div>
+                <div class="author-grid" data-group-panel="renomados">
+                    <article class="card"><span class="chip">Fundador do imaginário moderno</span><h3>J.R.R. Tolkien</h3><p>O nome mais emblemático da fantasia épica, com mitologia, povos e um senso de mundo vasto que influenciou gerações.</p><p class="author-note"><strong>Boa porta:</strong> <em>O Hobbit</em>, por ser mais leve e aventureiro.</p></article>
+                    <article class="card"><span class="chip">Fantasia com profundidade</span><h3>Ursula K. Le Guin</h3><p>Une magia, identidade e amadurecimento em narrativas que parecem simples na superfície, mas ficam ecoando.</p><p class="author-note"><strong>Boa porta:</strong> <em>Um Mago de Terramar</em>.</p></article>
+                    <article class="card"><span class="chip">Encanto direto e simbólico</span><h3>C.S. Lewis</h3><p>Funciona muito bem para quem deseja um começo acolhedor e cheio de maravilhamento.</p><p class="author-note"><strong>Boa porta:</strong> <em>O Leão, a Feiticeira e o Guarda-Roupa</em>.</p></article>
+                    <article class="card"><span class="chip">Humor e inteligência</span><h3>Terry Pratchett</h3><p>Mostra que fantasia também pode ser espirituosa, afiada e profundamente humana.</p><p class="author-note"><strong>Boa porta:</strong> <em>Pequenos Deuses</em>.</p></article>
+                    <article class="card"><span class="chip">Intriga e tensão</span><h3>George R.R. Martin</h3><p>Leva a fantasia para terrenos políticos, cruéis e intensos, onde alianças importam tanto quanto a magia.</p><p class="author-note"><strong>Boa porta:</strong> <em>A Guerra dos Tronos</em>.</p></article>
+                    <article class="card"><span class="chip">Ritmo moderno</span><h3>Brandon Sanderson</h3><p>Conhecido por sistemas de magia claros e narrativa fluida para leitores iniciantes.</p><p class="author-note"><strong>Boa porta:</strong> <em>Mistborn: O Império Final</em>.</p></article>
+                </div>
+                <div class="author-grid" data-group-panel="menos-falados" hidden>
+                    <article class="card"><span class="chip">Beleza rarefeita</span><h3>Patricia A. McKillip</h3><p>Muito amada por leitores de fantasia lírica. Sua escrita parece névoa dourada e cheia de imagens memoráveis.</p><p class="author-note"><strong>Boa porta:</strong> <em>The Forgotten Beasts of Eld</em>.</p></article>
+                    <article class="card"><span class="chip">Melancolia luminosa</span><h3>Peter S. Beagle</h3><p>Trabalha o maravilhoso com um toque doce e triste ao mesmo tempo, sem perder a delicadeza.</p><p class="author-note"><strong>Boa porta:</strong> <em>The Last Unicorn</em>.</p></article>
+                    <article class="card"><span class="chip">Voz singular</span><h3>Sofia Samatar</h3><p>Escreve fantasia introspectiva, com foco em memória, linguagem e estranhamento.</p><p class="author-note"><strong>Boa porta:</strong> <em>A Stranger in Olondria</em>.</p></article>
+                    <article class="card"><span class="chip">Raiz mítica</span><h3>Lord Dunsany</h3><p>Um dos nomes antigos que ajudaram a formar o tom onírico da fantasia moderna.</p><p class="author-note"><strong>Boa porta:</strong> <em>The King of Elfland's Daughter</em>.</p></article>
+                    <article class="card"><span class="chip">Aventura delicada</span><h3>Robin McKinley</h3><p>Conduz jornadas com sensibilidade e imaginação, ótima para quem quer fantasia acolhedora.</p><p class="author-note"><strong>Boa porta:</strong> <em>The Blue Sword</em>.</p></article>
+                    <article class="card"><span class="chip">Estranheza charmosa</span><h3>T. Kingfisher</h3><p>Mistura humor sutil, aventura e um toque esquisito em livros que não intimidam quem está começando.</p><p class="author-note"><strong>Boa porta:</strong> <em>Nettle &amp; Bone</em>.</p></article>
+                </div>
+            </div>
+        </section>
+
+        <section id="agora">
+            <div class="container">
+                <div class="section-head">
+                    <div>
+                        <p class="eyebrow">Para ler já</p>
+                        <h2>Se quiser sair desta página com um primeiro livro</h2>
+                    </div>
+                    <p>Escolha pela sensação que você quer viver. Assim a fantasia deixa de parecer um território fechado e vira um convite pessoal.</p>
+                </div>
+                <div class="pick-grid">
+                    <article class="card"><h3>Para encanto clássico</h3><p><strong>O Hobbit</strong> abre a porta para a aventura fantástica sem exigir um mergulho imediato em estruturas mais densas.</p></article>
+                    <article class="card"><h3>Para magia serena</h3><p><strong>Um Mago de Terramar</strong> entrega profundidade, beleza e uma leitura mais contemplativa logo de início.</p></article>
+                    <article class="card"><h3>Para algo fora do óbvio</h3><p><strong>The Last Unicorn</strong> ou <strong>Nettle &amp; Bone</strong> mostram que a fantasia pode ser delicada, estranha e muito acolhedora.</p></article>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="container">
+        <div class="footer-box">
+            <div>
+                <p class="mini-label">Fim do primeiro passeio</p>
+                <p class="lead">Que sua entrada na fantasia comece com curiosidade, não com excesso. O bosque fica mais bonito quando a trilha parece sua.</p>
+            </div>
+            <a class="button secondary" href="#inicio">Voltar ao topo</a>
+        </div>
+    </footer>
+
+    <script>
+        const paths = {
+            luminosa: {
+                title: "Luminosa e lírica",
+                description: "Ideal para quem quer sentir maravilhamento antes de mergulhar em grandes conflitos. Aqui a fantasia aparece como algo antigo, belo e delicado, quase como uma música distante entre árvores.",
+                book: "Um Mago de Terramar, de Ursula K. Le Guin",
+                vibe: "Linguagem elegante, crescimento interior e magia com peso simbólico.",
+                next: "Patricia A. McKillip ou Peter S. Beagle, se quiser manter o encanto rarefeito."
+            },
+            aventurosa: {
+                title: "Aventureira e clara",
+                description: "Boa para quem quer uma história que anda bem, apresenta o mundo aos poucos e cria sensação de jornada desde as primeiras páginas.",
+                book: "O Hobbit, de J.R.R. Tolkien",
+                vibe: "Exploração, humor leve, perigo na medida e sensação de descoberta.",
+                next: "C.S. Lewis ou Robin McKinley, se você quiser continuar por caminhos acolhedores."
+            },
+            politica: {
+                title: "Política e intensa",
+                description: "Perfeita para leitores que gostam de tensão entre reinos, personagens moralmente complexos e um mundo onde decisões importam mais do que profecias.",
+                book: "A Guerra dos Tronos, de George R.R. Martin",
+                vibe: "Intriga, alianças frágeis, reviravoltas e uma fantasia mais áspera.",
+                next: "Brandon Sanderson, se quiser manter o senso de escala com uma estrutura mais direta."
+            },
+            mitica: {
+                title: "Mítica e estranha",
+                description: "Funciona para quem procura narrativas que parecem lenda, sonho ou conto antigo. O foco aqui é atmosfera, simbolismo e um toque de assombro bonito.",
+                book: "The King of Elfland's Daughter, de Lord Dunsany",
+                vibe: "Clima ancestral, imagens marcantes e sensação de estar ouvindo um mito.",
+                next: "Sofia Samatar ou Patricia A. McKillip, se quiser um segundo passo ainda mais singular."
+            }
+        };
+        const tabs = document.querySelectorAll(".tab");
+        const title = document.getElementById("path-title");
+        const description = document.getElementById("path-description");
+        const book = document.getElementById("path-book");
+        const vibe = document.getElementById("path-vibe");
+        const next = document.getElementById("path-next");
+        tabs.forEach((tab) => {
+            tab.addEventListener("click", () => {
+                const path = paths[tab.dataset.path];
+                tabs.forEach((item) => {
+                    item.classList.remove("is-active");
+                    item.setAttribute("aria-selected", "false");
+                });
+                tab.classList.add("is-active");
+                tab.setAttribute("aria-selected", "true");
+                title.textContent = path.title;
+                description.textContent = path.description;
+                book.textContent = path.book;
+                vibe.textContent = path.vibe;
+                next.textContent = path.next;
+            });
+        });
+        const toggles = document.querySelectorAll(".toggle");
+        const panels = document.querySelectorAll("[data-group-panel]");
+        toggles.forEach((toggle) => {
+            toggle.addEventListener("click", () => {
+                toggles.forEach((item) => {
+                    item.classList.remove("is-active");
+                    item.setAttribute("aria-selected", "false");
+                });
+                panels.forEach((panel) => {
+                    panel.hidden = panel.dataset.groupPanel !== toggle.dataset.group;
+                });
+                toggle.classList.add("is-active");
+                toggle.setAttribute("aria-selected", "true");
+            });
+        });
+    </script>
+</body>
+</html>
