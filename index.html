@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Guia introdutório de literatura fantástica para iniciantes, com autores renomados, nomes menos falados e trilhas de leitura.">
+    <meta name="theme-color" content="#f8f4eb">
+    <meta property="og:title" content="Bosque da Fantasia">
+    <meta property="og:description" content="Um guia leve e visual para quem quer começar na literatura fantástica.">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
     <title>Bosque da Fantasia</title>
     <style>
         :root {
@@ -31,6 +36,7 @@
                 radial-gradient(circle at 85% 15%, rgba(105, 133, 111, 0.18), transparent 24%),
                 linear-gradient(180deg, #fbf8f2 0%, var(--mist) 55%, #f8f4eb 100%);
             line-height: 1.6;
+            overflow-x: hidden;
         }
         body::before {
             content: "";
@@ -140,6 +146,30 @@
         }
         .stat span { color: var(--muted); font-size: 0.92rem; }
         .hero-card h2 { margin-top: 0.3rem; font-size: 2rem; }
+        .hero-figure {
+            margin: 0 0 1.15rem;
+            overflow: hidden;
+            border-radius: 20px;
+            border: 1px solid rgba(69, 96, 85, 0.1);
+            background: rgba(255, 252, 246, 0.68);
+        }
+        .hero-figure img {
+            display: block;
+            width: 100%;
+            aspect-ratio: 5 / 4;
+            object-fit: cover;
+        }
+        .hero-caption,
+        .source-list li,
+        .visual-card p,
+        .visual-card li {
+            color: var(--muted);
+        }
+        .hero-caption {
+            margin: 0;
+            padding: 0.7rem 0.95rem 0.9rem;
+            font-size: 0.84rem;
+        }
         .tip {
             margin-top: 1.3rem;
             border-radius: 18px;
@@ -214,6 +244,164 @@
         .toggle { max-width: 21rem; }
         .author-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
         .author-grid[hidden] { display: none; }
+        .visual-grid,
+        .source-grid {
+            display: grid;
+            gap: 1rem;
+        }
+        .visual-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .visual-card {
+            display: grid;
+            grid-template-columns: minmax(150px, 210px) minmax(0, 1fr);
+            gap: 1rem;
+            align-items: start;
+        }
+        .visual-media {
+            overflow: hidden;
+            border-radius: 20px;
+            border: 1px solid rgba(69, 96, 85, 0.12);
+            background: rgba(255, 252, 246, 0.72);
+        }
+        .visual-media img {
+            display: block;
+            width: 100%;
+            aspect-ratio: 4 / 5;
+            object-fit: cover;
+            object-position: center top;
+        }
+        .visual-body {
+            display: grid;
+            gap: 0.8rem;
+            align-content: start;
+        }
+        .visual-body h3 {
+            font-size: 1.45rem;
+            margin: 0;
+        }
+        .visual-list {
+            margin: 0;
+            padding-left: 1.1rem;
+        }
+        .visual-list li + li {
+            margin-top: 0.35rem;
+        }
+        .visual-link {
+            color: var(--deep);
+            text-decoration: underline;
+            text-decoration-color: rgba(69, 96, 85, 0.28);
+            text-underline-offset: 0.18rem;
+        }
+        .source-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .source-list {
+            margin: 0;
+            padding-left: 1.1rem;
+        }
+        .source-list li + li {
+            margin-top: 0.55rem;
+        }
+        .audio-dock {
+            position: fixed;
+            right: 1rem;
+            bottom: 1rem;
+            z-index: 30;
+            width: min(18.5rem, calc(100% - 2rem));
+            padding: 0.85rem 0.9rem;
+            border: 1px solid rgba(69, 96, 85, 0.14);
+            border-radius: 20px;
+            background: rgba(255, 252, 246, 0.84);
+            box-shadow: 0 16px 38px rgba(34, 49, 39, 0.12);
+            backdrop-filter: blur(18px);
+            transition: width 180ms ease, padding 180ms ease, transform 180ms ease;
+        }
+        .audio-dock.is-collapsed {
+            width: auto;
+            min-width: 0;
+            padding: 0.42rem;
+            border-radius: 999px;
+        }
+        .audio-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+        }
+        .audio-head-text {
+            min-width: 0;
+        }
+        .audio-head h3 {
+            font-size: 0.98rem;
+            margin: 0;
+        }
+        .audio-panel-toggle {
+            min-height: 2.2rem;
+            padding: 0.45rem 0.8rem;
+            white-space: nowrap;
+        }
+        .audio-head p,
+        .audio-meta,
+        .audio-status {
+            margin: 0;
+            color: var(--muted);
+        }
+        .audio-meta {
+            margin-top: 0.25rem;
+            font-size: 0.8rem;
+        }
+        .audio-controls {
+            display: grid;
+            gap: 0.55rem;
+            margin-top: 0.75rem;
+        }
+        .audio-dock.is-collapsed .audio-head {
+            justify-content: center;
+        }
+        .audio-dock.is-collapsed .audio-head-text,
+        .audio-dock.is-collapsed .audio-controls {
+            display: none;
+        }
+        .audio-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.7rem;
+        }
+        .audio-action {
+            width: 100%;
+            justify-content: center;
+        }
+        .audio-action:disabled {
+            opacity: 0.55;
+            cursor: default;
+            transform: none;
+        }
+        .audio-select,
+        .audio-slider {
+            display: grid;
+            gap: 0.3rem;
+        }
+        .audio-slider label,
+        .audio-select label {
+            color: var(--deep);
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+        }
+        .audio-select select {
+            width: 100%;
+            padding: 0.66rem 0.8rem;
+            border-radius: 14px;
+            border: 1px solid rgba(69, 96, 85, 0.14);
+            background: rgba(255, 252, 246, 0.88);
+            color: var(--text);
+            font: inherit;
+        }
+        .audio-slider input[type="range"] {
+            width: 100%;
+            accent-color: var(--deep);
+        }
+        .audio-status {
+            font-size: 0.78rem;
+            min-height: 1.3rem;
+        }
         .chip {
             display: inline-flex;
             padding: 0.32rem 0.7rem;
@@ -237,6 +425,26 @@
             box-shadow: var(--shadow);
             margin-bottom: 3rem;
         }
+        .footer-disclosure {
+            width: 100%;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(69, 96, 85, 0.08);
+        }
+        .footer-disclosure summary {
+            cursor: pointer;
+            color: var(--deep);
+            font-weight: 700;
+            list-style: none;
+        }
+        .footer-disclosure summary::-webkit-details-marker {
+            display: none;
+        }
+        .footer-disclosure-body {
+            margin-top: 0.85rem;
+            display: grid;
+            gap: 1rem;
+        }
         .mini-label { color: var(--gold); margin-bottom: 0.4rem; }
         .fade { opacity: 0; transform: translateY(18px); animation: rise 700ms ease forwards; }
         .delay-1 { animation-delay: 100ms; }
@@ -244,15 +452,38 @@
         .delay-3 { animation-delay: 320ms; }
         @keyframes rise { to { opacity: 1; transform: translateY(0); } }
         @media (max-width: 980px) {
-            .hero, .shell, .guide-grid, .author-grid, .pick-grid { grid-template-columns: 1fr; }
+            .hero, .shell, .guide-grid, .author-grid, .pick-grid, .visual-grid, .source-grid { grid-template-columns: 1fr; }
+            .visual-card { grid-template-columns: 1fr; }
             .section-head, .footer-box { flex-direction: column; align-items: start; }
         }
         @media (max-width: 720px) {
             .topbar-inner { flex-direction: column; align-items: start; }
             nav, .actions, .toggle-row { width: 100%; }
+            nav {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                padding-bottom: 0.2rem;
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+            nav::-webkit-scrollbar { display: none; }
             .hero { padding-top: 3.4rem; }
             .stats { grid-template-columns: 1fr; }
             h1 { max-width: 10ch; }
+            .button, .toggle { width: 100%; justify-content: center; }
+            .tab { width: 100%; }
+            .hero-card, .card, .panel, .footer-box { padding: 1.1rem; }
+            .visual-media img { aspect-ratio: 1 / 1.18; }
+            .hero-caption { font-size: 0.82rem; }
+            .lead { font-size: 1rem; }
+            section { padding: 0.6rem 0 2rem; }
+            .audio-dock {
+                left: 1rem;
+                right: 1rem;
+                width: auto;
+                bottom: 0.8rem;
+            }
+            .audio-buttons { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -268,6 +499,7 @@
                 <a href="#trilhas">Trilhas</a>
                 <a href="#autores">Autores</a>
                 <a href="#agora">Para ler já</a>
+                <a href="#capas">Estante visual</a>
             </nav>
         </div>
     </header>
@@ -289,6 +521,17 @@
                 </div>
             </div>
             <aside class="hero-card fade delay-2">
+                <figure class="hero-figure">
+                    <img
+                        src="https://commons.wikimedia.org/wiki/Special:FilePath/Rackham%20elves.jpg?width=1200"
+                        alt="Ilustração em tons suaves de criaturas élficas em meio a uma floresta."
+                        loading="eager"
+                        decoding="async"
+                    >
+                    <figcaption class="hero-caption">
+                        Uma abertura visual para entrar no bosque com calma.
+                    </figcaption>
+                </figure>
                 <p class="eyebrow">Sussurro do bosque</p>
                 <h2>Comece pelo clima da história, não pelo tamanho da saga.</h2>
                 <p>Se você gosta de contos mais poéticos, há um caminho. Se prefere aventura clara e envolvente, há outro. O segredo é escolher a sensação que você quer sentir antes de escolher o autor.</p>
@@ -379,12 +622,12 @@
                     <article class="card"><span class="chip">Ritmo moderno</span><h3>Brandon Sanderson</h3><p>Conhecido por sistemas de magia claros e narrativa fluida para leitores iniciantes.</p><p class="author-note"><strong>Boa porta:</strong> <em>Mistborn: O Império Final</em>.</p></article>
                 </div>
                 <div class="author-grid" data-group-panel="menos-falados" hidden>
-                    <article class="card"><span class="chip">Beleza rarefeita</span><h3>Patricia A. McKillip</h3><p>Muito amada por leitores de fantasia lírica. Sua escrita parece névoa dourada e cheia de imagens memoráveis.</p><p class="author-note"><strong>Boa porta:</strong> <em>The Forgotten Beasts of Eld</em>.</p></article>
-                    <article class="card"><span class="chip">Melancolia luminosa</span><h3>Peter S. Beagle</h3><p>Trabalha o maravilhoso com um toque doce e triste ao mesmo tempo, sem perder a delicadeza.</p><p class="author-note"><strong>Boa porta:</strong> <em>The Last Unicorn</em>.</p></article>
-                    <article class="card"><span class="chip">Voz singular</span><h3>Sofia Samatar</h3><p>Escreve fantasia introspectiva, com foco em memória, linguagem e estranhamento.</p><p class="author-note"><strong>Boa porta:</strong> <em>A Stranger in Olondria</em>.</p></article>
-                    <article class="card"><span class="chip">Raiz mítica</span><h3>Lord Dunsany</h3><p>Um dos nomes antigos que ajudaram a formar o tom onírico da fantasia moderna.</p><p class="author-note"><strong>Boa porta:</strong> <em>The King of Elfland's Daughter</em>.</p></article>
-                    <article class="card"><span class="chip">Aventura delicada</span><h3>Robin McKinley</h3><p>Conduz jornadas com sensibilidade e imaginação, ótima para quem quer fantasia acolhedora.</p><p class="author-note"><strong>Boa porta:</strong> <em>The Blue Sword</em>.</p></article>
-                    <article class="card"><span class="chip">Estranheza charmosa</span><h3>T. Kingfisher</h3><p>Mistura humor sutil, aventura e um toque esquisito em livros que não intimidam quem está começando.</p><p class="author-note"><strong>Boa porta:</strong> <em>Nettle &amp; Bone</em>.</p></article>
+                    <article class="card"><span class="chip">Beleza rarefeita</span><h3>Patricia A. McKillip</h3><p>Muito amada por leitores de fantasia lírica. Sua escrita parece névoa dourada e cheia de imagens memoráveis.</p><p class="author-note"><strong>Boa porta:</strong> <em>As Feras Esquecidas de Eld</em>.</p></article>
+                    <article class="card"><span class="chip">Melancolia luminosa</span><h3>Peter S. Beagle</h3><p>Trabalha o maravilhoso com um toque doce e triste ao mesmo tempo, sem perder a delicadeza.</p><p class="author-note"><strong>Boa porta:</strong> <em>O Último Unicórnio</em>.</p></article>
+                    <article class="card"><span class="chip">Voz singular</span><h3>Sofia Samatar</h3><p>Escreve fantasia introspectiva, com foco em memória, linguagem e estranhamento.</p><p class="author-note"><strong>Boa porta:</strong> <em>Um Estranho em Olondria</em>.</p></article>
+                    <article class="card"><span class="chip">Raiz mítica</span><h3>Lord Dunsany</h3><p>Um dos nomes antigos que ajudaram a formar o tom onírico da fantasia moderna.</p><p class="author-note"><strong>Boa porta:</strong> <em>A Filha do Rei de Elfland</em>.</p></article>
+                    <article class="card"><span class="chip">Aventura delicada</span><h3>Robin McKinley</h3><p>Conduz jornadas com sensibilidade e imaginação, ótima para quem quer fantasia acolhedora.</p><p class="author-note"><strong>Boa porta:</strong> <em>A Espada Azul</em>.</p></article>
+                    <article class="card"><span class="chip">Estranheza charmosa</span><h3>T. Kingfisher</h3><p>Mistura humor sutil, aventura e um toque esquisito em livros que não intimidam quem está começando.</p><p class="author-note"><strong>Boa porta:</strong> <em>Urtiga e Osso</em>.</p></article>
                 </div>
             </div>
         </section>
@@ -401,7 +644,97 @@
                 <div class="pick-grid">
                     <article class="card"><h3>Para encanto clássico</h3><p><strong>O Hobbit</strong> abre a porta para a aventura fantástica sem exigir um mergulho imediato em estruturas mais densas.</p></article>
                     <article class="card"><h3>Para magia serena</h3><p><strong>Um Mago de Terramar</strong> entrega profundidade, beleza e uma leitura mais contemplativa logo de início.</p></article>
-                    <article class="card"><h3>Para algo fora do óbvio</h3><p><strong>The Last Unicorn</strong> ou <strong>Nettle &amp; Bone</strong> mostram que a fantasia pode ser delicada, estranha e muito acolhedora.</p></article>
+                    <article class="card"><h3>Para algo fora do óbvio</h3><p><strong>O Último Unicórnio</strong> ou <strong>Urtiga e Osso</strong> mostram que a fantasia pode ser delicada, estranha e muito acolhedora.</p></article>
+                </div>
+            </div>
+        </section>
+
+        <section id="capas">
+            <div class="container">
+                <div class="section-head">
+                    <div>
+                        <p class="eyebrow">Estante visual</p>
+                        <h2>Recomendações com presença de imagem e clima de floresta antiga</h2>
+                    </div>
+                    <p>Esta seleção reforça a atmosfera do site com edições e ilustrações que carregam um ar de lenda, viagem e encantamento.</p>
+                </div>
+                <div class="visual-grid">
+                    <article class="card visual-card">
+                        <figure class="visual-media">
+                            <img
+                                src="https://commons.wikimedia.org/wiki/Special:FilePath/The%20Hunting%20of%20the%20Unicorn%20by%20Samuel%20Simes%2C%20Frontispiece%20to%20The%20King%20of%20Elfland%27s%20Daughter.png?width=900"
+                                alt="Frontispício ilustrado de A Filha do Rei de Elfland."
+                                loading="lazy"
+                                decoding="async"
+                            >
+                        </figure>
+                        <div class="visual-body">
+                            <span class="chip">Clima mais élfico</span>
+                            <h3>A Filha do Rei de Elfland</h3>
+                            <p>Uma fantasia que parece ter sido recolhida de uma canção antiga. Excelente para quem quer atmosfera, beleza e sensação de lenda.</p>
+                            <ul class="visual-list">
+                                <li>Leitura ideal para quem busca estranheza delicada.</li>
+                                <li>Ótimo elo entre fantasia clássica e o tom feérico que você pediu.</li>
+                            </ul>
+                        </div>
+                    </article>
+                    <article class="card visual-card">
+                        <figure class="visual-media">
+                            <img
+                                src="https://commons.wikimedia.org/wiki/Special:FilePath/Phantastes%20Title%20Page%201894.jpg?width=900"
+                                alt="Página de rosto ornamentada de Fantastes."
+                                loading="lazy"
+                                decoding="async"
+                            >
+                        </figure>
+                        <div class="visual-body">
+                            <span class="chip">Fantasia feérica</span>
+                            <h3>Fantastes</h3>
+                            <p>George MacDonald é uma raiz importante da fantasia moderna. O livro tem uma energia sonhadora e simbólica, muito boa para leitores curiosos.</p>
+                            <ul class="visual-list">
+                                <li>Mais lírico do que aventureiro.</li>
+                                <li>Boa escolha para quem quer uma experiência fantástica menos óbvia.</li>
+                            </ul>
+                        </div>
+                    </article>
+                    <article class="card visual-card">
+                        <figure class="visual-media">
+                            <img
+                                src="https://commons.wikimedia.org/wiki/Special:FilePath/Princess%20and%20the%20Goblin.jpg?width=900"
+                                alt="Capa histórica de A Princesa e o Goblin."
+                                loading="lazy"
+                                decoding="async"
+                            >
+                        </figure>
+                        <div class="visual-body">
+                            <span class="chip">Porta acolhedora</span>
+                            <h3>A Princesa e o Goblin</h3>
+                            <p>Um caminho macio para quem quer fantasia acessível, com aventura, brilho clássico e um toque encantado sem ser pesado.</p>
+                            <ul class="visual-list">
+                                <li>Funciona muito bem no mobile porque a leitura costuma fluir rápido.</li>
+                                <li>Recomendação segura para quem ainda está testando gosto dentro do gênero.</li>
+                            </ul>
+                        </div>
+                    </article>
+                    <article class="card visual-card">
+                        <figure class="visual-media">
+                            <img
+                                src="https://commons.wikimedia.org/wiki/Special:FilePath/The%20Well%20at%20the%20World%27s%20End%2C%20design%20by%20William%20Morris%2C%20Hammersmith%2C%20Kelmscott%20Press%2C%201896%20-%20National%20Gallery%20of%20Art%2C%20Washington%20-%20DSC09794.JPG?width=900"
+                                alt="Foto de uma edição histórica de O Poço no Fim do Mundo."
+                                loading="lazy"
+                                decoding="async"
+                            >
+                        </figure>
+                        <div class="visual-body">
+                            <span class="chip">Objeto-livro</span>
+                            <h3>O Poço no Fim do Mundo</h3>
+                            <p>Além do texto, esta recomendação entra como peça visual: um livro antigo que carrega muito da estética de bosque, jornada e encantamento.</p>
+                            <ul class="visual-list">
+                                <li>Excelente para ampliar o repertório visual da página.</li>
+                                <li>Ajuda a dar presença de estante com uma aparência mais artesanal e antiga.</li>
+                            </ul>
+                        </div>
+                    </article>
                 </div>
             </div>
         </section>
@@ -414,8 +747,79 @@
                 <p class="lead">Que sua entrada na fantasia comece com curiosidade, não com excesso. O bosque fica mais bonito quando a trilha parece sua.</p>
             </div>
             <a class="button secondary" href="#inicio">Voltar ao topo</a>
+            <details class="footer-disclosure" id="creditos">
+                <summary>Ver créditos de imagens e trilhas</summary>
+                <div class="footer-disclosure-body">
+                    <div class="source-grid">
+                        <article class="card">
+                            <h3>Imagens do site</h3>
+                            <ul class="source-list">
+                                <li><strong>Elfos de Rackham</strong>:
+                                    <a class="visual-link" href="https://commons.wikimedia.org/wiki/File:Rackham_elves.jpg" target="_blank" rel="noreferrer noopener">Wikimedia Commons</a>.
+                                </li>
+                                <li><strong>A Filha do Rei de Elfland</strong>:
+                                    <a class="visual-link" href="https://commons.wikimedia.org/wiki/File:The_Hunting_of_the_Unicorn_by_Samuel_Simes,_Frontispiece_to_The_King_of_Elfland%27s_Daughter.png" target="_blank" rel="noreferrer noopener">fonte</a>.
+                                </li>
+                                <li><strong>Página de Rosto de Fantastes, 1894</strong>:
+                                    <a class="visual-link" href="https://commons.wikimedia.org/wiki/File:Phantastes_Title_Page_1894.jpg" target="_blank" rel="noreferrer noopener">fonte</a>.
+                                </li>
+                                <li><strong>A Princesa e o Goblin</strong>:
+                                    <a class="visual-link" href="https://commons.wikimedia.org/wiki/File:Princess_and_the_Goblin.jpg" target="_blank" rel="noreferrer noopener">fonte</a>.
+                                </li>
+                                <li><strong>O Poço no Fim do Mundo</strong>:
+                                    <a class="visual-link" href="https://commons.wikimedia.org/wiki/File:The_Well_at_the_World%27s_End%2C_design_by_William_Morris%2C_Hammersmith%2C_Kelmscott_Press%2C_1896_-_National_Gallery_of_Art%2C_Washington_-_DSC09794.JPG" target="_blank" rel="noreferrer noopener">fonte</a>.
+                                </li>
+                            </ul>
+                        </article>
+                        <article class="card">
+                            <h3>Trilhas disponíveis</h3>
+                            <ul class="source-list">
+                                <li><strong>Serenata do Bosque</strong>:
+                                    <a class="visual-link" href="https://commons.wikimedia.org/wiki/File:Gramophone-11491-248010.ogg" target="_blank" rel="noreferrer noopener">fonte</a>.
+                                </li>
+                                <li><strong>Violino ao Longe</strong>:
+                                    <a class="visual-link" href="https://commons.wikimedia.org/wiki/File:Street_musician_violin.ogg" target="_blank" rel="noreferrer noopener">fonte</a>.
+                                </li>
+                                <li><strong>Névoa de Câmara</strong>:
+                                    <a class="visual-link" href="https://commons.wikimedia.org/wiki/File:Victor-16029a-b6222.ogg" target="_blank" rel="noreferrer noopener">fonte</a>.
+                                </li>
+                            </ul>
+                        </article>
+                    </div>
+                </div>
+            </details>
         </div>
     </footer>
+
+    <div class="audio-dock is-collapsed" id="audio-dock" aria-label="Controle da trilha sonora ambiente">
+        <div class="audio-head">
+            <div class="audio-head-text">
+                <h3>Trilha do bosque</h3>
+                <p id="audio-meta" class="audio-meta">Escolha uma trilha e deixe o ambiente correr em segundo plano.</p>
+            </div>
+            <button id="audio-panel-toggle" class="button secondary audio-panel-toggle" type="button" aria-expanded="false" aria-controls="audio-controls">Som</button>
+        </div>
+        <div class="audio-controls" id="audio-controls">
+            <div class="audio-select">
+                <label for="audio-track">Trilha sonora</label>
+                <select id="audio-track">
+                    <option value="serenata">Serenata do Bosque</option>
+                    <option value="violino">Violino ao Longe</option>
+                    <option value="nevoa">Névoa de Câmara</option>
+                </select>
+            </div>
+            <div class="audio-buttons">
+                <button id="audio-play" class="button secondary audio-action" type="button">Tocar</button>
+                <button id="audio-pause" class="button secondary audio-action" type="button">Pausar</button>
+            </div>
+            <div class="audio-slider">
+                <label for="audio-volume">Volume ambiente</label>
+                <input id="audio-volume" type="range" min="0" max="100" step="1" value="12">
+            </div>
+            <p id="audio-status" class="audio-status">A trilha começa quando você tocar no botão de tocar.</p>
+        </div>
+        <audio id="ambient-audio" loop preload="metadata" crossorigin="anonymous"></audio>
+    </div>
 
     <script>
         const paths = {
@@ -443,7 +847,7 @@
             mitica: {
                 title: "Mítica e estranha",
                 description: "Funciona para quem procura narrativas que parecem lenda, sonho ou conto antigo. O foco aqui é atmosfera, simbolismo e um toque de assombro bonito.",
-                book: "The King of Elfland's Daughter, de Lord Dunsany",
+                book: "A Filha do Rei de Elfland, de Lord Dunsany",
                 vibe: "Clima ancestral, imagens marcantes e sensação de estar ouvindo um mito.",
                 next: "Sofia Samatar ou Patricia A. McKillip, se quiser um segundo passo ainda mais singular."
             }
@@ -485,6 +889,148 @@
                 toggle.setAttribute("aria-selected", "true");
             });
         });
+
+        const ambientAudio = document.getElementById("ambient-audio");
+        const audioPlay = document.getElementById("audio-play");
+        const audioPause = document.getElementById("audio-pause");
+        const audioTrack = document.getElementById("audio-track");
+        const audioMeta = document.getElementById("audio-meta");
+        const audioVolume = document.getElementById("audio-volume");
+        const audioStatus = document.getElementById("audio-status");
+        const AUDIO_ENABLED_KEY = "bosque-da-fantasia-audio-enabled";
+        const AUDIO_VOLUME_KEY = "bosque-da-fantasia-audio-volume";
+        const AUDIO_TRACK_KEY = "bosque-da-fantasia-audio-track";
+        const defaultVolume = 0.12;
+        const tracks = {
+            serenata: {
+                label: "Serenata do Bosque",
+                description: "Violino, flauta e harpa em uma camada macia e clássica.",
+                sources: [
+                    { src: "https://upload.wikimedia.org/wikipedia/commons/transcoded/2/29/Gramophone-11491-248010.ogg/Gramophone-11491-248010.ogg.mp3", type: "audio/mpeg" },
+                    { src: "https://upload.wikimedia.org/wikipedia/commons/2/29/Gramophone-11491-248010.ogg", type: "audio/ogg" }
+                ]
+            },
+            violino: {
+                label: "Violino ao Longe",
+                description: "Um violino simples, distante e humano, quase como alguém tocando fora da trilha.",
+                sources: [
+                    { src: "https://upload.wikimedia.org/wikipedia/commons/transcoded/9/94/Street_musician_violin.ogg/Street_musician_violin.ogg.mp3", type: "audio/mpeg" },
+                    { src: "https://upload.wikimedia.org/wikipedia/commons/9/94/Street_musician_violin.ogg", type: "audio/ogg" }
+                ]
+            },
+            nevoa: {
+                label: "Névoa de Câmara",
+                description: "Instrumental antigo com sopros suaves para um clima de salão encantado.",
+                sources: [
+                    { src: "https://upload.wikimedia.org/wikipedia/commons/transcoded/2/2d/Victor-16029a-b6222.ogg/Victor-16029a-b6222.ogg.mp3", type: "audio/mpeg" },
+                    { src: "https://upload.wikimedia.org/wikipedia/commons/2/2d/Victor-16029a-b6222.ogg", type: "audio/ogg" }
+                ]
+            }
+        };
+
+        const applyTrackSources = (track) => {
+            ambientAudio.innerHTML = "";
+
+            track.sources.forEach((sourceInfo) => {
+                const source = document.createElement("source");
+                source.src = sourceInfo.src;
+                source.type = sourceInfo.type;
+                ambientAudio.appendChild(source);
+            });
+
+            ambientAudio.load();
+        };
+
+        const setTrack = (trackKey) => {
+            const resolvedTrackKey = tracks[trackKey] ? trackKey : "serenata";
+            const track = tracks[resolvedTrackKey];
+            applyTrackSources(track);
+            audioTrack.value = resolvedTrackKey;
+            audioMeta.textContent = track.description;
+            localStorage.setItem(AUDIO_TRACK_KEY, resolvedTrackKey);
+        };
+
+        const updateAudioUi = (isPlaying, message) => {
+            audioPlay.disabled = isPlaying;
+            audioPause.disabled = !isPlaying;
+            audioStatus.textContent = message;
+        };
+
+        const setAudioVolume = (value) => {
+            ambientAudio.volume = value;
+            audioVolume.value = Math.round(value * 100);
+            localStorage.setItem(AUDIO_VOLUME_KEY, String(value));
+        };
+
+        const storedVolume = Number(localStorage.getItem(AUDIO_VOLUME_KEY));
+        const initialVolume = Number.isFinite(storedVolume) && storedVolume >= 0 && storedVolume <= 1
+            ? storedVolume
+            : defaultVolume;
+        setAudioVolume(initialVolume);
+        const storedTrack = localStorage.getItem(AUDIO_TRACK_KEY);
+        setTrack(storedTrack && tracks[storedTrack] ? storedTrack : "serenata");
+
+        audioVolume.addEventListener("input", (event) => {
+            const value = Number(event.target.value) / 100;
+            setAudioVolume(value);
+
+            if (!ambientAudio.paused) {
+                updateAudioUi(true, "Trilha ativa em volume baixo e contínuo.");
+            } else {
+                updateAudioUi(false, "Volume ajustado. Toque em tocar quando quiser ouvir.");
+            }
+        });
+
+        audioTrack.addEventListener("change", async (event) => {
+            const wasPlaying = !ambientAudio.paused;
+            setTrack(event.target.value);
+
+            if (wasPlaying) {
+                try {
+                    await ambientAudio.play();
+                    updateAudioUi(true, "Trilha trocada sem interromper o ambiente.");
+                } catch (error) {
+                    localStorage.setItem(AUDIO_ENABLED_KEY, "false");
+                    updateAudioUi(false, "A nova trilha foi escolhida. Toque em tocar para recomeçar.");
+                }
+            } else {
+                updateAudioUi(false, "Nova trilha escolhida. Toque em tocar para ouvir.");
+            }
+        });
+
+        ambientAudio.addEventListener("error", () => {
+            localStorage.setItem(AUDIO_ENABLED_KEY, "false");
+            updateAudioUi(false, "Essa trilha não carregou direito. Troque de faixa ou tente tocar novamente.");
+        });
+
+        audioPlay.addEventListener("click", async () => {
+            try {
+                await ambientAudio.play();
+                localStorage.setItem(AUDIO_ENABLED_KEY, "true");
+                updateAudioUi(true, "Trilha ativa em loop suave.");
+            } catch (error) {
+                updateAudioUi(false, "O navegador não liberou o som agora. Tente tocar em tocar outra vez.");
+            }
+        });
+
+        audioPause.addEventListener("click", () => {
+            ambientAudio.pause();
+            localStorage.setItem(AUDIO_ENABLED_KEY, "false");
+            updateAudioUi(false, "Trilha pausada.");
+        });
+
+        if (localStorage.getItem(AUDIO_ENABLED_KEY) === "true") {
+            ambientAudio.play()
+                .then(() => {
+                    updateAudioUi(true, "Trilha retomada com sua preferência salva.");
+                })
+                .catch(() => {
+                    localStorage.setItem(AUDIO_ENABLED_KEY, "false");
+                    updateAudioUi(false, "Sua preferência foi lembrada, mas o navegador pediu um novo toque para liberar o som.");
+                });
+        } else {
+            updateAudioUi(false, "A trilha começa quando você tocar no botão de tocar.");
+        }
     </script>
 </body>
 </html>
