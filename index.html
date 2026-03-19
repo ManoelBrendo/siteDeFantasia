@@ -20,6 +20,65 @@
     <link rel="modulepreload" href="./index-page.js">
     <link rel="modulepreload" href="./audio-player.js">
     <link rel="modulepreload" href="./open-library-api.js">
+    <link rel="modulepreload" href="./site-data.js">
+    <link rel="modulepreload" href="./recommendation-engine.js">
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "Bosque da Fantasia",
+            "inLanguage": "pt-BR",
+            "description": "Guia de entrada para literatura fantastica com curadoria elfica, busca em acervo e recomendacao por afinidade.",
+            "about": [
+                "fantasia literaria",
+                "mitologia celta",
+                "fantasia medieval",
+                "livros fantasticos"
+            ],
+            "hasPart": {
+                "@type": "ItemList",
+                "name": "Livros em destaque",
+                "itemListElement": [
+                    {
+                        "@type": "Book",
+                        "position": 1,
+                        "name": "A Filha do Rei de Elfland",
+                        "author": {
+                            "@type": "Person",
+                            "name": "Lord Dunsany"
+                        }
+                    },
+                    {
+                        "@type": "Book",
+                        "position": 2,
+                        "name": "Fantastes",
+                        "author": {
+                            "@type": "Person",
+                            "name": "George MacDonald"
+                        }
+                    },
+                    {
+                        "@type": "Book",
+                        "position": 3,
+                        "name": "A Princesa e o Goblin",
+                        "author": {
+                            "@type": "Person",
+                            "name": "George MacDonald"
+                        }
+                    },
+                    {
+                        "@type": "Book",
+                        "position": 4,
+                        "name": "O Poco no Fim do Mundo",
+                        "author": {
+                            "@type": "Person",
+                            "name": "William Morris"
+                        }
+                    }
+                ]
+            }
+        }
+    </script>
     <style>
         :root {
             color-scheme: dark;
@@ -447,6 +506,8 @@
         .author-card,
         .featured-card,
         .result-card,
+        .affinity-panel,
+        .affinity-result-card,
         .search-panel,
         .purchase-panel,
         .catalog-panel {
@@ -467,6 +528,8 @@
 
         .lore-card::before,
         .author-card::before,
+        .affinity-panel::before,
+        .affinity-result-card::before,
         .search-panel::before,
         .catalog-panel::before,
         .purchase-panel::before {
@@ -507,6 +570,152 @@
 
         .authors-grid {
             grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .affinity-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 0.94fr);
+            gap: 1.15rem;
+        }
+
+        .affinity-panel,
+        .affinity-result-card {
+            padding: 1.3rem;
+        }
+
+        .affinity-question-stack {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .affinity-question-card {
+            padding: 1rem;
+            border-radius: 22px;
+            border: 1px solid rgba(220, 191, 131, 0.14);
+            background: rgba(255, 247, 232, 0.04);
+        }
+
+        .affinity-question-head {
+            display: grid;
+            gap: 0.45rem;
+            margin-bottom: 0.85rem;
+        }
+
+        .affinity-question-head h3 {
+            font-size: 1.3rem;
+        }
+
+        .affinity-choice-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.75rem;
+        }
+
+        .affinity-choice {
+            display: grid;
+            gap: 0.25rem;
+            width: 100%;
+            padding: 0.95rem 1rem;
+            border-radius: 18px;
+            border: 1px solid rgba(220, 191, 131, 0.14);
+            background: rgba(255, 247, 232, 0.03);
+            color: var(--text);
+            text-align: left;
+            cursor: pointer;
+            transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+        }
+
+        .affinity-choice:hover,
+        .affinity-choice:focus-visible {
+            transform: translateY(-2px);
+            border-color: rgba(220, 191, 131, 0.28);
+            background: rgba(255, 247, 232, 0.08);
+        }
+
+        .affinity-choice.is-selected {
+            border-color: rgba(220, 191, 131, 0.42);
+            background: linear-gradient(180deg, rgba(220, 191, 131, 0.14), rgba(255, 247, 232, 0.06));
+        }
+
+        .affinity-choice strong {
+            font-size: 1rem;
+            color: var(--gold-soft);
+        }
+
+        .affinity-choice span {
+            color: var(--muted);
+        }
+
+        .affinity-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        .affinity-progress {
+            margin: 0.25rem 0 0;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .affinity-result-card {
+            display: grid;
+            gap: 0.95rem;
+            align-content: start;
+        }
+
+        .affinity-result-card h3 {
+            font-size: clamp(2rem, 4vw, 2.7rem);
+        }
+
+        .affinity-result-card p {
+            margin: 0;
+            color: var(--muted);
+        }
+
+        .affinity-result-alt {
+            padding: 0.9rem 1rem;
+            border-radius: 18px;
+            border: 1px solid rgba(220, 191, 131, 0.12);
+            background: rgba(255, 247, 232, 0.04);
+            font-size: 0.96rem;
+        }
+
+        .affinity-result-card[data-state="ready"] .affinity-result-name {
+            color: var(--gold-soft);
+        }
+
+        .affinity-result-books {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .affinity-book-link {
+            display: grid;
+            gap: 0.18rem;
+            padding: 0.9rem 1rem;
+            border-radius: 18px;
+            border: 1px solid rgba(220, 191, 131, 0.14);
+            background: rgba(255, 247, 232, 0.04);
+            transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+        }
+
+        .affinity-book-link:hover,
+        .affinity-book-link:focus-visible {
+            transform: translateY(-2px);
+            border-color: rgba(220, 191, 131, 0.3);
+            background: rgba(255, 247, 232, 0.08);
+        }
+
+        .affinity-book-link strong {
+            color: var(--text);
+            font-size: 1rem;
+        }
+
+        .affinity-book-link span {
+            color: var(--muted);
+            font-size: 0.92rem;
         }
 
         .featured-grid {
@@ -864,6 +1073,7 @@
 
         @media (max-width: 1080px) {
             .hero,
+            .affinity-layout,
             .oracle-layout,
             .purchase-panel {
                 grid-template-columns: 1fr;
@@ -897,6 +1107,7 @@
 
             .hero-ritual,
             .panorama-grid,
+            .affinity-choice-grid,
             .authors-grid,
             .featured-grid,
             .results-grid,
@@ -937,6 +1148,7 @@
                 </a>
                 <nav class="topnav" aria-label="Navegação principal">
                     <a href="#panorama">Panorama</a>
+                    <a href="#afinidade">Afinidade</a>
                     <a href="#autores">Autores</a>
                     <a href="#estante">Estante</a>
                     <a href="#oraculo">Busca</a>
@@ -953,7 +1165,7 @@
                     <p>Esta página foi redesenhada para apresentar fantasia literária de forma viva, intuitiva e encantada.</p>
                     <div class="hero-actions">
                         <a class="button primary" href="#estante">Começar pela estante</a>
-                        <a class="button secondary" href="#oraculo">Abrir o oráculo de busca</a>
+                        <a class="button secondary" href="#afinidade">Descobrir minha trilha</a>
                     </div>
                     <div class="hero-ritual" aria-label="Destaques do site">
                         <article><strong>1</strong><span>Página única com acervo, autores e descoberta.</span></article>
@@ -1004,6 +1216,40 @@
                         <span>Porta III</span>
                         <h3>Idade média sonhada</h3>
                         <p>Aqui entram cavaleiros, castelos, jornadas e livros com peso de crônica antiga.</p>
+                    </article>
+                </div>
+            </section>
+
+            <section id="afinidade" class="section" aria-labelledby="afinidade-titulo">
+                <div class="section-header">
+                    <div class="section-header-copy">
+                        <div class="eyebrow">Oráculo de afinidade</div>
+                        <h2 id="afinidade-titulo">Descubra qual trilha combina com seu imaginário antes mesmo de abrir o acervo.</h2>
+                        <p>
+                            Em vez de começar no escuro, responda às quatro perguntas abaixo. O site cruza suas respostas e sugere uma trilha de leitura com clima,
+                            foco temático e livros de entrada mais coerentes com o seu perfil.
+                        </p>
+                    </div>
+                    <div class="knot" aria-hidden="true"></div>
+                </div>
+                <div class="affinity-layout">
+                    <article class="affinity-panel">
+                        <div id="affinity-questions" class="affinity-question-stack" aria-live="polite"></div>
+                        <div class="affinity-actions">
+                            <button id="affinity-submit" class="button primary" type="button">Revelar minha trilha</button>
+                            <button id="affinity-reset" class="button secondary" type="button">Limpar respostas</button>
+                        </div>
+                        <p id="affinity-progress" class="affinity-progress">0/4 respostas escolhidas</p>
+                    </article>
+
+                    <article id="affinity-result" class="affinity-result-card" data-state="idle">
+                        <div class="eyebrow">Leitura sugerida</div>
+                        <h3 id="affinity-result-name" class="affinity-result-name">Responda às quatro perguntas</h3>
+                        <p id="affinity-result-description">O Oráculo de Afinidade vai sugerir uma trilha de leitura coerente com seu gosto.</p>
+                        <p id="affinity-result-reason">Escolha um portal, um ritmo, uma forma de magia e uma paisagem.</p>
+                        <p id="affinity-result-alt" class="affinity-result-alt">Uma trilha complementar aparece aqui quando o oraculo encontrar um segundo caminho compativel.</p>
+                        <div id="affinity-result-books" class="affinity-result-books" aria-live="polite"></div>
+                        <button id="affinity-explore" class="button secondary" type="button" disabled>Explorar essa trilha</button>
                     </article>
                 </div>
             </section>
@@ -1169,6 +1415,45 @@
         </footer>
     </div>
 
+    <div class="audio-dock is-collapsed" id="audio-dock" aria-label="Controle da trilha sonora ambiente">
+        <div class="audio-head">
+            <div class="audio-head-text">
+                <h3>Trilha do bosque</h3>
+                <p id="audio-meta" class="audio-meta">Escolha uma trilha e deixe o ambiente correr em segundo plano.</p>
+            </div>
+            <button id="audio-panel-toggle" class="button secondary audio-panel-toggle" type="button" aria-expanded="false" aria-controls="audio-controls">Som</button>
+        </div>
+        <div class="audio-controls" id="audio-controls">
+            <div class="audio-select">
+                <label for="audio-track">Trilha sonora</label>
+                <select id="audio-track">
+                    <option value="serenata">Serenata do Bosque</option>
+                    <option value="violino">Violino ao Longe</option>
+                    <option value="nevoa">Nevoa de Camara</option>
+                </select>
+            </div>
+            <div class="audio-buttons">
+                <button id="audio-play" class="button secondary audio-action" type="button">Tocar</button>
+                <button id="audio-pause" class="button secondary audio-action" type="button">Pausar</button>
+            </div>
+            <div class="audio-slider">
+                <label for="audio-volume">Volume ambiente</label>
+                <input id="audio-volume" type="range" min="0" max="100" step="1" value="12">
+            </div>
+            <p id="audio-status" class="audio-status">A trilha comeca quando voce tocar no botao de tocar.</p>
+        </div>
+        <audio id="ambient-audio" loop preload="metadata" crossorigin="anonymous" playsinline></audio>
+    </div>
+
+    <script type="module">
+        import { initAudioPlayer } from "./audio-player.js";
+
+        try {
+            initAudioPlayer();
+        } catch (error) {
+            console.error("Falha ao iniciar o player de audio:", error);
+        }
+    </script>
     <script type="module" src="./index-page.js"></script>
 </body>
 </html>

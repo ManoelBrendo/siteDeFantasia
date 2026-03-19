@@ -1,5 +1,7 @@
 const OPEN_LIBRARY_SEARCH_URL = "https://openlibrary.org/search.json";
 const OPEN_LIBRARY_COVER_SIZE = "M";
+const SEARCH_CACHE_PREFIX = "bosque-cache:";
+const SEARCH_CACHE_TTL_MS = 1000 * 60 * 60 * 12;
 const OPEN_LIBRARY_FIELDS = [
     "key",
     "title",
@@ -120,6 +122,63 @@ const normalizeLookup = (value) => {
 
 const unique = (values) => {
     return [...new Set(values.filter(Boolean))];
+};
+
+const getStorage = () => {
+    try {
+        return window.localStorage;
+    } catch {
+        return null;
+    }
+};
+
+const buildCacheKey = (url) => {
+    return `${SEARCH_CACHE_PREFIX}${url}`;
+};
+
+const readCachedSearch = (url) => {
+    const storage = getStorage();
+
+    if (!storage) {
+        return null;
+    }
+
+    try {
+        const rawValue = storage.getItem(buildCacheKey(url));
+
+        if (!rawValue) {
+            return null;
+        }
+
+        const parsedValue = JSON.parse(rawValue);
+        const isFresh = Number(parsedValue?.savedAt) > 0 && (Date.now() - Number(parsedValue.savedAt)) < SEARCH_CACHE_TTL_MS;
+
+        if (!isFresh || !parsedValue?.data) {
+            storage.removeItem(buildCacheKey(url));
+            return null;
+        }
+
+        return parsedValue.data;
+    } catch {
+        return null;
+    }
+};
+
+const writeCachedSearch = (url, data) => {
+    const storage = getStorage();
+
+    if (!storage) {
+        return;
+    }
+
+    try {
+        storage.setItem(buildCacheKey(url), JSON.stringify({
+            savedAt: Date.now(),
+            data
+        }));
+    } catch {
+        // Ignora limites de armazenamento e mantém o fluxo normal da aplicação.
+    }
 };
 
 const translateSubject = (subject) => {
@@ -299,6 +358,13 @@ export class OpenLibraryCatalogApi {
             return this.cache.get(url);
         }
 
+        const cachedResult = readCachedSearch(url);
+
+        if (cachedResult) {
+            this.cache.set(url, cachedResult);
+            return cachedResult;
+        }
+
         const response = await fetch(url, {
             method: "GET",
             headers: {
@@ -336,6 +402,7 @@ export class OpenLibraryCatalogApi {
         };
 
         this.cache.set(url, result);
+        writeCachedSearch(url, result);
         return result;
     }
 }

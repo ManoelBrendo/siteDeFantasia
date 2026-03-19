@@ -196,7 +196,7 @@ const createPlayerMarkup = () => `
             </div>
             <p id="audio-status" class="audio-status">A trilha começa quando você tocar no botão de tocar.</p>
         </div>
-        <audio id="ambient-audio" loop preload="metadata" crossorigin="anonymous"></audio>
+        <audio id="ambient-audio" loop preload="metadata" crossorigin="anonymous" playsinline></audio>
     </div>
 `;
 
@@ -211,16 +211,27 @@ const ensureStyles = () => {
     document.head.appendChild(style);
 };
 
+const ensurePlayerMarkup = () => {
+    let audioDock = document.getElementById("audio-dock");
+
+    if (!audioDock) {
+        document.body.insertAdjacentHTML("beforeend", createPlayerMarkup());
+        audioDock = document.getElementById("audio-dock");
+    }
+
+    return audioDock;
+};
+
 export const initAudioPlayer = () => {
-    if (document.getElementById("audio-dock")) {
+    ensureStyles();
+
+    const audioDock = ensurePlayerMarkup();
+
+    if (!audioDock || audioDock.dataset.audioReady === "true") {
         return;
     }
 
-    ensureStyles();
-    document.body.insertAdjacentHTML("beforeend", createPlayerMarkup());
-
     const ambientAudio = document.getElementById("ambient-audio");
-    const audioDock = document.getElementById("audio-dock");
     const audioPanelToggle = document.getElementById("audio-panel-toggle");
     const audioPlay = document.getElementById("audio-play");
     const audioPause = document.getElementById("audio-pause");
@@ -233,6 +244,12 @@ export const initAudioPlayer = () => {
     const AUDIO_TRACK_KEY = "bosque-da-fantasia-audio-track";
     const AUDIO_PANEL_KEY = "bosque-da-fantasia-audio-panel-open";
     const defaultVolume = 0.12;
+
+    if (!ambientAudio || !audioPanelToggle || !audioPlay || !audioPause || !audioTrack || !audioMeta || !audioVolume || !audioStatus) {
+        throw new Error("Estrutura do player de áudio está incompleta.");
+    }
+
+    audioDock.dataset.audioReady = "true";
 
     const applyTrackSources = (track) => {
         ambientAudio.innerHTML = "";

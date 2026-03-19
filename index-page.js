@@ -1,82 +1,66 @@
-import { initAudioPlayer } from "./audio-player.js";
 import { OpenLibraryCatalogApi } from "./open-library-api.js";
+import {
+    DEFAULT_LABEL,
+    DEFAULT_QUERY,
+    RESULTS_PER_PAGE,
+    affinityQuestions,
+    featuredBooks,
+    readingPaths,
+    topicThemes
+} from "./site-data.js";
+import { recommendFromAnswers } from "./recommendation-engine.js";
 
 const api = new OpenLibraryCatalogApi();
-const DEFAULT_QUERY = "subject:fantasy";
-const DEFAULT_LABEL = "Espadas e reinos";
-const RESULTS_PER_PAGE = 9;
 
-const featuredBooks = [
-    {
-        id: "elfland",
-        title: "A Filha do Rei de Elfland",
-        originalTitle: "The King of Elfland's Daughter",
-        author: "Lord Dunsany",
-        year: "1924",
-        cover: "https://commons.wikimedia.org/wiki/Special:FilePath/The%20Hunting%20of%20the%20Unicorn%20by%20Samuel%20Simes%2C%20Frontispiece%20to%20The%20King%20of%20Elfland%27s%20Daughter.png?width=720",
-        description: "Quando um reino humano exige um toque de magia, o príncipe Alveric parte para Elfland e traz de lá a filha do rei. O encontro entre os dois abala as fronteiras entre a vida comum e um mundo feérico que não segue o tempo dos homens.",
-        aura: "Feérico, régio e melancólico"
-    },
-    {
-        id: "phantastes",
-        title: "Fantastes",
-        originalTitle: "Phantastes",
-        author: "George MacDonald",
-        year: "1858",
-        cover: "https://commons.wikimedia.org/wiki/Special:FilePath/Phantastes%20Title%20Page%201894.jpg?width=720",
-        description: "Depois de herdar uma chave misteriosa, Anodos desperta em uma terra encantada e atravessa florestas, palácios e provações interiores. A trama funciona como viagem espiritual e conto de maravilhamento ao mesmo tempo.",
-        aura: "Onírico, simbólico e iniciático"
-    },
-    {
-        id: "princesa-goblin",
-        title: "A Princesa e o Goblin",
-        originalTitle: "The Princess and the Goblin",
-        author: "George MacDonald",
-        year: "1872",
-        cover: "https://commons.wikimedia.org/wiki/Special:FilePath/Princess%20and%20the%20Goblin.jpg?width=720",
-        description: "A pequena princesa Irene vive em um castelo ameaçado por goblins escondidos no subterrâneo. Com a ajuda de Curdie, ela precisa enfrentar perigos, descobrir passagens ocultas e confiar em uma proteção misteriosa que paira sobre o reino.",
-        aura: "Acolhedor, medieval e aventureiro"
-    },
-    {
-        id: "well-world-end",
-        title: "O Poço no Fim do Mundo",
-        originalTitle: "The Well at the World's End",
-        author: "William Morris",
-        year: "1896",
-        cover: "https://commons.wikimedia.org/wiki/Special:FilePath/The%20Well%20at%20the%20World%27s%20End%2C%20design%20by%20William%20Morris%2C%20Hammersmith%2C%20Kelmscott%20Press%2C%201896%20-%20National%20Gallery%20of%20Art%2C%20Washington%20-%20DSC09794.JPG?width=720",
-        description: "Ralph deixa o conforto do lar para procurar um poço lendário ligado à fortuna e ao destino. A jornada o leva por estradas, cortes, combates e encontros que transformam a busca em um romance de formação cavaleiresca.",
-        aura: "Cavaleiresco, antigo e cerimonial"
+const getRequiredElement = (id) => {
+    const element = document.getElementById(id);
+
+    if (!element) {
+        throw new Error(`Elemento obrigatório ausente: #${id}`);
     }
-];
 
-const topicThemes = [
-    { label: "Elfos e feéria", query: "elves fantasy", description: "Cortes feéricas, bosques e reinos encantados." },
-    { label: "Mitologia celta", query: "\"celtic mythology\" fantasy", description: "Sidhe, druidas, símbolos e velhas lendas." },
-    { label: "Lendas arturianas", query: "\"arthurian romance\"", description: "Camelot, Avalon e relíquias do reino." },
-    { label: "Espadas e reinos", query: "subject:fantasy", description: "Jornadas, heróis e paisagens de saga." },
-    { label: "Magia e feitiçaria", query: "\"magic fantasy\"", description: "Feitiços, grimórios e aprendizes do arcano." },
-    { label: "Dragões e criaturas", query: "\"dragons fantasy\"", description: "Bestiários, monstros e fôlego antigo." },
-    { label: "Bosques encantados", query: "\"fairy tales\" forest", description: "Trilhas verdes e maravilhas do mato." },
-    { label: "Castelos medievais", query: "\"medieval fantasy\"", description: "Pedra, brasões e ecos de corte." }
-];
+    return element;
+};
+
+const escapeHtml = (value) => {
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+};
 
 const elements = {
-    curatedGrid: document.getElementById("curated-grid"),
-    topicsGrid: document.getElementById("topics-grid"),
-    searchForm: document.getElementById("catalog-search-form"),
-    searchInput: document.getElementById("catalog-search"),
-    submitButton: document.getElementById("catalog-submit"),
-    status: document.getElementById("catalog-status"),
-    resultsGrid: document.getElementById("results-grid"),
-    loadMoreButton: document.getElementById("catalog-load-more"),
-    activeTheme: document.getElementById("active-theme"),
-    purchaseTitle: document.getElementById("purchase-title"),
-    purchaseOriginal: document.getElementById("purchase-original"),
-    purchaseMeta: document.getElementById("purchase-meta"),
-    purchaseDescription: document.getElementById("purchase-description"),
-    purchaseCover: document.getElementById("purchase-cover"),
-    purchaseLink: document.getElementById("purchase-link"),
-    purchaseHint: document.getElementById("purchase-hint")
+    oraculoSection: getRequiredElement("oraculo"),
+    compraSection: getRequiredElement("compra"),
+    affinityQuestions: getRequiredElement("affinity-questions"),
+    affinityResult: getRequiredElement("affinity-result"),
+    affinityResultName: getRequiredElement("affinity-result-name"),
+    affinityResultDescription: getRequiredElement("affinity-result-description"),
+    affinityResultReason: getRequiredElement("affinity-result-reason"),
+    affinityResultAlt: getRequiredElement("affinity-result-alt"),
+    affinityResultBooks: getRequiredElement("affinity-result-books"),
+    affinitySubmit: getRequiredElement("affinity-submit"),
+    affinityReset: getRequiredElement("affinity-reset"),
+    affinityProgress: getRequiredElement("affinity-progress"),
+    affinityExplore: getRequiredElement("affinity-explore"),
+    curatedGrid: getRequiredElement("curated-grid"),
+    topicsGrid: getRequiredElement("topics-grid"),
+    searchForm: getRequiredElement("catalog-search-form"),
+    searchInput: getRequiredElement("catalog-search"),
+    submitButton: getRequiredElement("catalog-submit"),
+    status: getRequiredElement("catalog-status"),
+    resultsGrid: getRequiredElement("results-grid"),
+    loadMoreButton: getRequiredElement("catalog-load-more"),
+    activeTheme: getRequiredElement("active-theme"),
+    purchaseTitle: getRequiredElement("purchase-title"),
+    purchaseOriginal: getRequiredElement("purchase-original"),
+    purchaseMeta: getRequiredElement("purchase-meta"),
+    purchaseDescription: getRequiredElement("purchase-description"),
+    purchaseCover: getRequiredElement("purchase-cover"),
+    purchaseLink: getRequiredElement("purchase-link"),
+    purchaseHint: getRequiredElement("purchase-hint")
 };
 
 const state = {
@@ -87,7 +71,8 @@ const state = {
     debounceTimer: null,
     resultBooks: [],
     registry: new Map(),
-    activeLabel: DEFAULT_LABEL
+    activeLabel: DEFAULT_LABEL,
+    affinityAnswers: new Map()
 };
 
 const registerBooks = (books) => {
@@ -140,18 +125,18 @@ const hydrateBookImages = (root) => {
 
 const buildCuratedMarkup = (book) => `
     <article class="featured-card">
-        <a class="book-card-link js-book-link" href="#compra" data-book-id="${book.id}" aria-label="Abrir o portal de compra para ${book.title}">
+        <a class="book-card-link js-book-link" href="#compra" data-book-id="${escapeHtml(book.id)}" aria-label="Abrir o portal de compra para ${escapeHtml(book.title)}">
             <div class="book-cover-shell">
-                <img data-book-cover-id="${book.id}" src="${book.cover}" alt="Capa de ${book.title}" loading="lazy" decoding="async">
+                <img data-book-cover-id="${escapeHtml(book.id)}" src="${escapeHtml(book.cover)}" alt="Capa de ${escapeHtml(book.title)}" loading="lazy" decoding="async">
             </div>
             <div class="book-copy">
-                <span class="book-ribbon">${book.aura}</span>
-                <h3>${book.title}</h3>
-                <p class="book-original">${book.originalTitle}</p>
-                <p class="book-description">${book.description}</p>
+                <span class="book-ribbon">${escapeHtml(book.aura)}</span>
+                <h3>${escapeHtml(book.title)}</h3>
+                <p class="book-original">${escapeHtml(book.originalTitle)}</p>
+                <p class="book-description">${escapeHtml(book.description)}</p>
                 <div class="book-meta">
-                    <span>${book.author}</span>
-                    <span>${book.year}</span>
+                    <span>${escapeHtml(book.author)}</span>
+                    <span>${escapeHtml(book.year)}</span>
                 </div>
             </div>
         </a>
@@ -159,29 +144,58 @@ const buildCuratedMarkup = (book) => `
 `;
 
 const buildTopicMarkup = (topic) => `
-    <button class="theme-card" type="button" data-query="${topic.query}" data-label="${topic.label}">
-        <strong>${topic.label}</strong>
-        <span>${topic.description}</span>
+    <button class="theme-card" type="button" data-query="${escapeHtml(topic.query)}" data-label="${escapeHtml(topic.label)}">
+        <strong>${escapeHtml(topic.label)}</strong>
+        <span>${escapeHtml(topic.description)}</span>
     </button>
 `;
 
 const buildResultMarkup = (book) => `
     <article class="result-card">
-        <a class="book-card-link js-book-link" href="#compra" data-book-id="${book.id}" aria-label="Abrir o portal de compra para ${book.title}">
+        <a class="book-card-link js-book-link" href="#compra" data-book-id="${escapeHtml(book.id)}" aria-label="Abrir o portal de compra para ${escapeHtml(book.title)}">
             <div class="book-cover-shell">
-                <img data-book-cover-id="${book.id}" src="${book.cover}" alt="Capa de ${book.title}" loading="lazy" decoding="async">
+                <img data-book-cover-id="${escapeHtml(book.id)}" src="${escapeHtml(book.cover)}" alt="Capa de ${escapeHtml(book.title)}" loading="lazy" decoding="async">
             </div>
             <div class="book-copy">
-                <h3>${book.title}</h3>
-                <p class="book-author">${book.author}</p>
-                <p class="book-description">${book.description}</p>
+                <h3>${escapeHtml(book.title)}</h3>
+                <p class="book-author">${escapeHtml(book.author)}</p>
+                <p class="book-description">${escapeHtml(book.description)}</p>
                 <div class="book-meta">
-                    <span>${book.year}</span>
-                    <span>${book.editionCount ? `${book.editionCount} edições` : "Acervo geral"}</span>
+                    <span>${escapeHtml(book.year)}</span>
+                    <span>${book.editionCount ? `${escapeHtml(book.editionCount)} edições` : "Acervo geral"}</span>
                 </div>
             </div>
         </a>
     </article>
+`;
+
+const buildAffinityQuestionMarkup = (question) => `
+    <article class="affinity-question-card">
+        <div class="affinity-question-head">
+            <span class="book-ribbon">Pergunta</span>
+            <h3>${escapeHtml(question.title)}</h3>
+        </div>
+        <div class="affinity-choice-grid">
+            ${question.options.map((option) => `
+                <button
+                    class="affinity-choice"
+                    type="button"
+                    data-question-id="${escapeHtml(question.id)}"
+                    data-option-value="${escapeHtml(option.value)}"
+                >
+                    <strong>${escapeHtml(option.label)}</strong>
+                    <span>${escapeHtml(option.description)}</span>
+                </button>
+            `).join("")}
+        </div>
+    </article>
+`;
+
+const buildAffinityBookMarkup = (book) => `
+    <a class="affinity-book-link js-book-link" href="#compra" data-book-id="${escapeHtml(book.id)}">
+        <strong>${escapeHtml(book.title)}</strong>
+        <span>${escapeHtml(book.author)}</span>
+    </a>
 `;
 
 const renderCuratedShelf = () => {
@@ -192,6 +206,19 @@ const renderCuratedShelf = () => {
 
 const renderTopics = () => {
     elements.topicsGrid.innerHTML = topicThemes.map(buildTopicMarkup).join("");
+};
+
+const renderAffinityQuestions = () => {
+    elements.affinityQuestions.innerHTML = affinityQuestions.map(buildAffinityQuestionMarkup).join("");
+};
+
+const syncAffinityChoices = () => {
+    elements.affinityQuestions.querySelectorAll(".affinity-choice").forEach((button) => {
+        const isSelected = state.affinityAnswers.get(button.dataset.questionId) === button.dataset.optionValue;
+        button.classList.toggle("is-selected", isSelected);
+    });
+
+    elements.affinityProgress.textContent = `${state.affinityAnswers.size}/${affinityQuestions.length} respostas escolhidas`;
 };
 
 const updatePurchasePanel = (book) => {
@@ -211,6 +238,42 @@ const updatePurchasePanel = (book) => {
 const renderResults = () => {
     elements.resultsGrid.innerHTML = state.resultBooks.map(buildResultMarkup).join("");
     hydrateBookImages(elements.resultsGrid);
+};
+
+const renderAffinityRecommendation = () => {
+    if (state.affinityAnswers.size < affinityQuestions.length) {
+        elements.affinityResult.dataset.state = "idle";
+        elements.affinityResultName.textContent = "Responda às quatro perguntas";
+        elements.affinityResultDescription.textContent = "O Oráculo de Afinidade vai sugerir uma trilha de leitura coerente com seu gosto.";
+        elements.affinityResultReason.textContent = "Escolha um portal, um ritmo, uma forma de magia e uma paisagem.";
+        elements.affinityResultAlt.textContent = "Uma trilha complementar aparece aqui quando o oraculo encontrar um segundo caminho compativel.";
+        elements.affinityResultBooks.innerHTML = "";
+        elements.affinityExplore.disabled = true;
+        return;
+    }
+
+    const recommendation = recommendFromAnswers({
+        answers: state.affinityAnswers,
+        questions: affinityQuestions,
+        paths: readingPaths
+    });
+
+    const recommendedBooks = recommendation.bestPath.bookIds
+        .map((bookId) => state.registry.get(bookId))
+        .filter(Boolean);
+
+    elements.affinityResult.dataset.state = "ready";
+    elements.affinityResultName.textContent = recommendation.bestPath.name;
+    elements.affinityResultDescription.textContent = recommendation.bestPath.description;
+    elements.affinityResultReason.textContent = `O Oráculo aproximou você de ${recommendation.chosenOptions.map((option) => option.label).join(", ")}.`;
+    elements.affinityResultAlt.textContent = recommendation.runnerUp
+        ? `Se quiser um segundo caminho sem perder o clima principal, experimente tambem ${recommendation.runnerUp.name.toLowerCase()}.`
+        : "Esta leitura ficou bem definida; o oraculo nao encontrou uma segunda trilha tao forte quanto a principal.";
+    elements.affinityResultBooks.innerHTML = recommendedBooks.map(buildAffinityBookMarkup).join("");
+    elements.affinityExplore.disabled = false;
+    elements.affinityExplore.dataset.query = recommendation.bestPath.focusQuery;
+    elements.affinityExplore.dataset.label = recommendation.bestPath.focusLabel;
+    elements.affinityExplore.textContent = `Explorar ${recommendation.bestPath.focusLabel}`;
 };
 
 const updateStatus = ({ loading = false, error = "", empty = false } = {}) => {
@@ -336,6 +399,19 @@ const selectBookById = (id) => {
     updatePurchasePanel(selectedBook);
 };
 
+const scrollToSection = (section) => {
+    section.scrollIntoView({ behavior: "smooth", block: "start" });
+};
+
+const scheduleCatalogWarmup = (callback) => {
+    if ("requestIdleCallback" in window) {
+        window.requestIdleCallback(callback, { timeout: 900 });
+        return;
+    }
+
+    window.setTimeout(callback, 180);
+};
+
 const initSearchInteractions = () => {
     elements.searchForm.addEventListener("submit", (event) => {
         event.preventDefault();
@@ -372,9 +448,50 @@ const initSearchInteractions = () => {
         const { query, label } = button.dataset;
         setActiveTheme(label, query, { syncInput: true });
         runSearch({ query, page: 1, append: false, label });
-        document.getElementById("oraculo").scrollIntoView({ behavior: "smooth", block: "start" });
+        scrollToSection(elements.oraculoSection);
     });
 
+    elements.loadMoreButton.addEventListener("click", () => {
+        runSearch({ query: state.query, page: state.page + 1, append: true, label: state.activeLabel });
+    });
+};
+
+const initAffinityInteractions = () => {
+    elements.affinityQuestions.addEventListener("click", (event) => {
+        const button = event.target.closest("[data-question-id][data-option-value]");
+
+        if (!button) {
+            return;
+        }
+
+        state.affinityAnswers.set(button.dataset.questionId, button.dataset.optionValue);
+        syncAffinityChoices();
+    });
+
+    elements.affinitySubmit.addEventListener("click", () => {
+        renderAffinityRecommendation();
+    });
+
+    elements.affinityReset.addEventListener("click", () => {
+        state.affinityAnswers.clear();
+        syncAffinityChoices();
+        renderAffinityRecommendation();
+    });
+
+    elements.affinityExplore.addEventListener("click", () => {
+        const { query, label } = elements.affinityExplore.dataset;
+
+        if (!query || !label) {
+            return;
+        }
+
+        setActiveTheme(label, query, { syncInput: true });
+        runSearch({ query, page: 1, append: false, label });
+        scrollToSection(elements.oraculoSection);
+    });
+};
+
+const initGlobalBookClicks = () => {
     document.body.addEventListener("click", (event) => {
         const link = event.target.closest(".js-book-link");
 
@@ -384,19 +501,19 @@ const initSearchInteractions = () => {
 
         const { bookId } = link.dataset;
         selectBookById(bookId);
-        document.getElementById("compra").scrollIntoView({ behavior: "smooth", block: "start" });
-    });
-
-    elements.loadMoreButton.addEventListener("click", () => {
-        runSearch({ query: state.query, page: state.page + 1, append: true, label: state.activeLabel });
+        scrollToSection(elements.compraSection);
     });
 };
 
 const init = async () => {
     renderCuratedShelf();
     renderTopics();
-    initAudioPlayer();
+    renderAffinityQuestions();
+    syncAffinityChoices();
+    renderAffinityRecommendation();
+    initAffinityInteractions();
     initSearchInteractions();
+    initGlobalBookClicks();
     updatePurchasePanel(featuredBooks[0]);
 
     const queryFromUrl = new URLSearchParams(window.location.search).get("busca") || DEFAULT_QUERY;
@@ -404,19 +521,17 @@ const init = async () => {
     const initialLabel = matchedTheme?.label || prettyQuery(queryFromUrl) || DEFAULT_LABEL;
 
     setActiveTheme(initialLabel, queryFromUrl, { syncInput: true });
-    await runSearch({ query: queryFromUrl, page: 1, append: false, label: initialLabel });
+    scheduleCatalogWarmup(() => {
+        runSearch({ query: queryFromUrl, page: 1, append: false, label: initialLabel });
+    });
 };
 
 const bootstrap = async () => {
     try {
         await init();
     } catch (error) {
-        initAudioPlayer();
         console.error("Falha ao inicializar a página:", error);
-
-        if (elements.status) {
-            elements.status.textContent = "A página carregou parcialmente. A trilha sonora continua disponível, mas o acervo precisa ser recarregado.";
-        }
+        elements.status.textContent = "A página carregou parcialmente. Recarregue em alguns instantes para tentar novamente.";
     }
 };
 
