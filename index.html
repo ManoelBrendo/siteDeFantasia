@@ -3,1066 +3,1166 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Guia introdutório de literatura fantástica para iniciantes, com autores renomados, nomes menos falados e trilhas de leitura.">
-    <meta name="theme-color" content="#f8f4eb">
+    <title>Bosque da Fantasia | Livros, mitos e reinos antigos</title>
+    <meta
+        name="description"
+        content="Uma jornada única para quem quer conhecer fantasia literária com atmosfera élfica, mitologia celta, trilha sonora ambiente e um grande acervo de livros."
+    >
     <meta property="og:title" content="Bosque da Fantasia">
-    <meta property="og:description" content="Um guia leve e visual para quem quer começar na literatura fantástica.">
+    <meta
+        property="og:description"
+        content="Descubra autores, mitos, livros clássicos e um acervo pesquisável em uma experiência élfica e medieval."
+    >
     <meta property="og:type" content="website">
-    <meta name="twitter:card" content="summary">
-    <title>Bosque da Fantasia</title>
     <style>
         :root {
-            --bg: #f8f4eb;
-            --mist: #edf4ee;
-            --card: rgba(255, 252, 246, 0.82);
-            --text: #223127;
-            --muted: #5d6c63;
-            --accent: #69856f;
-            --deep: #456055;
-            --gold: #b49a62;
-            --line: rgba(69, 96, 85, 0.14);
-            --shadow: 0 18px 50px rgba(34, 49, 39, 0.08);
-            --radius: 24px;
-            --max: 1120px;
+            color-scheme: dark;
+            --bg: #09120f;
+            --bg-soft: #10211b;
+            --panel: rgba(13, 27, 22, 0.84);
+            --panel-strong: rgba(10, 20, 16, 0.9);
+            --line: rgba(207, 183, 120, 0.28);
+            --gold: #dcbf83;
+            --gold-soft: #f0dfb0;
+            --mist: #d9d4c4;
+            --text: #f7efdc;
+            --muted: #c4bda8;
+            --deep: #dcbf83;
+            --shadow: 0 24px 70px rgba(3, 8, 7, 0.55);
+            --radius-xl: 34px;
+            --radius-lg: 24px;
+            --radius-md: 18px;
+            --content-width: min(1120px, calc(100% - 1.5rem));
         }
-        * { box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             margin: 0;
-            font-family: "Trebuchet MS", "Gill Sans", sans-serif;
-            color: var(--text);
+            min-height: 100vh;
             background:
-                radial-gradient(circle at top left, rgba(180, 154, 98, 0.2), transparent 30%),
-                radial-gradient(circle at 85% 15%, rgba(105, 133, 111, 0.18), transparent 24%),
-                linear-gradient(180deg, #fbf8f2 0%, var(--mist) 55%, #f8f4eb 100%);
+                radial-gradient(circle at top, rgba(49, 88, 71, 0.28), transparent 34%),
+                radial-gradient(circle at 20% 20%, rgba(135, 161, 118, 0.12), transparent 24%),
+                radial-gradient(circle at 80% 10%, rgba(198, 171, 111, 0.15), transparent 22%),
+                linear-gradient(180deg, #08100d 0%, #102019 22%, #09110f 55%, #050807 100%);
+            color: var(--text);
+            font-family: "Palatino Linotype", "Book Antiqua", Georgia, serif;
             line-height: 1.6;
             overflow-x: hidden;
         }
-        body::before {
+
+        body::before,
+        body::after {
             content: "";
             position: fixed;
             inset: 0;
             pointer-events: none;
-            background: linear-gradient(120deg, rgba(255,255,255,0.2), transparent 22%);
+            z-index: -2;
         }
-        a { color: inherit; text-decoration: none; }
-        button { font: inherit; cursor: pointer; }
-        .container { width: min(var(--max), calc(100% - 2rem)); margin: 0 auto; }
+
+        body::before {
+            background:
+                radial-gradient(circle at 15% 80%, rgba(209, 190, 138, 0.08), transparent 22%),
+                radial-gradient(circle at 85% 70%, rgba(70, 118, 94, 0.12), transparent 24%);
+            filter: blur(8px);
+        }
+
+        body::after {
+            opacity: 0.16;
+            background-image:
+                linear-gradient(rgba(231, 214, 171, 0.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(231, 214, 171, 0.05) 1px, transparent 1px);
+            background-size: 46px 46px;
+            mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.75), transparent 96%);
+            z-index: -1;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        img {
+            display: block;
+            max-width: 100%;
+        }
+
+        button,
+        input {
+            font: inherit;
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.55rem;
+            min-height: 3rem;
+            padding: 0.78rem 1.25rem;
+            border-radius: 999px;
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: transform 180ms ease, border-color 180ms ease, background 180ms ease, box-shadow 180ms ease;
+        }
+
+        .button:hover,
+        .button:focus-visible {
+            transform: translateY(-2px);
+        }
+
+        .button.primary {
+            color: #08100d;
+            background: linear-gradient(135deg, rgba(250, 230, 175, 1), rgba(219, 188, 116, 0.94));
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.25);
+        }
+
+        .button.secondary {
+            border-color: rgba(220, 191, 131, 0.28);
+            background: rgba(255, 247, 230, 0.06);
+            color: var(--text);
+        }
+
+        .button.ghost {
+            border-color: rgba(220, 191, 131, 0.18);
+            background: transparent;
+            color: var(--mist);
+        }
+
+        .site-shell {
+            position: relative;
+        }
+
         .topbar {
             position: sticky;
             top: 0;
             z-index: 20;
             backdrop-filter: blur(14px);
-            background: rgba(248, 244, 235, 0.78);
-            border-bottom: 1px solid rgba(69, 96, 85, 0.08);
+            background: rgba(8, 14, 12, 0.72);
+            border-bottom: 1px solid rgba(220, 191, 131, 0.12);
         }
-        .topbar-inner, .section-head, .footer-box {
+
+        .topbar-inner {
+            width: var(--content-width);
+            margin: 0 auto;
+            min-height: 4.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.85rem;
+            min-width: 0;
+        }
+
+        .brand-mark {
+            width: 2.7rem;
+            height: 2.7rem;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            color: var(--gold-soft);
+            border: 1px solid rgba(220, 191, 131, 0.34);
+            background:
+                radial-gradient(circle at 30% 30%, rgba(220, 191, 131, 0.25), transparent 55%),
+                rgba(255, 249, 235, 0.04);
+            font-size: 1.18rem;
+        }
+
+        .brand-copy {
+            display: grid;
+            gap: 0.08rem;
+        }
+
+        .brand-copy strong {
+            font-size: 1rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .brand-copy span {
+            color: var(--muted);
+            font-size: 0.82rem;
+        }
+
+        .topnav {
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .topnav a {
+            padding: 0.55rem 0.9rem;
+            border-radius: 999px;
+            color: var(--mist);
+            border: 1px solid transparent;
+            transition: background 180ms ease, border-color 180ms ease, color 180ms ease;
+        }
+
+        .topnav a:hover,
+        .topnav a:focus-visible {
+            background: rgba(255, 246, 221, 0.06);
+            border-color: rgba(220, 191, 131, 0.18);
+            color: var(--gold-soft);
+        }
+
+        .hero {
+            width: var(--content-width);
+            margin: 0 auto;
+            padding: 3.6rem 0 2rem;
+            display: grid;
+            grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .hero-copy {
+            position: relative;
+            padding: 2rem 0 2rem;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.55rem;
+            margin-bottom: 1rem;
+            color: var(--gold-soft);
+            font-size: 0.86rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+
+        .eyebrow::before,
+        .eyebrow::after {
+            content: "";
+            width: 2.4rem;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(220, 191, 131, 0.8), transparent);
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            margin: 0;
+            font-family: "Garamond", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+            line-height: 1.05;
+            font-weight: 600;
+        }
+
+        .hero-copy h1 {
+            font-size: clamp(3rem, 5.5vw, 5.4rem);
+            max-width: 10ch;
+            text-wrap: balance;
+        }
+
+        .hero-copy p {
+            max-width: 62ch;
+            margin: 1.35rem 0 0;
+            color: var(--muted);
+            font-size: 1.08rem;
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.9rem;
+            margin-top: 1.7rem;
+        }
+
+        .hero-ritual {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.95rem;
+            margin-top: 2rem;
+        }
+
+        .hero-ritual article {
+            padding: 1rem 1rem 1.1rem;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(220, 191, 131, 0.16);
+            background: rgba(255, 247, 232, 0.04);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+        }
+
+        .hero-ritual strong {
+            display: block;
+            color: var(--gold-soft);
+            font-size: 1.55rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .hero-ritual span {
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .hero-stage {
+            position: relative;
+            padding: 1.4rem;
+            border-radius: calc(var(--radius-xl) + 6px);
+            border: 1px solid rgba(220, 191, 131, 0.16);
+            background:
+                radial-gradient(circle at top, rgba(221, 193, 131, 0.16), transparent 30%),
+                linear-gradient(180deg, rgba(18, 35, 29, 0.88), rgba(8, 15, 13, 0.95));
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .hero-stage::before {
+            content: "";
+            position: absolute;
+            inset: 1rem;
+            border-radius: calc(var(--radius-xl) - 6px);
+            border: 1px solid rgba(220, 191, 131, 0.14);
+            pointer-events: none;
+        }
+
+        .hero-stage-grid {
+            position: relative;
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            grid-template-rows: auto auto;
+            gap: 1rem;
+        }
+
+        .hero-visual {
+            position: relative;
+            border-radius: 30px;
+            overflow: hidden;
+            min-height: 18rem;
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .hero-visual img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: saturate(0.92) contrast(1.05) brightness(0.88);
+        }
+
+        .hero-visual-tall {
+            grid-row: span 2;
+            min-height: 27rem;
+        }
+
+        .hero-plaque {
+            position: absolute;
+            left: 1.1rem;
+            right: 1.1rem;
+            bottom: 1.1rem;
+            padding: 1rem 1.1rem;
+            border-radius: 20px;
+            background: rgba(7, 13, 11, 0.62);
+            border: 1px solid rgba(220, 191, 131, 0.18);
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-plaque strong {
+            display: block;
+            color: var(--gold-soft);
+            font-size: 1.05rem;
+        }
+
+        .hero-plaque span {
+            color: var(--mist);
+            font-size: 0.92rem;
+        }
+
+        .section {
+            width: var(--content-width);
+            margin: 0 auto;
+            padding: 2rem 0;
+            content-visibility: auto;
+            contain-intrinsic-size: 900px;
+        }
+
+        .section-header {
             display: flex;
             align-items: end;
             justify-content: space-between;
             gap: 1rem;
+            margin-bottom: 1.5rem;
         }
-        .topbar-inner { padding: 1rem 0; align-items: center; }
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 0.7rem;
-            color: var(--deep);
-            font: 700 1.2rem/1 "Palatino Linotype", "Book Antiqua", Georgia, serif;
-            letter-spacing: 0.04em;
+
+        .section-header-copy {
+            max-width: 60rem;
         }
-        .brand-mark {
-            width: 2.3rem;
-            height: 2.3rem;
-            display: grid;
-            place-items: center;
-            border-radius: 999px;
-            background: linear-gradient(145deg, rgba(105,133,111,0.16), rgba(180,154,98,0.18));
-            border: 1px solid rgba(105,133,111,0.18);
-        }
-        nav { display: flex; flex-wrap: wrap; gap: 1rem; color: var(--muted); }
-        nav a:hover, nav a:focus-visible { color: var(--deep); }
-        .hero {
-            display: grid;
-            grid-template-columns: minmax(0, 1.15fr) minmax(300px, 0.9fr);
-            gap: 2rem;
-            padding: 4.5rem 0 3rem;
-            align-items: center;
-        }
-        .eyebrow, .mini-label {
-            margin: 0 0 0.9rem;
-            color: var(--deep);
-            text-transform: uppercase;
-            letter-spacing: 0.14em;
-            font-size: 0.78rem;
-            font-weight: 700;
-        }
-        h1, h2, h3 {
-            margin: 0;
-            font-family: "Palatino Linotype", "Book Antiqua", Georgia, serif;
-            line-height: 1.08;
-        }
-        h1 { font-size: clamp(2.8rem, 5vw, 4.8rem); max-width: 12ch; }
-        .lead, .section-head p, .hero-card p, .card p, .tip p { color: var(--muted); }
-        .lead { max-width: 58ch; margin: 1.2rem 0 0; font-size: 1.08rem; }
-        .actions, .toggle-row { display: flex; flex-wrap: wrap; gap: 0.85rem; margin-top: 1.7rem; }
-        .button, .tab, .toggle {
-            border: 1px solid transparent;
-            border-radius: 999px;
-            padding: 0.85rem 1.2rem;
-            background: rgba(255, 252, 246, 0.6);
-            transition: transform 180ms ease, border-color 180ms ease;
-        }
-        .button:hover, .tab:hover, .toggle:hover,
-        .button:focus-visible, .tab:focus-visible, .toggle:focus-visible { transform: translateY(-2px); }
-        .button.primary {
-            background: linear-gradient(135deg, var(--deep), var(--accent));
-            color: #f8f6ef;
-            box-shadow: 0 14px 28px rgba(69, 96, 85, 0.18);
-        }
-        .button.secondary, .toggle, .tab { border-color: rgba(69, 96, 85, 0.16); color: var(--deep); }
-        .stats, .guide-grid, .author-grid, .pick-grid {
-            display: grid;
-            gap: 1rem;
-        }
-        .stats { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 1.9rem; }
-        .card, .hero-card, .panel, .shell {
-            background: var(--card);
-            border: 1px solid var(--line);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            backdrop-filter: blur(12px);
-        }
-        .stat, .card, .hero-card, .panel, .tip { padding: 1.4rem; }
-        .stat {
-            border-radius: 18px;
-            background: rgba(255, 252, 246, 0.56);
-            border: 1px solid rgba(69, 96, 85, 0.08);
-        }
-        .stat strong {
-            display: block;
-            color: var(--deep);
-            font: 700 1.35rem/1 "Palatino Linotype", "Book Antiqua", Georgia, serif;
-        }
-        .stat span { color: var(--muted); font-size: 0.92rem; }
-        .hero-card h2 { margin-top: 0.3rem; font-size: 2rem; }
-        .hero-figure {
-            margin: 0 0 1.15rem;
-            overflow: hidden;
-            border-radius: 20px;
-            border: 1px solid rgba(69, 96, 85, 0.1);
-            background: rgba(255, 252, 246, 0.68);
-        }
-        .hero-figure img {
-            display: block;
-            width: 100%;
-            aspect-ratio: 5 / 4;
-            object-fit: cover;
-        }
-        .hero-caption,
-        .source-list li,
-        .visual-card p,
-        .visual-card li {
-            color: var(--muted);
-        }
-        .hero-caption {
-            margin: 0;
-            padding: 0.7rem 0.95rem 0.9rem;
-            font-size: 0.84rem;
-        }
-        .tip {
-            margin-top: 1.3rem;
-            border-radius: 18px;
-            background: rgba(105, 133, 111, 0.08);
-            border: 1px solid rgba(105, 133, 111, 0.12);
-        }
-        section { padding: 1rem 0 2.3rem; }
-        .section-head { margin-bottom: 1.3rem; }
-        .section-head h2 { font-size: clamp(2rem, 3vw, 3rem); max-width: 13ch; }
-        .section-head p { max-width: 56ch; margin: 0.5rem 0 0; }
-        .guide-grid, .pick-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-        .guide-index {
-            width: 2.2rem;
-            height: 2.2rem;
-            display: inline-grid;
-            place-items: center;
-            border-radius: 999px;
-            background: rgba(105, 133, 111, 0.14);
-            color: var(--deep);
-            font-weight: 700;
-        }
-        .card h3 { margin-top: 0.8rem; font-size: 1.45rem; }
-        .shell {
-            display: grid;
-            grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-            gap: 1rem;
-            padding: 1rem;
-        }
-        .tabs { display: grid; gap: 0.8rem; }
-        .tab, .toggle {
-            width: 100%;
-            text-align: left;
-            background: rgba(255, 252, 246, 0.62);
-        }
-        .tab small, .toggle small { display: block; margin-top: 0.18rem; color: var(--muted); }
-        .tab.is-active, .toggle.is-active {
-            background: linear-gradient(135deg, rgba(105,133,111,0.18), rgba(255,252,246,0.88));
-            border-color: rgba(69, 96, 85, 0.22);
-        }
-        .panel { position: relative; overflow: hidden; }
-        .panel::after {
-            content: "";
-            position: absolute;
-            right: -2rem;
-            bottom: -2rem;
-            width: 8rem;
-            height: 8rem;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(180,154,98,0.18), transparent 70%);
-        }
-        .panel h3 { margin-top: 0.4rem; font-size: clamp(1.8rem, 3vw, 2.5rem); }
-        .panel .summary { margin-top: 0.8rem; font-size: 1.03rem; color: var(--muted); }
-        .meta {
-            margin-top: 1.2rem;
-            display: grid;
-            gap: 0.8rem;
-        }
-        .meta-item {
-            padding: 0.9rem 1rem;
-            border-radius: 16px;
-            background: rgba(105, 133, 111, 0.08);
-        }
-        .meta-item strong {
-            display: block;
-            margin-bottom: 0.25rem;
-            color: var(--deep);
-            font-size: 0.84rem;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-        }
-        .toggle-row { margin-top: 0; }
-        .toggle { max-width: 21rem; }
-        .author-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-        .author-grid[hidden] { display: none; }
-        .visual-grid,
-        .source-grid {
-            display: grid;
-            gap: 1rem;
-        }
-        .visual-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-        .visual-card {
-            display: grid;
-            grid-template-columns: minmax(150px, 210px) minmax(0, 1fr);
-            gap: 1rem;
-            align-items: start;
-        }
-        .visual-media {
-            overflow: hidden;
-            border-radius: 20px;
-            border: 1px solid rgba(69, 96, 85, 0.12);
-            background: rgba(255, 252, 246, 0.72);
-        }
-        .visual-media img {
-            display: block;
-            width: 100%;
-            aspect-ratio: 4 / 5;
-            object-fit: cover;
-            object-position: center top;
-        }
-        .visual-body {
-            display: grid;
-            gap: 0.8rem;
-            align-content: start;
-        }
-        .visual-body h3 {
-            font-size: 1.45rem;
-            margin: 0;
-        }
-        .visual-list {
-            margin: 0;
-            padding-left: 1.1rem;
-        }
-        .visual-list li + li {
+
+        .section-header h2 {
+            font-size: clamp(2rem, 4vw, 3.3rem);
             margin-top: 0.35rem;
         }
-        .visual-link {
-            color: var(--deep);
-            text-decoration: underline;
-            text-decoration-color: rgba(69, 96, 85, 0.28);
-            text-underline-offset: 0.18rem;
+
+        .section-header p {
+            margin: 0.85rem 0 0;
+            color: var(--muted);
+            max-width: 62ch;
         }
-        .source-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-        .source-list {
-            margin: 0;
-            padding-left: 1.1rem;
+
+        .knot {
+            width: 7rem;
+            height: 7rem;
+            opacity: 0.22;
+            flex: none;
+            border-radius: 50%;
+            border: 1px solid rgba(220, 191, 131, 0.16);
+            background:
+                radial-gradient(circle, transparent 34%, rgba(220, 191, 131, 0.5) 35%, transparent 39%),
+                radial-gradient(circle, transparent 55%, rgba(220, 191, 131, 0.38) 56%, transparent 61%),
+                radial-gradient(circle at center, rgba(220, 191, 131, 0.18) 2%, transparent 3%);
         }
-        .source-list li + li {
-            margin-top: 0.55rem;
+
+        .panorama-grid,
+        .authors-grid,
+        .featured-grid,
+        .results-grid,
+        .topics-grid {
+            display: grid;
+            gap: 1.15rem;
         }
-        .audio-dock {
-            position: fixed;
-            right: 1rem;
-            bottom: 1rem;
-            z-index: 30;
-            width: min(18.5rem, calc(100% - 2rem));
-            padding: 0.85rem 0.9rem;
-            border: 1px solid rgba(69, 96, 85, 0.14);
-            border-radius: 20px;
-            background: rgba(255, 252, 246, 0.84);
-            box-shadow: 0 16px 38px rgba(34, 49, 39, 0.12);
-            backdrop-filter: blur(18px);
-            transition: width 180ms ease, padding 180ms ease, transform 180ms ease;
+
+        .panorama-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
         }
-        .audio-dock.is-collapsed {
-            width: auto;
-            min-width: 0;
-            padding: 0.42rem;
+
+        .lore-card,
+        .author-card,
+        .featured-card,
+        .result-card,
+        .search-panel,
+        .purchase-panel,
+        .catalog-panel {
+            position: relative;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--line);
+            background:
+                linear-gradient(180deg, rgba(255, 248, 230, 0.05), rgba(255, 248, 230, 0.015)),
+                var(--panel);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .lore-card,
+        .author-card {
+            padding: 1.35rem;
+        }
+
+        .lore-card::before,
+        .author-card::before,
+        .search-panel::before,
+        .catalog-panel::before,
+        .purchase-panel::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(220, 191, 131, 0.08), transparent 40%);
+            pointer-events: none;
+        }
+
+        .lore-card span,
+        .author-card span {
+            display: inline-flex;
+            margin-bottom: 0.85rem;
+            padding: 0.32rem 0.7rem;
             border-radius: 999px;
+            border: 1px solid rgba(220, 191, 131, 0.16);
+            color: var(--gold-soft);
+            font-size: 0.78rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
         }
-        .audio-head {
+
+        .lore-card p,
+        .author-card p,
+        .author-card ul {
+            margin: 0.8rem 0 0;
+            color: var(--muted);
+        }
+
+        .author-card ul {
+            padding-left: 1rem;
+        }
+
+        .author-card li + li {
+            margin-top: 0.25rem;
+        }
+
+        .authors-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .featured-grid {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+
+        .book-card-link {
+            display: grid;
+            height: 100%;
+            gap: 1rem;
+            padding: 1rem;
+            transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+        }
+
+        .featured-card:hover .book-card-link,
+        .featured-card:focus-within .book-card-link,
+        .result-card:hover .book-card-link,
+        .result-card:focus-within .book-card-link {
+            transform: translateY(-5px);
+        }
+
+        .book-cover-shell {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            min-height: 14.5rem;
+            background:
+                linear-gradient(180deg, rgba(243, 228, 189, 0.16), rgba(18, 33, 28, 0.7)),
+                rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(220, 191, 131, 0.16);
+        }
+
+        .book-cover-shell img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .book-copy {
+            display: grid;
+            gap: 0.5rem;
+        }
+
+        .book-ribbon {
+            justify-self: start;
+            padding: 0.3rem 0.68rem;
+            border-radius: 999px;
+            background: rgba(220, 191, 131, 0.12);
+            color: var(--gold-soft);
+            border: 1px solid rgba(220, 191, 131, 0.14);
+            font-size: 0.75rem;
+            letter-spacing: 0.07em;
+            text-transform: uppercase;
+        }
+
+        .book-copy h3 {
+            font-size: 1.45rem;
+        }
+
+        .book-original,
+        .book-author {
+            margin: 0;
+            color: var(--gold-soft);
+            font-size: 0.95rem;
+        }
+
+        .book-description {
+            margin: 0;
+            color: var(--muted);
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 5;
+            overflow: hidden;
+        }
+
+        .book-meta {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.7rem;
+            margin-top: 0.2rem;
+            color: var(--mist);
+            font-size: 0.88rem;
+        }
+
+        .book-meta span {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .oracle-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr);
+            gap: 1.15rem;
+        }
+
+        .search-panel,
+        .catalog-panel,
+        .purchase-panel {
+            padding: 1.3rem;
+        }
+
+        .scroll-shell {
+            position: relative;
+            padding: 1.2rem;
+            border-radius: 26px;
+            background: linear-gradient(180deg, rgba(230, 214, 175, 0.98), rgba(203, 182, 132, 0.95));
+            color: #1b170f;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65), 0 18px 50px rgba(2, 6, 5, 0.34);
+        }
+
+        .scroll-shell::before,
+        .scroll-shell::after {
+            content: "";
+            position: absolute;
+            top: 1rem;
+            bottom: 1rem;
+            width: 18px;
+            border-radius: 999px;
+            background: linear-gradient(180deg, rgba(130, 85, 37, 0.92), rgba(84, 50, 18, 0.95));
+            box-shadow: inset 0 0 0 1px rgba(255, 241, 208, 0.18);
+        }
+
+        .scroll-shell::before {
+            left: 0.45rem;
+        }
+
+        .scroll-shell::after {
+            right: 0.45rem;
+        }
+
+        .scroll-label {
+            display: block;
+            font-size: 0.82rem;
+            letter-spacing: 0.09em;
+            text-transform: uppercase;
+            color: rgba(58, 40, 18, 0.9);
+            margin-bottom: 0.6rem;
+        }
+
+        .catalog-search-form {
+            display: grid;
+            gap: 0.9rem;
+        }
+
+        .catalog-search-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 0.8rem;
+            align-items: center;
+        }
+
+        .catalog-search-input {
+            width: 100%;
+            min-height: 3.4rem;
+            border: none;
+            outline: none;
+            background: rgba(255, 249, 233, 0.55);
+            border-radius: 18px;
+            padding: 0.95rem 1.1rem;
+            color: #231c10;
+            box-shadow: inset 0 0 0 1px rgba(108, 77, 35, 0.18);
+        }
+
+        .catalog-search-submit {
+            min-width: 10rem;
+            color: #120d07;
+            background: linear-gradient(135deg, #1f4c36, #7ba176);
+            border: none;
+        }
+
+        .active-theme {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            align-self: start;
+            padding: 0.5rem 0.9rem;
+            border-radius: 999px;
+            background: rgba(22, 18, 11, 0.08);
+            color: rgba(42, 31, 14, 0.86);
+            font-size: 0.88rem;
+        }
+
+        .theme-card {
+            display: grid;
+            gap: 0.25rem;
+            width: 100%;
+            padding: 1rem 1.05rem;
+            border-radius: 20px;
+            border: 1px solid rgba(220, 191, 131, 0.16);
+            background: rgba(255, 247, 232, 0.04);
+            color: var(--text);
+            cursor: pointer;
+            text-align: left;
+            transition: transform 180ms ease, background 180ms ease, border-color 180ms ease;
+        }
+
+        .theme-card:hover,
+        .theme-card:focus-visible {
+            transform: translateY(-2px);
+            border-color: rgba(220, 191, 131, 0.34);
+            background: rgba(255, 247, 232, 0.08);
+        }
+
+        .theme-card.is-active {
+            border-color: rgba(220, 191, 131, 0.42);
+            background:
+                linear-gradient(180deg, rgba(220, 191, 131, 0.14), rgba(255, 247, 232, 0.06)),
+                rgba(255, 247, 232, 0.1);
+            box-shadow: inset 0 0 0 1px rgba(255, 242, 214, 0.03);
+        }
+
+        .theme-card strong {
+            font-size: 1rem;
+            color: var(--gold-soft);
+        }
+
+        .theme-card span {
+            color: var(--muted);
+        }
+
+        .topics-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .catalog-toolbar {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 0.75rem;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
         }
-        .audio-head-text {
-            min-width: 0;
-        }
-        .audio-head h3 {
-            font-size: 0.98rem;
+
+        .catalog-status {
+            color: var(--muted);
             margin: 0;
         }
-        .audio-panel-toggle {
-            min-height: 2.2rem;
-            padding: 0.45rem 0.8rem;
-            white-space: nowrap;
+
+        .results-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
         }
-        .audio-head p,
-        .audio-meta,
-        .audio-status {
+
+        .result-card .book-cover-shell {
+            min-height: 13rem;
+        }
+
+        .load-more-wrap {
+            display: flex;
+            justify-content: center;
+            margin-top: 1.35rem;
+        }
+
+        .purchase-panel {
+            display: grid;
+            grid-template-columns: minmax(240px, 0.75fr) minmax(0, 1.25fr);
+            gap: 1.25rem;
+            align-items: start;
+        }
+
+        .purchase-cover-wrap {
+            padding: 0.9rem;
+            border-radius: 24px;
+            border: 1px solid rgba(220, 191, 131, 0.18);
+            background: rgba(255, 247, 232, 0.04);
+        }
+
+        .purchase-cover-wrap img {
+            width: 100%;
+            aspect-ratio: 3 / 4.2;
+            object-fit: cover;
+            border-radius: 18px;
+        }
+
+        .purchase-copy {
+            display: grid;
+            gap: 0.85rem;
+        }
+
+        .purchase-copy h3 {
+            font-size: clamp(2rem, 4vw, 3rem);
+        }
+
+        .purchase-copy p {
             margin: 0;
             color: var(--muted);
         }
-        .audio-meta {
-            margin-top: 0.25rem;
-            font-size: 0.8rem;
+
+        .purchase-original {
+            color: var(--gold-soft);
         }
-        .audio-controls {
-            display: grid;
-            gap: 0.55rem;
-            margin-top: 0.75rem;
-        }
-        .audio-dock.is-collapsed .audio-head {
-            justify-content: center;
-        }
-        .audio-dock.is-collapsed .audio-head-text,
-        .audio-dock.is-collapsed .audio-controls {
-            display: none;
-        }
-        .audio-buttons {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 0.7rem;
-        }
-        .audio-action {
-            width: 100%;
-            justify-content: center;
-        }
-        .audio-action:disabled {
-            opacity: 0.55;
-            cursor: default;
-            transform: none;
-        }
-        .audio-select,
-        .audio-slider {
-            display: grid;
-            gap: 0.3rem;
-        }
-        .audio-slider label,
-        .audio-select label {
-            color: var(--deep);
-            font-size: 0.8rem;
-            font-weight: 700;
-            letter-spacing: 0.03em;
-        }
-        .audio-select select {
-            width: 100%;
-            padding: 0.66rem 0.8rem;
-            border-radius: 14px;
-            border: 1px solid rgba(69, 96, 85, 0.14);
-            background: rgba(255, 252, 246, 0.88);
-            color: var(--text);
-            font: inherit;
-        }
-        .audio-slider input[type="range"] {
-            width: 100%;
-            accent-color: var(--deep);
-        }
-        .audio-status {
-            font-size: 0.78rem;
-            min-height: 1.3rem;
-        }
-        .chip {
-            display: inline-flex;
-            padding: 0.32rem 0.7rem;
-            border-radius: 999px;
-            background: rgba(180, 154, 98, 0.12);
-            color: var(--deep);
-            font-size: 0.8rem;
-        }
-        .author-note {
-            margin-top: 1rem;
-            padding-top: 0.95rem;
-            border-top: 1px solid rgba(69, 96, 85, 0.08);
+
+        .purchase-meta {
+            color: var(--mist);
             font-size: 0.95rem;
         }
-        .author-note strong { color: var(--deep); }
-        .footer-box {
-            padding: 1.2rem 1.4rem;
-            border-radius: 20px;
-            background: rgba(255, 252, 246, 0.76);
-            border: 1px solid rgba(69, 96, 85, 0.1);
-            box-shadow: var(--shadow);
-            margin-bottom: 3rem;
+
+        .purchase-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-top: 0.3rem;
         }
-        .footer-disclosure {
-            width: 100%;
+
+        .purchase-hint {
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        #purchase-link[aria-disabled="true"] {
+            opacity: 0.88;
+        }
+
+        .footer {
+            width: var(--content-width);
+            margin: 0 auto;
+            padding: 2rem 0 5rem;
+            color: var(--muted);
+        }
+
+        .footer-card {
+            border-radius: 26px;
+            border: 1px solid rgba(220, 191, 131, 0.14);
+            background: rgba(7, 12, 10, 0.88);
+            padding: 1.25rem 1.35rem;
+        }
+
+        .footer-card p {
+            margin: 0;
+        }
+
+        .footer-card details {
             margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid rgba(69, 96, 85, 0.08);
         }
-        .footer-disclosure summary {
+
+        .footer-card summary {
             cursor: pointer;
-            color: var(--deep);
-            font-weight: 700;
-            list-style: none;
+            color: var(--gold-soft);
         }
-        .footer-disclosure summary::-webkit-details-marker {
-            display: none;
+
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-top: 0.9rem;
         }
-        .footer-disclosure-body {
-            margin-top: 0.85rem;
-            display: grid;
-            gap: 1rem;
+
+        .footer-links a {
+            color: var(--mist);
+            text-decoration: underline;
+            text-underline-offset: 0.16rem;
         }
-        .mini-label { color: var(--gold); margin-bottom: 0.4rem; }
-        .fade { opacity: 0; transform: translateY(18px); animation: rise 700ms ease forwards; }
-        .delay-1 { animation-delay: 100ms; }
-        .delay-2 { animation-delay: 220ms; }
-        .delay-3 { animation-delay: 320ms; }
-        @keyframes rise { to { opacity: 1; transform: translateY(0); } }
-        @media (max-width: 980px) {
-            .hero, .shell, .guide-grid, .author-grid, .pick-grid, .visual-grid, .source-grid { grid-template-columns: 1fr; }
-            .visual-card { grid-template-columns: 1fr; }
-            .section-head, .footer-box { flex-direction: column; align-items: start; }
+
+        @media (max-width: 1080px) {
+            .hero,
+            .oracle-layout,
+            .purchase-panel {
+                grid-template-columns: 1fr;
+            }
+
+            .featured-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .results-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
         }
-        @media (max-width: 720px) {
-            .topbar-inner { flex-direction: column; align-items: start; }
-            nav, .actions, .toggle-row { width: 100%; }
-            nav {
-                overflow-x: auto;
-                flex-wrap: nowrap;
-                padding-bottom: 0.2rem;
-                -ms-overflow-style: none;
-                scrollbar-width: none;
+
+        @media (max-width: 780px) {
+            .topbar-inner,
+            .section-header,
+            .catalog-toolbar {
+                flex-direction: column;
+                align-items: flex-start;
             }
-            nav::-webkit-scrollbar { display: none; }
-            .hero { padding-top: 3.4rem; }
-            .stats { grid-template-columns: 1fr; }
-            h1 { max-width: 10ch; }
-            .button, .toggle { width: 100%; justify-content: center; }
-            .tab { width: 100%; }
-            .hero-card, .card, .panel, .footer-box { padding: 1.1rem; }
-            .visual-media img { aspect-ratio: 1 / 1.18; }
-            .hero-caption { font-size: 0.82rem; }
-            .lead { font-size: 1rem; }
-            section { padding: 0.6rem 0 2rem; }
-            .audio-dock {
-                left: 1rem;
-                right: 1rem;
-                width: auto;
-                bottom: 0.8rem;
+
+            .hero {
+                padding-top: 2.5rem;
             }
-            .audio-dock.is-collapsed {
-                left: auto;
-                right: 1rem;
-                width: auto;
+
+            .topbar,
+            .hero-plaque {
+                backdrop-filter: none;
             }
-            .audio-panel-toggle {
-                width: auto;
+
+            .hero-ritual,
+            .panorama-grid,
+            .authors-grid,
+            .featured-grid,
+            .results-grid,
+            .topics-grid,
+            .hero-stage-grid {
+                grid-template-columns: 1fr;
             }
-            .audio-buttons { grid-template-columns: 1fr; }
+
+            .hero-visual-tall {
+                min-height: 20rem;
+            }
+
+            .catalog-search-row {
+                grid-template-columns: 1fr;
+            }
+
+            .catalog-search-submit,
+            .button {
+                width: 100%;
+            }
+
+            .knot {
+                display: none;
+            }
         }
     </style>
 </head>
 <body>
-    <header class="topbar">
-        <div class="container topbar-inner">
-            <a class="brand" href="#inicio">
-                <span class="brand-mark">*</span>
-                <span>Bosque da Fantasia</span>
-            </a>
-            <nav aria-label="Seções principais">
-                <a href="#entrada">Comece aqui</a>
-                <a href="#trilhas">Trilhas</a>
-                <a href="#autores">Autores</a>
-                <a href="#agora">Para ler já</a>
-                <a href="#capas">Estante visual</a>
-                <a href="livros.html">Acervo</a>
-            </nav>
-        </div>
-    </header>
-
-    <main id="inicio">
-        <section class="container hero">
-            <div>
-                <p class="eyebrow fade">Fantasia sem labirinto</p>
-                <h1 class="fade delay-1">Um portal leve para quem vai entrar nesse mundo pela primeira vez.</h1>
-                <p class="lead fade delay-2">Nem toda fantasia começa com mapas enormes e guerras intermináveis. Ela também pode ser delicada, luminosa, misteriosa ou acolhedora. Esta página organiza o gênero de forma simples para você entender os tons, conhecer grandes nomes e descobrir vozes menos comentadas.</p>
-                <div class="actions fade delay-3">
-                    <a class="button primary" href="#entrada">Abrir o mapa inicial</a>
-                    <a class="button secondary" href="#autores">Explorar autores</a>
-                    <a class="button secondary" href="livros.html">Entrar no acervo</a>
-                </div>
-                <div class="stats fade delay-3">
-                    <div class="stat"><strong>12</strong><span>autores para começar sem se perder</span></div>
-                    <div class="stat"><strong>4</strong><span>trilhas de leitura por atmosfera</span></div>
-                    <div class="stat"><strong>1</strong><span>guia intuitivo para a primeira escolha</span></div>
-                </div>
+    <div class="site-shell">
+        <header class="topbar">
+            <div class="topbar-inner">
+                <a class="brand" href="#inicio" aria-label="Voltar ao início do Bosque da Fantasia">
+                    <div class="brand-mark" aria-hidden="true">✦</div>
+                    <div class="brand-copy">
+                        <strong>Bosque da Fantasia</strong>
+                        <span>Liturgia de livros, mitos e reinos antigos</span>
+                    </div>
+                </a>
+                <nav class="topnav" aria-label="Navegação principal">
+                    <a href="#panorama">Panorama</a>
+                    <a href="#autores">Autores</a>
+                    <a href="#estante">Estante</a>
+                    <a href="#oraculo">Busca</a>
+                    <a href="#compra">Compra</a>
+                </nav>
             </div>
-            <aside class="hero-card fade delay-2">
-                <figure class="hero-figure">
-                    <img
-                        src="https://commons.wikimedia.org/wiki/Special:FilePath/Rackham%20elves.jpg?width=1200"
-                        alt="Ilustração em tons suaves de criaturas élficas em meio a uma floresta."
-                        loading="eager"
-                        decoding="async"
-                    >
-                    <figcaption class="hero-caption">
-                        Uma abertura visual para entrar no bosque com calma.
-                    </figcaption>
-                </figure>
-                <p class="eyebrow">Sussurro do bosque</p>
-                <h2>Comece pelo clima da história, não pelo tamanho da saga.</h2>
-                <p>Se você gosta de contos mais poéticos, há um caminho. Se prefere aventura clara e envolvente, há outro. O segredo é escolher a sensação que você quer sentir antes de escolher o autor.</p>
-                <div class="tip">
-                    <p class="mini-label">Primeira chave</p>
-                    <p>Fantasia é menos um bloco único e mais uma floresta de estilos: épica, lírica, acolhedora, política ou mítica.</p>
-                </div>
-            </aside>
-        </section>
+        </header>
 
-        <section id="entrada">
-            <div class="container">
-                <div class="section-head">
-                    <div>
-                        <p class="eyebrow">Comece aqui</p>
-                        <h2>Três passos para não se perder no gênero</h2>
+        <main>
+            <section id="inicio" class="hero" aria-labelledby="titulo-principal">
+                <div class="hero-copy">
+                    <div class="eyebrow">Um portal para novos leitores</div>
+                    <h1 id="titulo-principal">Entre no reino da fantasia sem se perder na névoa.</h1>
+                    <p>Esta página foi redesenhada para apresentar fantasia literária de forma viva, intuitiva e encantada.</p>
+                    <div class="hero-actions">
+                        <a class="button primary" href="#estante">Começar pela estante</a>
+                        <a class="button secondary" href="#oraculo">Abrir o oráculo de busca</a>
                     </div>
-                    <p>O universo fantástico fica mais amigável quando você olha primeiro para o tom da narrativa, depois para o ritmo e só então para o tamanho da série.</p>
-                </div>
-                <div class="guide-grid">
-                    <article class="card">
-                        <span class="guide-index">1</span>
-                        <h3>Escolha a atmosfera</h3>
-                        <p>Quer algo contemplativo, aventureiro, político ou mágico de um jeito suave? O clima muda completamente a porta de entrada ideal.</p>
-                    </article>
-                    <article class="card">
-                        <span class="guide-index">2</span>
-                        <h3>Prefira um livro-ponte</h3>
-                        <p>Começar por uma obra que apresenta o autor sem exigir compromisso com uma saga enorme torna a experiência mais leve.</p>
-                    </article>
-                    <article class="card">
-                        <span class="guide-index">3</span>
-                        <h3>Siga o encanto</h3>
-                        <p>Se um livro te ganhou pela linguagem, pela magia ou pelos personagens, use isso como bússola para a próxima leitura.</p>
-                    </article>
-                </div>
-            </div>
-        </section>
-
-        <section id="trilhas">
-            <div class="container">
-                <div class="section-head">
-                    <div>
-                        <p class="eyebrow">Trilhas guiadas</p>
-                        <h2>Escolha o portal que combina com você</h2>
-                    </div>
-                    <p>Clique em um caminho e a página sugere um tipo de fantasia, um ponto de partida e o que esperar dessa jornada.</p>
-                </div>
-                <div class="shell">
-                    <div class="tabs" role="tablist" aria-label="Trilhas de fantasia">
-                        <button class="tab is-active" data-path="luminosa" role="tab" aria-selected="true">Luminosa e lírica<small>Magia delicada, beleza e sensação de encantamento.</small></button>
-                        <button class="tab" data-path="aventurosa" role="tab" aria-selected="false">Aventureira e clara<small>Ritmo envolvente, boas portas de entrada e jornada nítida.</small></button>
-                        <button class="tab" data-path="politica" role="tab" aria-selected="false">Política e intensa<small>Conflitos, poder, reinos e personagens em tensão.</small></button>
-                        <button class="tab" data-path="mitica" role="tab" aria-selected="false">Mítica e estranha<small>Textos que parecem lenda antiga ou sonho acordado.</small></button>
-                    </div>
-                    <article class="panel" aria-live="polite">
-                        <p class="mini-label">Portal aberto</p>
-                        <h3 id="path-title">Luminosa e lírica</h3>
-                        <p id="path-description" class="summary">Ideal para quem quer sentir maravilhamento antes de mergulhar em grandes conflitos. Aqui a fantasia aparece como algo antigo, belo e delicado, quase como uma música distante entre árvores.</p>
-                        <div class="meta">
-                            <div class="meta-item"><strong>Comece por</strong><span id="path-book">Um Mago de Terramar, de Ursula K. Le Guin</span></div>
-                            <div class="meta-item"><strong>Você vai encontrar</strong><span id="path-vibe">Linguagem elegante, crescimento interior e magia com peso simbólico.</span></div>
-                            <div class="meta-item"><strong>Depois avance para</strong><span id="path-next">Patricia A. McKillip ou Peter S. Beagle, se quiser manter o encanto rarefeito.</span></div>
-                        </div>
-                    </article>
-                </div>
-            </div>
-        </section>
-
-        <section id="autores">
-            <div class="container">
-                <div class="section-head">
-                    <div>
-                        <p class="eyebrow">Autores em destaque</p>
-                        <h2>Grandes nomes e descobertas menos faladas</h2>
-                    </div>
-                    <div class="toggle-row" role="tablist" aria-label="Categorias de autores">
-                        <button class="toggle is-active" data-group="renomados" role="tab" aria-selected="true">Renomados<small>Para entender as bases do gênero.</small></button>
-                        <button class="toggle" data-group="menos-falados" role="tab" aria-selected="false">Menos falados<small>Para encontrar vozes queridas por leitores experientes.</small></button>
+                    <div class="hero-ritual" aria-label="Destaques do site">
+                        <article><strong>1</strong><span>Página única com acervo, autores e descoberta.</span></article>
+                        <article><strong>3</strong><span>Trilhas sonoras para manter o clima do bosque.</span></article>
+                        <article><strong>12+</strong><span>Resultados por rodada no acervo pesquisável.</span></article>
                     </div>
                 </div>
-                <div class="author-grid" data-group-panel="renomados">
-                    <article class="card"><span class="chip">Fundador do imaginário moderno</span><h3>J.R.R. Tolkien</h3><p>O nome mais emblemático da fantasia épica, com mitologia, povos e um senso de mundo vasto que influenciou gerações.</p><p class="author-note"><strong>Boa porta:</strong> <em>O Hobbit</em>, por ser mais leve e aventureiro.</p></article>
-                    <article class="card"><span class="chip">Fantasia com profundidade</span><h3>Ursula K. Le Guin</h3><p>Une magia, identidade e amadurecimento em narrativas que parecem simples na superfície, mas ficam ecoando.</p><p class="author-note"><strong>Boa porta:</strong> <em>Um Mago de Terramar</em>.</p></article>
-                    <article class="card"><span class="chip">Encanto direto e simbólico</span><h3>C.S. Lewis</h3><p>Funciona muito bem para quem deseja um começo acolhedor e cheio de maravilhamento.</p><p class="author-note"><strong>Boa porta:</strong> <em>O Leão, a Feiticeira e o Guarda-Roupa</em>.</p></article>
-                    <article class="card"><span class="chip">Humor e inteligência</span><h3>Terry Pratchett</h3><p>Mostra que fantasia também pode ser espirituosa, afiada e profundamente humana.</p><p class="author-note"><strong>Boa porta:</strong> <em>Pequenos Deuses</em>.</p></article>
-                    <article class="card"><span class="chip">Intriga e tensão</span><h3>George R.R. Martin</h3><p>Leva a fantasia para terrenos políticos, cruéis e intensos, onde alianças importam tanto quanto a magia.</p><p class="author-note"><strong>Boa porta:</strong> <em>A Guerra dos Tronos</em>.</p></article>
-                    <article class="card"><span class="chip">Ritmo moderno</span><h3>Brandon Sanderson</h3><p>Conhecido por sistemas de magia claros e narrativa fluida para leitores iniciantes.</p><p class="author-note"><strong>Boa porta:</strong> <em>Mistborn: O Império Final</em>.</p></article>
-                </div>
-                <div class="author-grid" data-group-panel="menos-falados" hidden>
-                    <article class="card"><span class="chip">Beleza rarefeita</span><h3>Patricia A. McKillip</h3><p>Muito amada por leitores de fantasia lírica. Sua escrita parece névoa dourada e cheia de imagens memoráveis.</p><p class="author-note"><strong>Boa porta:</strong> <em>As Feras Esquecidas de Eld</em>.</p></article>
-                    <article class="card"><span class="chip">Melancolia luminosa</span><h3>Peter S. Beagle</h3><p>Trabalha o maravilhoso com um toque doce e triste ao mesmo tempo, sem perder a delicadeza.</p><p class="author-note"><strong>Boa porta:</strong> <em>O Último Unicórnio</em>.</p></article>
-                    <article class="card"><span class="chip">Voz singular</span><h3>Sofia Samatar</h3><p>Escreve fantasia introspectiva, com foco em memória, linguagem e estranhamento.</p><p class="author-note"><strong>Boa porta:</strong> <em>Um Estranho em Olondria</em>.</p></article>
-                    <article class="card"><span class="chip">Raiz mítica</span><h3>Lord Dunsany</h3><p>Um dos nomes antigos que ajudaram a formar o tom onírico da fantasia moderna.</p><p class="author-note"><strong>Boa porta:</strong> <em>A Filha do Rei de Elfland</em>.</p></article>
-                    <article class="card"><span class="chip">Aventura delicada</span><h3>Robin McKinley</h3><p>Conduz jornadas com sensibilidade e imaginação, ótima para quem quer fantasia acolhedora.</p><p class="author-note"><strong>Boa porta:</strong> <em>A Espada Azul</em>.</p></article>
-                    <article class="card"><span class="chip">Estranheza charmosa</span><h3>T. Kingfisher</h3><p>Mistura humor sutil, aventura e um toque esquisito em livros que não intimidam quem está começando.</p><p class="author-note"><strong>Boa porta:</strong> <em>Urtiga e Osso</em>.</p></article>
-                </div>
-            </div>
-        </section>
-
-        <section id="agora">
-            <div class="container">
-                <div class="section-head">
-                    <div>
-                        <p class="eyebrow">Para ler já</p>
-                        <h2>Se quiser sair desta página com um primeiro livro</h2>
-                    </div>
-                    <p>Escolha pela sensação que você quer viver. Assim a fantasia deixa de parecer um território fechado e vira um convite pessoal.</p>
-                </div>
-                <div class="pick-grid">
-                    <article class="card"><h3>Para encanto clássico</h3><p><strong>O Hobbit</strong> abre a porta para a aventura fantástica sem exigir um mergulho imediato em estruturas mais densas.</p></article>
-                    <article class="card"><h3>Para magia serena</h3><p><strong>Um Mago de Terramar</strong> entrega profundidade, beleza e uma leitura mais contemplativa logo de início.</p></article>
-                    <article class="card"><h3>Para algo fora do óbvio</h3><p><strong>O Último Unicórnio</strong> ou <strong>Urtiga e Osso</strong> mostram que a fantasia pode ser delicada, estranha e muito acolhedora.</p></article>
-                </div>
-            </div>
-        </section>
-
-        <section id="capas">
-            <div class="container">
-                <div class="section-head">
-                    <div>
-                        <p class="eyebrow">Estante visual</p>
-                        <h2>Recomendações com presença de imagem e clima de floresta antiga</h2>
-                    </div>
-                    <p>Esta seleção reforça a atmosfera do site com edições e ilustrações que carregam um ar de lenda, viagem e encantamento.</p>
-                </div>
-                <div class="visual-grid">
-                    <article class="card visual-card">
-                        <figure class="visual-media">
-                            <img
-                                src="https://commons.wikimedia.org/wiki/Special:FilePath/The%20Hunting%20of%20the%20Unicorn%20by%20Samuel%20Simes%2C%20Frontispiece%20to%20The%20King%20of%20Elfland%27s%20Daughter.png?width=900"
-                                alt="Frontispício ilustrado de A Filha do Rei de Elfland."
-                                loading="lazy"
-                                decoding="async"
-                            >
+                <div class="hero-stage" aria-label="Painel visual do universo fantástico">
+                    <div class="hero-stage-grid">
+                        <figure class="hero-visual hero-visual-tall">
+                            <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Rackham_elves.jpg?width=900" alt="Ilustração histórica de elfos em um bosque" decoding="async" fetchpriority="high">
+                            <figcaption class="hero-plaque">
+                                <strong>Tom élfico e crepuscular</strong>
+                                <span>Feéria, mata antiga e um brilho de lenda em volta dos livros.</span>
+                            </figcaption>
                         </figure>
-                        <div class="visual-body">
-                            <span class="chip">Clima mais élfico</span>
-                            <h3>A Filha do Rei de Elfland</h3>
-                            <p>Uma fantasia que parece ter sido recolhida de uma canção antiga. Excelente para quem quer atmosfera, beleza e sensação de lenda.</p>
-                            <ul class="visual-list">
-                                <li>Leitura ideal para quem busca estranheza delicada.</li>
-                                <li>Ótimo elo entre fantasia clássica e o tom feérico que você pediu.</li>
-                            </ul>
-                        </div>
-                    </article>
-                    <article class="card visual-card">
-                        <figure class="visual-media">
-                            <img
-                                src="https://commons.wikimedia.org/wiki/Special:FilePath/Phantastes%20Title%20Page%201894.jpg?width=900"
-                                alt="Página de rosto ornamentada de Fantastes."
-                                loading="lazy"
-                                decoding="async"
-                            >
+                        <figure class="hero-visual">
+                            <img src="https://commons.wikimedia.org/wiki/Special:FilePath/The%20Hunting%20of%20the%20Unicorn%20by%20Samuel%20Simes%2C%20Frontispiece%20to%20The%20King%20of%20Elfland%27s%20Daughter.png?width=720" alt="Frontispício histórico de A Filha do Rei de Elfland" loading="lazy" decoding="async">
                         </figure>
-                        <div class="visual-body">
-                            <span class="chip">Fantasia feérica</span>
-                            <h3>Fantastes</h3>
-                            <p>George MacDonald é uma raiz importante da fantasia moderna. O livro tem uma energia sonhadora e simbólica, muito boa para leitores curiosos.</p>
-                            <ul class="visual-list">
-                                <li>Mais lírico do que aventureiro.</li>
-                                <li>Boa escolha para quem quer uma experiência fantástica menos óbvia.</li>
-                            </ul>
-                        </div>
-                    </article>
-                    <article class="card visual-card">
-                        <figure class="visual-media">
-                            <img
-                                src="https://commons.wikimedia.org/wiki/Special:FilePath/Princess%20and%20the%20Goblin.jpg?width=900"
-                                alt="Capa histórica de A Princesa e o Goblin."
-                                loading="lazy"
-                                decoding="async"
-                            >
+                        <figure class="hero-visual">
+                            <img src="https://commons.wikimedia.org/wiki/Special:FilePath/The%20Well%20at%20the%20World%27s%20End%2C%20design%20by%20William%20Morris%2C%20Hammersmith%2C%20Kelmscott%20Press%2C%201896%20-%20National%20Gallery%20of%20Art%2C%20Washington%20-%20DSC09794.JPG?width=720" alt="Edição histórica ornamentada de O Poço no Fim do Mundo" loading="lazy" decoding="async">
                         </figure>
-                        <div class="visual-body">
-                            <span class="chip">Porta acolhedora</span>
-                            <h3>A Princesa e o Goblin</h3>
-                            <p>Um caminho macio para quem quer fantasia acessível, com aventura, brilho clássico e um toque encantado sem ser pesado.</p>
-                            <ul class="visual-list">
-                                <li>Funciona muito bem no mobile porque a leitura costuma fluir rápido.</li>
-                                <li>Recomendação segura para quem ainda está testando gosto dentro do gênero.</li>
-                            </ul>
-                        </div>
-                    </article>
-                    <article class="card visual-card">
-                        <figure class="visual-media">
-                            <img
-                                src="https://commons.wikimedia.org/wiki/Special:FilePath/The%20Well%20at%20the%20World%27s%20End%2C%20design%20by%20William%20Morris%2C%20Hammersmith%2C%20Kelmscott%20Press%2C%201896%20-%20National%20Gallery%20of%20Art%2C%20Washington%20-%20DSC09794.JPG?width=900"
-                                alt="Foto de uma edição histórica de O Poço no Fim do Mundo."
-                                loading="lazy"
-                                decoding="async"
-                            >
-                        </figure>
-                        <div class="visual-body">
-                            <span class="chip">Objeto-livro</span>
-                            <h3>O Poço no Fim do Mundo</h3>
-                            <p>Além do texto, esta recomendação entra como peça visual: um livro antigo que carrega muito da estética de bosque, jornada e encantamento.</p>
-                            <ul class="visual-list">
-                                <li>Excelente para ampliar o repertório visual da página.</li>
-                                <li>Ajuda a dar presença de estante com uma aparência mais artesanal e antiga.</li>
-                            </ul>
-                        </div>
-                    </article>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer class="container">
-        <div class="footer-box">
-            <div>
-                <p class="mini-label">Fim do primeiro passeio</p>
-                <p class="lead">Que sua entrada na fantasia comece com curiosidade, não com excesso. O bosque fica mais bonito quando a trilha parece sua.</p>
-            </div>
-            <a class="button secondary" href="#inicio">Voltar ao topo</a>
-            <details class="footer-disclosure" id="creditos">
-                <summary>Ver créditos de imagens e trilhas</summary>
-                <div class="footer-disclosure-body">
-                    <div class="source-grid">
-                        <article class="card">
-                            <h3>Imagens do site</h3>
-                            <ul class="source-list">
-                                <li><strong>Elfos de Rackham</strong>:
-                                    <a class="visual-link" href="https://commons.wikimedia.org/wiki/File:Rackham_elves.jpg" target="_blank" rel="noreferrer noopener">Wikimedia Commons</a>.
-                                </li>
-                                <li><strong>A Filha do Rei de Elfland</strong>:
-                                    <a class="visual-link" href="https://commons.wikimedia.org/wiki/File:The_Hunting_of_the_Unicorn_by_Samuel_Simes,_Frontispiece_to_The_King_of_Elfland%27s_Daughter.png" target="_blank" rel="noreferrer noopener">fonte</a>.
-                                </li>
-                                <li><strong>Página de Rosto de Fantastes, 1894</strong>:
-                                    <a class="visual-link" href="https://commons.wikimedia.org/wiki/File:Phantastes_Title_Page_1894.jpg" target="_blank" rel="noreferrer noopener">fonte</a>.
-                                </li>
-                                <li><strong>A Princesa e o Goblin</strong>:
-                                    <a class="visual-link" href="https://commons.wikimedia.org/wiki/File:Princess_and_the_Goblin.jpg" target="_blank" rel="noreferrer noopener">fonte</a>.
-                                </li>
-                                <li><strong>O Poço no Fim do Mundo</strong>:
-                                    <a class="visual-link" href="https://commons.wikimedia.org/wiki/File:The_Well_at_the_World%27s_End%2C_design_by_William_Morris%2C_Hammersmith%2C_Kelmscott_Press%2C_1896_-_National_Gallery_of_Art%2C_Washington_-_DSC09794.JPG" target="_blank" rel="noreferrer noopener">fonte</a>.
-                                </li>
-                            </ul>
-                        </article>
-                        <article class="card">
-                            <h3>Trilhas disponíveis</h3>
-                            <ul class="source-list">
-                                <li><strong>Serenata do Bosque</strong>:
-                                    <a class="visual-link" href="https://commons.wikimedia.org/wiki/File:Gramophone-11491-248010.ogg" target="_blank" rel="noreferrer noopener">fonte</a>.
-                                </li>
-                                <li><strong>Violino ao Longe</strong>:
-                                    <a class="visual-link" href="https://commons.wikimedia.org/wiki/File:Street_musician_violin.ogg" target="_blank" rel="noreferrer noopener">fonte</a>.
-                                </li>
-                                <li><strong>Névoa de Câmara</strong>:
-                                    <a class="visual-link" href="https://commons.wikimedia.org/wiki/File:Victor-16029a-b6222.ogg" target="_blank" rel="noreferrer noopener">fonte</a>.
-                                </li>
-                            </ul>
-                        </article>
                     </div>
                 </div>
-            </details>
-        </div>
-    </footer>
+            </section>
 
-    <div class="audio-dock is-collapsed" id="audio-dock" aria-label="Controle da trilha sonora ambiente">
-        <div class="audio-head">
-            <div class="audio-head-text">
-                <h3>Trilha do bosque</h3>
-                <p id="audio-meta" class="audio-meta">Escolha uma trilha e deixe o ambiente correr em segundo plano.</p>
+            <section id="panorama" class="section" aria-labelledby="panorama-titulo">
+                <div class="section-header">
+                    <div class="section-header-copy">
+                        <div class="eyebrow">Primeiros passos</div>
+                        <h2 id="panorama-titulo">Como entrar nesse universo sem se sentir estrangeiro.</h2>
+                        <p>Fantasia não é só dragão e espada. Ela também pode ser intimista, lírica, folclórica, sombria, espiritual ou cavaleiresca.</p>
+                    </div>
+                    <div class="knot" aria-hidden="true"></div>
+                </div>
+                <div class="panorama-grid">
+                    <article class="lore-card">
+                        <span>Porta I</span>
+                        <h3>Feéria e encantamento</h3>
+                        <p>Ideal para quem quer elfos, bosques, reinos além do mundo comum e uma sensação de maravilha antiga.</p>
+                    </article>
+                    <article class="lore-card">
+                        <span>Porta II</span>
+                        <h3>Mitologia celta e memória oral</h3>
+                        <p>Para leitores atraídos por sidhe, druidas, Avalon, símbolos solares e histórias que parecem ter sido guardadas por bardos.</p>
+                    </article>
+                    <article class="lore-card">
+                        <span>Porta III</span>
+                        <h3>Idade média sonhada</h3>
+                        <p>Aqui entram cavaleiros, castelos, jornadas e livros com peso de crônica antiga.</p>
+                    </article>
+                </div>
+            </section>
+
+            <section id="autores" class="section" aria-labelledby="autores-titulo">
+                <div class="section-header">
+                    <div class="section-header-copy">
+                        <div class="eyebrow">Autores guardiões</div>
+                        <h2 id="autores-titulo">Vozes renomadas e nomes menos lembrados que merecem a tocha acesa.</h2>
+                        <p>A ideia aqui não é listar tudo, mas orientar quem chega agora à fantasia.</p>
+                    </div>
+                    <div class="knot" aria-hidden="true"></div>
+                </div>
+                <div class="authors-grid">
+                    <article class="author-card">
+                        <span>Renomados</span>
+                        <h3>J. R. R. Tolkien</h3>
+                        <p>O grande arquiteto da fantasia moderna.</p>
+                        <ul>
+                            <li>Bom para: leitores que querem profundidade de mundo.</li>
+                            <li>Clima: épico, melancólico e ancestral.</li>
+                        </ul>
+                    </article>
+                    <article class="author-card">
+                        <span>Renomados</span>
+                        <h3>Ursula K. Le Guin</h3>
+                        <p>Mostra que fantasia também pode ser pensamento, silêncio e equilíbrio.</p>
+                        <ul>
+                            <li>Bom para: fantasia inteligente e contemplativa.</li>
+                            <li>Clima: ritual, marítimo e profundamente humano.</li>
+                        </ul>
+                    </article>
+                    <article class="author-card">
+                        <span>Pouco lembrados</span>
+                        <h3>Lord Dunsany</h3>
+                        <p>Um dos mestres do sonho feérico e da distância mítica.</p>
+                        <ul>
+                            <li>Bom para: quem quer um tom élfico mais puro.</li>
+                            <li>Clima: régio, nebuloso e quase litúrgico.</li>
+                        </ul>
+                    </article>
+                    <article class="author-card">
+                        <span>Pouco lembrados</span>
+                        <h3>William Morris</h3>
+                        <p>Une artesanato medieval, imaginário de jornada e prosa com sabor de romance antigo.</p>
+                        <ul>
+                            <li>Bom para: estrada, destino e cavaleirismo.</li>
+                            <li>Clima: medieval, cerimonial e pastoral.</li>
+                        </ul>
+                    </article>
+                </div>
+            </section>
+
+            <section id="estante" class="section" aria-labelledby="estante-titulo">
+                <div class="section-header">
+                    <div class="section-header-copy">
+                        <div class="eyebrow">Estante cerimonial</div>
+                        <h2 id="estante-titulo">Livros escolhidos como quem acende lampiões antes de entrar no bosque.</h2>
+                        <p>Clique na capa ou no texto para levar a obra ao painel de compra.</p>
+                    </div>
+                    <div class="knot" aria-hidden="true"></div>
+                </div>
+                <div id="curated-grid" class="featured-grid" aria-live="polite"></div>
+            </section>
+
+            <section id="oraculo" class="section" aria-labelledby="oraculo-titulo">
+                <div class="section-header">
+                    <div class="section-header-copy">
+                        <div class="eyebrow">Oráculo do acervo</div>
+                        <h2 id="oraculo-titulo">Pesquise o que quiser em um pergaminho vivo e expanda o reino.</h2>
+                        <p>Pesquise elfos, mitologia celta, castelos, magia, autores ou qualquer trilha que você queira seguir.</p>
+                    </div>
+                    <div class="knot" aria-hidden="true"></div>
+                </div>
+                <div class="oracle-layout">
+                    <section class="search-panel" aria-label="Busca e temas sugeridos">
+                        <div class="scroll-shell">
+                            <form id="catalog-search-form" class="catalog-search-form">
+                                <div>
+                                    <label class="scroll-label" for="catalog-search">Escreva seu interesse no pergaminho</label>
+                                    <div class="catalog-search-row">
+                                        <input
+                                            id="catalog-search"
+                                            class="catalog-search-input"
+                                            type="search"
+                                            name="busca"
+                                            placeholder="Ex.: elfos, mitologia celta, Avalon, fantasia medieval..."
+                                            autocomplete="off"
+                                        >
+                                        <button id="catalog-submit" class="button catalog-search-submit" type="submit">Consultar o acervo</button>
+                                    </div>
+                                </div>
+                                <span id="active-theme" class="active-theme">Espadas e reinos</span>
+                            </form>
+                        </div>
+                        <div style="height: 1rem;" aria-hidden="true"></div>
+                        <div id="topics-grid" class="topics-grid" aria-label="Temas para explorar"></div>
+                    </section>
+
+                    <section id="acervo" class="catalog-panel" aria-labelledby="acervo-titulo">
+                        <div class="catalog-toolbar">
+                            <div>
+                                <h3 id="acervo-titulo">Acervo revelado</h3>
+                                <p id="catalog-status" class="catalog-status">O oráculo ainda vai revelar os livros.</p>
+                            </div>
+                            <a class="button ghost" href="#compra">Ir para o painel de compra</a>
+                        </div>
+                        <div id="results-grid" class="results-grid" aria-live="polite"></div>
+                        <div class="load-more-wrap">
+                            <button id="catalog-load-more" class="button secondary" type="button" hidden>Mostrar mais livros</button>
+                        </div>
+                    </section>
+                </div>
+            </section>
+
+            <section id="compra" class="section" aria-labelledby="compra-titulo">
+                <div class="section-header">
+                    <div class="section-header-copy">
+                        <div class="eyebrow">Sala de compra</div>
+                        <h2 id="compra-titulo">Cada livro selecionado passa por aqui antes de seguir para o destino final.</h2>
+                        <p>Este painel já está preparado para o momento em que você adicionar o link real de compra.</p>
+                    </div>
+                    <div class="knot" aria-hidden="true"></div>
+                </div>
+                <article class="purchase-panel">
+                    <div class="purchase-cover-wrap">
+                        <img id="purchase-cover" src="" alt="">
+                    </div>
+                    <div class="purchase-copy">
+                        <div class="eyebrow">Obra escolhida</div>
+                        <h3 id="purchase-title">Aguardando seleção</h3>
+                        <p id="purchase-original" class="purchase-original">Clique em uma obra da estante ou do acervo.</p>
+                        <p id="purchase-meta" class="purchase-meta">Autor e ano aparecem aqui.</p>
+                        <p id="purchase-description">A descrição da obra selecionada será exibida neste painel.</p>
+                        <div class="purchase-actions">
+                            <a id="purchase-link" class="button primary" href="#compra">Link de compra em breve</a>
+                            <a class="button secondary" href="#oraculo">Voltar ao oráculo</a>
+                        </div>
+                        <p id="purchase-hint" class="purchase-hint">Quando o link real estiver pronto, basta trocar o destino desse botão para a loja escolhida.</p>
+                    </div>
+                </article>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <div class="footer-card">
+                <p>Bosque da Fantasia agora funciona como uma única experiência: entrada guiada, autores, estante, busca ampla e painel de compra no mesmo fluxo.</p>
+                <details>
+                    <summary>Notas de crédito e licença</summary>
+                    <p>As imagens históricas e os áudios continuam com licença aberta ou status compatível indicado nas respectivas fontes.</p>
+                    <p style="margin-top: 0.75rem;">
+                        Nas capas do acervo, o site tenta primeiro a Open Library Covers API. Quando uma obra não retorna capa por lá,
+                        ele tenta algumas imagens históricas com licença aberta verificadas no Wikimedia Commons. Se ainda assim não houver
+                        uma opção segura, a página mantém a capa cerimonial do próprio site em vez de usar uma imagem sem clareza de direitos.
+                    </p>
+                    <div class="footer-links">
+                        <a href="CREDITOS-IMAGENS.md">Abrir créditos locais</a>
+                        <a href="https://openlibrary.org/search/howto" target="_blank" rel="noreferrer">Open Library Search API</a>
+                        <a href="https://covers.openlibrary.org/" target="_blank" rel="noreferrer">Open Library Covers API</a>
+                    </div>
+                </details>
             </div>
-            <button id="audio-panel-toggle" class="button secondary audio-panel-toggle" type="button" aria-expanded="false" aria-controls="audio-controls">Som</button>
-        </div>
-        <div class="audio-controls" id="audio-controls">
-            <div class="audio-select">
-                <label for="audio-track">Trilha sonora</label>
-                <select id="audio-track">
-                    <option value="serenata">Serenata do Bosque</option>
-                    <option value="violino">Violino ao Longe</option>
-                    <option value="nevoa">Névoa de Câmara</option>
-                </select>
-            </div>
-            <div class="audio-buttons">
-                <button id="audio-play" class="button secondary audio-action" type="button">Tocar</button>
-                <button id="audio-pause" class="button secondary audio-action" type="button">Pausar</button>
-            </div>
-            <div class="audio-slider">
-                <label for="audio-volume">Volume ambiente</label>
-                <input id="audio-volume" type="range" min="0" max="100" step="1" value="12">
-            </div>
-            <p id="audio-status" class="audio-status">A trilha começa quando você tocar no botão de tocar.</p>
-        </div>
-        <audio id="ambient-audio" loop preload="metadata" crossorigin="anonymous"></audio>
+        </footer>
     </div>
 
-    <script>
-        const paths = {
-            luminosa: {
-                title: "Luminosa e lírica",
-                description: "Ideal para quem quer sentir maravilhamento antes de mergulhar em grandes conflitos. Aqui a fantasia aparece como algo antigo, belo e delicado, quase como uma música distante entre árvores.",
-                book: "Um Mago de Terramar, de Ursula K. Le Guin",
-                vibe: "Linguagem elegante, crescimento interior e magia com peso simbólico.",
-                next: "Patricia A. McKillip ou Peter S. Beagle, se quiser manter o encanto rarefeito."
-            },
-            aventurosa: {
-                title: "Aventureira e clara",
-                description: "Boa para quem quer uma história que anda bem, apresenta o mundo aos poucos e cria sensação de jornada desde as primeiras páginas.",
-                book: "O Hobbit, de J.R.R. Tolkien",
-                vibe: "Exploração, humor leve, perigo na medida e sensação de descoberta.",
-                next: "C.S. Lewis ou Robin McKinley, se você quiser continuar por caminhos acolhedores."
-            },
-            politica: {
-                title: "Política e intensa",
-                description: "Perfeita para leitores que gostam de tensão entre reinos, personagens moralmente complexos e um mundo onde decisões importam mais do que profecias.",
-                book: "A Guerra dos Tronos, de George R.R. Martin",
-                vibe: "Intriga, alianças frágeis, reviravoltas e uma fantasia mais áspera.",
-                next: "Brandon Sanderson, se quiser manter o senso de escala com uma estrutura mais direta."
-            },
-            mitica: {
-                title: "Mítica e estranha",
-                description: "Funciona para quem procura narrativas que parecem lenda, sonho ou conto antigo. O foco aqui é atmosfera, simbolismo e um toque de assombro bonito.",
-                book: "A Filha do Rei de Elfland, de Lord Dunsany",
-                vibe: "Clima ancestral, imagens marcantes e sensação de estar ouvindo um mito.",
-                next: "Sofia Samatar ou Patricia A. McKillip, se quiser um segundo passo ainda mais singular."
-            }
-        };
-        const tabs = document.querySelectorAll(".tab");
-        const title = document.getElementById("path-title");
-        const description = document.getElementById("path-description");
-        const book = document.getElementById("path-book");
-        const vibe = document.getElementById("path-vibe");
-        const next = document.getElementById("path-next");
-        tabs.forEach((tab) => {
-            tab.addEventListener("click", () => {
-                const path = paths[tab.dataset.path];
-                tabs.forEach((item) => {
-                    item.classList.remove("is-active");
-                    item.setAttribute("aria-selected", "false");
-                });
-                tab.classList.add("is-active");
-                tab.setAttribute("aria-selected", "true");
-                title.textContent = path.title;
-                description.textContent = path.description;
-                book.textContent = path.book;
-                vibe.textContent = path.vibe;
-                next.textContent = path.next;
-            });
-        });
-        const toggles = document.querySelectorAll(".toggle");
-        const panels = document.querySelectorAll("[data-group-panel]");
-        toggles.forEach((toggle) => {
-            toggle.addEventListener("click", () => {
-                toggles.forEach((item) => {
-                    item.classList.remove("is-active");
-                    item.setAttribute("aria-selected", "false");
-                });
-                panels.forEach((panel) => {
-                    panel.hidden = panel.dataset.groupPanel !== toggle.dataset.group;
-                });
-                toggle.classList.add("is-active");
-                toggle.setAttribute("aria-selected", "true");
-            });
-        });
-
-        const ambientAudio = document.getElementById("ambient-audio");
-        const audioDock = document.getElementById("audio-dock");
-        const audioPanelToggle = document.getElementById("audio-panel-toggle");
-        const audioPlay = document.getElementById("audio-play");
-        const audioPause = document.getElementById("audio-pause");
-        const audioTrack = document.getElementById("audio-track");
-        const audioMeta = document.getElementById("audio-meta");
-        const audioVolume = document.getElementById("audio-volume");
-        const audioStatus = document.getElementById("audio-status");
-        const AUDIO_ENABLED_KEY = "bosque-da-fantasia-audio-enabled";
-        const AUDIO_VOLUME_KEY = "bosque-da-fantasia-audio-volume";
-        const AUDIO_TRACK_KEY = "bosque-da-fantasia-audio-track";
-        const AUDIO_PANEL_KEY = "bosque-da-fantasia-audio-panel-open";
-        const defaultVolume = 0.12;
-        const tracks = {
-            serenata: {
-                label: "Serenata do Bosque",
-                description: "Violino, flauta e harpa em uma camada macia e clássica.",
-                sources: [
-                    { src: "https://upload.wikimedia.org/wikipedia/commons/transcoded/2/29/Gramophone-11491-248010.ogg/Gramophone-11491-248010.ogg.mp3", type: "audio/mpeg" },
-                    { src: "https://upload.wikimedia.org/wikipedia/commons/2/29/Gramophone-11491-248010.ogg", type: "audio/ogg" }
-                ]
-            },
-            violino: {
-                label: "Violino ao Longe",
-                description: "Um violino simples, distante e humano, quase como alguém tocando fora da trilha.",
-                sources: [
-                    { src: "https://upload.wikimedia.org/wikipedia/commons/transcoded/9/94/Street_musician_violin.ogg/Street_musician_violin.ogg.mp3", type: "audio/mpeg" },
-                    { src: "https://upload.wikimedia.org/wikipedia/commons/9/94/Street_musician_violin.ogg", type: "audio/ogg" }
-                ]
-            },
-            nevoa: {
-                label: "Névoa de Câmara",
-                description: "Instrumental antigo com sopros suaves para um clima de salão encantado.",
-                sources: [
-                    { src: "https://upload.wikimedia.org/wikipedia/commons/transcoded/2/2d/Victor-16029a-b6222.ogg/Victor-16029a-b6222.ogg.mp3", type: "audio/mpeg" },
-                    { src: "https://upload.wikimedia.org/wikipedia/commons/2/2d/Victor-16029a-b6222.ogg", type: "audio/ogg" }
-                ]
-            }
-        };
-
-        const applyTrackSources = (track) => {
-            ambientAudio.innerHTML = "";
-
-            track.sources.forEach((sourceInfo) => {
-                const source = document.createElement("source");
-                source.src = sourceInfo.src;
-                source.type = sourceInfo.type;
-                ambientAudio.appendChild(source);
-            });
-
-            ambientAudio.load();
-        };
-
-        const setTrack = (trackKey) => {
-            const resolvedTrackKey = tracks[trackKey] ? trackKey : "serenata";
-            const track = tracks[resolvedTrackKey];
-            applyTrackSources(track);
-            audioTrack.value = resolvedTrackKey;
-            audioMeta.textContent = track.description;
-            localStorage.setItem(AUDIO_TRACK_KEY, resolvedTrackKey);
-        };
-
-        const syncPanelToggleLabel = () => {
-            const isOpen = !audioDock.classList.contains("is-collapsed");
-            audioPanelToggle.textContent = isOpen ? "Fechar" : (!ambientAudio.paused ? "Som ativo" : "Som");
-            audioPanelToggle.setAttribute("aria-expanded", String(isOpen));
-        };
-
-        const updateAudioUi = (isPlaying, message) => {
-            audioPlay.disabled = isPlaying;
-            audioPause.disabled = !isPlaying;
-            audioStatus.textContent = message;
-            syncPanelToggleLabel();
-        };
-
-        const setPanelOpen = (isOpen) => {
-            audioDock.classList.toggle("is-collapsed", !isOpen);
-            syncPanelToggleLabel();
-            localStorage.setItem(AUDIO_PANEL_KEY, String(isOpen));
-        };
-
-        const setAudioVolume = (value) => {
-            ambientAudio.volume = value;
-            audioVolume.value = Math.round(value * 100);
-            localStorage.setItem(AUDIO_VOLUME_KEY, String(value));
-        };
-
-        const storedVolume = Number(localStorage.getItem(AUDIO_VOLUME_KEY));
-        const initialVolume = Number.isFinite(storedVolume) && storedVolume >= 0 && storedVolume <= 1
-            ? storedVolume
-            : defaultVolume;
-        setAudioVolume(initialVolume);
-        setPanelOpen(localStorage.getItem(AUDIO_PANEL_KEY) === "true");
-        const storedTrack = localStorage.getItem(AUDIO_TRACK_KEY);
-        setTrack(storedTrack && tracks[storedTrack] ? storedTrack : "serenata");
-
-        audioPanelToggle.addEventListener("click", () => {
-            const isCollapsed = audioDock.classList.contains("is-collapsed");
-            setPanelOpen(isCollapsed);
-        });
-
-        audioVolume.addEventListener("input", (event) => {
-            const value = Number(event.target.value) / 100;
-            setAudioVolume(value);
-
-            if (!ambientAudio.paused) {
-                updateAudioUi(true, "Trilha ativa em volume baixo e contínuo.");
-            } else {
-                updateAudioUi(false, "Volume ajustado. Toque em tocar quando quiser ouvir.");
-            }
-        });
-
-        audioTrack.addEventListener("change", async (event) => {
-            const wasPlaying = !ambientAudio.paused;
-            setTrack(event.target.value);
-
-            if (wasPlaying) {
-                try {
-                    await ambientAudio.play();
-                    updateAudioUi(true, "Trilha trocada sem interromper o ambiente.");
-                } catch (error) {
-                    localStorage.setItem(AUDIO_ENABLED_KEY, "false");
-                    updateAudioUi(false, "A nova trilha foi escolhida. Toque em tocar para recomeçar.");
-                }
-            } else {
-                updateAudioUi(false, "Nova trilha escolhida. Toque em tocar para ouvir.");
-            }
-        });
-
-        ambientAudio.addEventListener("error", () => {
-            localStorage.setItem(AUDIO_ENABLED_KEY, "false");
-            updateAudioUi(false, "Essa trilha não carregou direito. Troque de faixa ou tente tocar novamente.");
-        });
-
-        audioPlay.addEventListener("click", async () => {
-            try {
-                await ambientAudio.play();
-                localStorage.setItem(AUDIO_ENABLED_KEY, "true");
-                updateAudioUi(true, "Trilha ativa em loop suave.");
-            } catch (error) {
-                updateAudioUi(false, "O navegador não liberou o som agora. Tente tocar em tocar outra vez.");
-            }
-        });
-
-        audioPause.addEventListener("click", () => {
-            ambientAudio.pause();
-            localStorage.setItem(AUDIO_ENABLED_KEY, "false");
-            updateAudioUi(false, "Trilha pausada.");
-        });
-
-        if (localStorage.getItem(AUDIO_ENABLED_KEY) === "true") {
-            ambientAudio.play()
-                .then(() => {
-                    updateAudioUi(true, "Trilha retomada com sua preferência salva.");
-                })
-                .catch(() => {
-                    localStorage.setItem(AUDIO_ENABLED_KEY, "false");
-                    updateAudioUi(false, "Sua preferência foi lembrada, mas o navegador pediu um novo toque para liberar o som.");
-                });
-        } else {
-            updateAudioUi(false, "A trilha começa quando você tocar no botão de tocar.");
-        }
-    </script>
+    <script type="module" src="assets/js/index-page.js"></script>
 </body>
 </html>

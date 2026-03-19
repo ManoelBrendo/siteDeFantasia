@@ -1,6 +1,6 @@
 # Bosque da Fantasia
 
-Site estático em HTML sobre literatura fantástica, pensado para iniciantes e pronto para ser publicado no GitHub Pages.
+Site estático em HTML, CSS e JavaScript com atmosfera élfica, inspiração celta e acabamento medieval, pensado para apresentar literatura fantástica a quem está começando.
 
 ## Publicar no GitHub Pages
 
@@ -13,23 +13,21 @@ Site estático em HTML sobre literatura fantástica, pensado para iniciantes e p
    - `Branch`: `main`
    - `Folder`: `/ (root)`
 6. Salve.
-7. Aguarde alguns segundos até o GitHub gerar o link público.
+7. Aguarde alguns instantes até o GitHub gerar o link público.
 
 ## Estrutura importante
 
-- `index.html`: página principal do site.
-- `livros.html`: catálogo com busca por API e rotas temáticas.
-- `compra.html`: rota placeholder para o futuro link de compra.
+- `index.html`: experiência principal do site, agora com home, autores, estante, busca e painel de compra em uma única página.
+- `assets/js/index-page.js`: comportamento da página principal, com recomendações, busca, temas e integração do painel de compra.
+- `assets/js/open-library-api.js`: camada de consulta ao acervo da Open Library.
+- `assets/js/audio-player.js`: player de trilha sonora com múltiplas faixas.
 - `.nojekyll`: evita processamento desnecessário do GitHub Pages.
-- `CREDITOS-IMAGENS.md`: origem e licença das imagens usadas.
-- `assets/js/open-library-api.js`: camada de integração com o catálogo.
-- `assets/js/books-page.js`: comportamento da página de livros.
-- `assets/js/audio-player.js`: player compartilhado entre as páginas novas.
+- `CREDITOS-IMAGENS.md`: origem e licença das imagens e áudios usados.
 
 ## Observações
 
-- O site funciona como página estática, sem build e sem dependências.
-- As imagens atuais são carregadas por URL a partir do Wikimedia Commons.
-- A trilha sonora ambiente também é carregada por URL, oferece seleção entre faixas e precisa de interação do usuário para tocar na maioria dos navegadores.
-- O catálogo usa a Open Library Search API para oferecer um acervo grande e pesquisável.
-- Se você quiser deixar tudo funcionando até offline, o próximo passo é baixar essas imagens para uma pasta local do projeto e atualizar os caminhos no `index.html`.
+- O projeto funciona sem build e sem dependências externas de instalação.
+- O acervo pesquisável usa a Open Library Search API.
+- As capas dinâmicas usam a Open Library Covers API.
+- O áudio ambiente e algumas imagens dependem de URLs externas, então o visitante precisa estar online para ver e ouvir tudo.
+- Navegadores modernos normalmente exigem interação do usuário para liberar o som pela primeira vez.
