@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Acervo vivo de livros de fantasia com busca por API, temas e descrições para explorar novas leituras.">
+    <meta name="theme-color" content="#f8f4eb">
+    <meta property="og:title" content="Bosque da Fantasia | Acervo">
+    <meta property="og:description" content="Pesquise livros de fantasia em um grande catálogo com visual de pergaminho e rotas por tema.">
+    <meta property="og:type" content="website">
+    <title>Bosque da Fantasia | Acervo</title>
+    <style>
+        :root {
+            --bg: #f8f4eb;
+            --mist: #edf4ee;
+            --card: rgba(255, 252, 246, 0.82);
+            --text: #223127;
+            --muted: #5d6c63;
+            --accent: #69856f;
+            --deep: #456055;
+            --gold: #b49a62;
+            --paper: #f2e4bc;
+            --line: rgba(69, 96, 85, 0.14);
+            --shadow: 0 18px 50px rgba(34, 49, 39, 0.08);
+            --radius: 24px;
+            --max: 1160px;
+        }
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            margin: 0;
+            font-family: "Trebuchet MS", "Gill Sans", sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(180, 154, 98, 0.18), transparent 30%),
+                radial-gradient(circle at 85% 15%, rgba(105, 133, 111, 0.16), transparent 24%),
+                linear-gradient(180deg, #fbf8f2 0%, var(--mist) 55%, #f8f4eb 100%);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background: linear-gradient(120deg, rgba(255,255,255,0.2), transparent 22%);
+        }
+        a { color: inherit; text-decoration: none; }
+        button, input, select { font: inherit; }
+        .container { width: min(var(--max), calc(100% - 2rem)); margin: 0 auto; }
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            backdrop-filter: blur(14px);
+            background: rgba(248, 244, 235, 0.78);
+            border-bottom: 1px solid rgba(69, 96, 85, 0.08);
+        }
+        .topbar-inner, .section-head, .footer-box {
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+        .topbar-inner { padding: 1rem 0; align-items: center; }
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            color: var(--deep);
+            font: 700 1.2rem/1 "Palatino Linotype", "Book Antiqua", Georgia, serif;
+            letter-spacing: 0.04em;
+        }
+        .brand-mark {
+            width: 2.3rem;
+            height: 2.3rem;
+            display: grid;
+            place-items: center;
+            border-radius: 999px;
+            background: linear-gradient(145deg, rgba(105,133,111,0.16), rgba(180,154,98,0.18));
+            border: 1px solid rgba(105,133,111,0.18);
+        }
+        nav { display: flex; flex-wrap: wrap; gap: 1rem; color: var(--muted); }
+        nav a:hover, nav a:focus-visible { color: var(--deep); }
+        .eyebrow, .mini-label {
+            margin: 0 0 0.9rem;
+            color: var(--deep);
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+        h1, h2, h3 {
+            margin: 0;
+            font-family: "Palatino Linotype", "Book Antiqua", Georgia, serif;
+            line-height: 1.08;
+        }
+        .hero {
+            display: grid;
+            grid-template-columns: minmax(0, 1.05fr) minmax(300px, 0.95fr);
+            gap: 2rem;
+            padding: 4.2rem 0 2.8rem;
+            align-items: start;
+        }
+        .hero h1 { font-size: clamp(2.6rem, 5vw, 4.6rem); max-width: 11ch; }
+        .lead, .section-head p, .hero-card p, .book-description, .book-author, .topic-card span, .footer-box p { color: var(--muted); }
+        .lead { margin: 1.2rem 0 0; max-width: 56ch; font-size: 1.06rem; }
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 3rem;
+            padding: 0.82rem 1.25rem;
+            border-radius: 999px;
+            border: 1px solid rgba(69, 96, 85, 0.16);
+            background: rgba(255, 252, 246, 0.62);
+            color: var(--deep);
+            transition: transform 180ms ease, border-color 180ms ease;
+        }
+        .button:hover, .button:focus-visible { transform: translateY(-2px); }
+        .button.primary {
+            background: linear-gradient(135deg, var(--deep), var(--accent));
+            color: #f8f6ef;
+            border-color: transparent;
+        }
+        .hero-card, .search-parchment, .topic-card, .book-card, .footer-box {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(12px);
+        }
+        .hero-card { padding: 1.5rem; }
+        .search-parchment {
+            position: relative;
+            padding: 1.35rem;
+            background: linear-gradient(180deg, #f7ebcb 0%, #ecd7aa 56%, #f8edd1 100%);
+            border-color: rgba(132, 101, 54, 0.22);
+        }
+        .search-parchment::before {
+            content: "";
+            position: absolute;
+            inset: 0.55rem;
+            border: 1px dashed rgba(111, 82, 37, 0.22);
+            border-radius: 18px;
+            pointer-events: none;
+        }
+        .search-shell {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 0.75rem;
+            margin-top: 0.9rem;
+        }
+        .search-shell input {
+            min-height: 3.2rem;
+            padding: 0.95rem 1rem;
+            border-radius: 18px;
+            border: 1px solid rgba(111, 82, 37, 0.18);
+            background: rgba(255,255,255,0.38);
+            color: var(--text);
+        }
+        .section { padding: 0.5rem 0 2rem; }
+        .section-head { margin-bottom: 1.2rem; }
+        .section-head h2 { font-size: clamp(2rem, 3vw, 3rem); max-width: 13ch; }
+        .topics-grid, .results-grid {
+            display: grid;
+            gap: 1rem;
+        }
+        .topics-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .topic-card {
+            padding: 1.25rem;
+            transition: transform 180ms ease, border-color 180ms ease;
+        }
+        .topic-card:hover, .topic-card:focus-visible {
+            transform: translateY(-3px);
+            border-color: rgba(69, 96, 85, 0.24);
+        }
+        .topic-card strong {
+            display: block;
+            margin-bottom: 0.4rem;
+            font-family: "Palatino Linotype", "Book Antiqua", Georgia, serif;
+            font-size: 1.2rem;
+            color: var(--deep);
+        }
+        .results-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .book-card { overflow: hidden; }
+        .book-link {
+            display: grid;
+            height: 100%;
+            grid-template-rows: auto 1fr;
+        }
+        .book-cover-shell {
+            background: linear-gradient(180deg, rgba(105,133,111,0.08), rgba(180,154,98,0.12));
+            padding: 1rem;
+        }
+        .book-cover-shell img {
+            display: block;
+            width: 100%;
+            aspect-ratio: 4 / 5;
+            object-fit: cover;
+            border-radius: 18px;
+            box-shadow: 0 12px 24px rgba(34, 49, 39, 0.1);
+        }
+        .book-copy {
+            display: grid;
+            gap: 0.7rem;
+            padding: 1.2rem 1.2rem 1.3rem;
+        }
+        .book-copy h3 { font-size: 1.35rem; color: var(--deep); }
+        .book-author { margin: 0; font-weight: 700; }
+        .book-description { margin: 0; font-size: 0.95rem; }
+        .book-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            color: var(--deep);
+            font-size: 0.83rem;
+        }
+        .catalog-tools {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .catalog-status { color: var(--muted); margin: 0; }
+        .footer-box {
+            padding: 1.25rem 1.35rem;
+            margin: 1rem 0 3rem;
+        }
+        .footer-disclosure {
+            width: 100%;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(69, 96, 85, 0.08);
+        }
+        .footer-disclosure summary {
+            cursor: pointer;
+            color: var(--deep);
+            font-weight: 700;
+            list-style: none;
+        }
+        .footer-disclosure summary::-webkit-details-marker { display: none; }
+        .footer-disclosure-body { margin-top: 0.85rem; }
+        .source-list { margin: 0; padding-left: 1.1rem; color: var(--muted); }
+        .source-list li + li { margin-top: 0.55rem; }
+        @media (max-width: 980px) {
+            .hero, .topics-grid, .results-grid { grid-template-columns: 1fr; }
+            .topbar-inner, .section-head, .catalog-tools, .footer-box { flex-direction: column; align-items: start; }
+        }
+        @media (max-width: 720px) {
+            nav { width: 100%; overflow-x: auto; flex-wrap: nowrap; }
+            nav::-webkit-scrollbar { display: none; }
+            .search-shell { grid-template-columns: 1fr; }
+            .button { width: 100%; }
+            .hero { padding-top: 3.3rem; }
+        }
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <div class="container topbar-inner">
+            <a class="brand" href="index.html">
+                <span class="brand-mark">*</span>
+                <span>Bosque da Fantasia</span>
+            </a>
+            <nav aria-label="Navegação principal">
+                <a href="index.html">Início</a>
+                <a href="livros.html">Acervo</a>
+                <a href="#temas">Temas</a>
+                <a href="#resultados">Resultados</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="container hero">
+            <div>
+                <p class="eyebrow">Acervo vivo</p>
+                <h1 id="catalog-title">Acervo para Fantasia</h1>
+                <p id="catalog-summary" class="lead">Pesquise por autor, saga, criatura, magia ou abra um dos assuntos do pergaminho logo abaixo.</p>
+                <div style="margin-top: 1.4rem; display: flex; flex-wrap: wrap; gap: 0.8rem;">
+                    <a class="button primary" href="#resultados">Ver livros</a>
+                    <a class="button" href="index.html">Voltar ao portal principal</a>
+                </div>
+            </div>
+
+            <aside class="hero-card">
+                <p class="eyebrow">Barra em pergaminho</p>
+                <h2 style="font-size: 2rem;">Busque o que quiser no catálogo e transforme a mesma página em várias rotas temáticas.</h2>
+                <p>O acervo usa a busca da Open Library para abrir muitas frentes de assunto sem perder o mesmo layout do site.</p>
+                <form id="catalog-search-form" class="search-parchment">
+                    <label class="mini-label" for="catalog-search">Pergaminho de busca</label>
+                    <div class="search-shell">
+                        <input id="catalog-search" type="search" placeholder="Procure por livro, autor, criatura, magia ou assunto">
+                        <button id="catalog-submit" class="button primary" type="submit">Buscar</button>
+                    </div>
+                </form>
+            </aside>
+        </section>
+
+        <section class="section" id="temas">
+            <div class="container">
+                <div class="section-head">
+                    <div>
+                        <p class="eyebrow">Rotas temáticas</p>
+                        <h2>Assuntos que já podem virar páginas do mesmo padrão</h2>
+                    </div>
+                    <p>Cada cartão abaixo abre a mesma estrutura de página com outra consulta no acervo. É uma base pronta para crescer em novas trilhas.</p>
+                </div>
+                <div id="topics-grid" class="topics-grid"></div>
+            </div>
+        </section>
+
+        <section class="section" id="resultados">
+            <div class="container">
+                <div class="section-head">
+                    <div>
+                        <p class="eyebrow">Resultados</p>
+                        <h2>Livros com capa, resumo rápido e saída preparada para compra</h2>
+                    </div>
+                    <p>Ao clicar na capa ou no conteúdo do livro, a pessoa vai para uma rota de compra placeholder pronta para receber o link real depois.</p>
+                </div>
+                <div class="catalog-tools">
+                    <p id="catalog-status" class="catalog-status">Carregando o acervo do bosque...</p>
+                    <button id="catalog-load-more" class="button" type="button" hidden>Carregar mais livros</button>
+                </div>
+                <div id="results-grid" class="results-grid"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="container">
+        <div class="footer-box">
+            <div>
+                <p class="mini-label">Créditos discretos</p>
+                <p>O catálogo usa a Open Library Search API como base de busca, mantendo a mesma atmosfera do portal principal.</p>
+            </div>
+            <details class="footer-disclosure">
+                <summary>Ver fontes do acervo e das trilhas</summary>
+                <div class="footer-disclosure-body">
+                    <ul class="source-list">
+                        <li>Busca e metadados do catálogo: <a href="https://openlibrary.org/search/howto" target="_blank" rel="noreferrer noopener">Open Library Search API</a>.</li>
+                        <li>Capas quando disponíveis: <a href="https://covers.openlibrary.org/" target="_blank" rel="noreferrer noopener">Open Library Covers API</a>.</li>
+                        <li>Trilhas do player: Wikimedia Commons, mantidas iguais às outras páginas.</li>
+                    </ul>
+                </div>
+            </details>
+        </div>
+    </footer>
+
+    <script type="module" src="assets/js/books-page.js"></script>
+</body>
+</html>

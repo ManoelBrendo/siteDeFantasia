@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Página placeholder para o futuro link de compra dos livros do Bosque da Fantasia.">
+    <meta name="theme-color" content="#f8f4eb">
+    <title>Bosque da Fantasia | Compra</title>
+    <style>
+        :root {
+            --bg: #f8f4eb;
+            --mist: #edf4ee;
+            --card: rgba(255, 252, 246, 0.82);
+            --text: #223127;
+            --muted: #5d6c63;
+            --accent: #69856f;
+            --deep: #456055;
+            --line: rgba(69, 96, 85, 0.14);
+            --shadow: 0 18px 50px rgba(34, 49, 39, 0.08);
+            --radius: 24px;
+            --max: 980px;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: "Trebuchet MS", "Gill Sans", sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(180, 154, 98, 0.18), transparent 30%),
+                radial-gradient(circle at 85% 15%, rgba(105, 133, 111, 0.16), transparent 24%),
+                linear-gradient(180deg, #fbf8f2 0%, var(--mist) 55%, #f8f4eb 100%);
+            line-height: 1.6;
+        }
+        .container { width: min(var(--max), calc(100% - 2rem)); margin: 0 auto; }
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            backdrop-filter: blur(14px);
+            background: rgba(248, 244, 235, 0.78);
+            border-bottom: 1px solid rgba(69, 96, 85, 0.08);
+        }
+        .topbar-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 1rem 0;
+        }
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            color: var(--deep);
+            font: 700 1.2rem/1 "Palatino Linotype", "Book Antiqua", Georgia, serif;
+            letter-spacing: 0.04em;
+            text-decoration: none;
+        }
+        .brand-mark {
+            width: 2.3rem;
+            height: 2.3rem;
+            display: grid;
+            place-items: center;
+            border-radius: 999px;
+            background: linear-gradient(145deg, rgba(105,133,111,0.16), rgba(180,154,98,0.18));
+            border: 1px solid rgba(105,133,111,0.18);
+        }
+        .hero {
+            display: grid;
+            grid-template-columns: minmax(260px, 340px) minmax(0, 1fr);
+            gap: 2rem;
+            align-items: center;
+            padding: 4rem 0 3rem;
+        }
+        .card {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 1.4rem;
+        }
+        .cover-shell {
+            background: linear-gradient(180deg, rgba(105,133,111,0.08), rgba(180,154,98,0.12));
+            border-radius: 20px;
+            padding: 1rem;
+        }
+        .cover-shell img {
+            display: block;
+            width: 100%;
+            aspect-ratio: 4 / 5;
+            object-fit: cover;
+            border-radius: 18px;
+        }
+        h1, h2 {
+            margin: 0;
+            font-family: "Palatino Linotype", "Book Antiqua", Georgia, serif;
+            line-height: 1.08;
+        }
+        h1 { font-size: clamp(2.4rem, 4vw, 4rem); }
+        .eyebrow {
+            margin: 0 0 0.9rem;
+            color: var(--deep);
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+        .lead, .muted { color: var(--muted); }
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 3rem;
+            padding: 0.82rem 1.25rem;
+            border-radius: 999px;
+            border: 1px solid rgba(69, 96, 85, 0.16);
+            background: rgba(255, 252, 246, 0.62);
+            color: var(--deep);
+            text-decoration: none;
+        }
+        @media (max-width: 860px) {
+            .hero { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <div class="container topbar-inner">
+            <a class="brand" href="index.html">
+                <span class="brand-mark">*</span>
+                <span>Bosque da Fantasia</span>
+            </a>
+            <a id="purchase-back" class="button" href="livros.html">Voltar ao acervo</a>
+        </div>
+    </header>
+
+    <main class="container hero">
+        <div class="card">
+            <div class="cover-shell">
+                <img id="purchase-cover" src="" alt="Capa do livro selecionado">
+            </div>
+        </div>
+        <div class="card">
+            <p class="eyebrow">Link de compra placeholder</p>
+            <h1 id="purchase-title">Livro do bosque</h1>
+            <p id="purchase-meta" class="lead">Autor não informado · Ano não informado</p>
+            <p id="purchase-note" class="muted">O link final de compra será conectado aqui depois.</p>
+            <div style="margin-top: 1.2rem; display: flex; flex-wrap: wrap; gap: 0.8rem;">
+                <a class="button" href="livros.html">Voltar para outra busca</a>
+                <a class="button" href="index.html">Voltar ao portal inicial</a>
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="assets/js/purchase-page.js"></script>
+</body>
+</html>
