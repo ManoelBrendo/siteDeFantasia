@@ -483,6 +483,14 @@
                 width: auto;
                 bottom: 0.8rem;
             }
+            .audio-dock.is-collapsed {
+                left: auto;
+                right: 1rem;
+                width: auto;
+            }
+            .audio-panel-toggle {
+                width: auto;
+            }
             .audio-buttons { grid-template-columns: 1fr; }
         }
     </style>
@@ -500,6 +508,7 @@
                 <a href="#autores">Autores</a>
                 <a href="#agora">Para ler já</a>
                 <a href="#capas">Estante visual</a>
+                <a href="livros.html">Acervo</a>
             </nav>
         </div>
     </header>
@@ -513,6 +522,7 @@
                 <div class="actions fade delay-3">
                     <a class="button primary" href="#entrada">Abrir o mapa inicial</a>
                     <a class="button secondary" href="#autores">Explorar autores</a>
+                    <a class="button secondary" href="livros.html">Entrar no acervo</a>
                 </div>
                 <div class="stats fade delay-3">
                     <div class="stat"><strong>12</strong><span>autores para começar sem se perder</span></div>
@@ -891,6 +901,8 @@
         });
 
         const ambientAudio = document.getElementById("ambient-audio");
+        const audioDock = document.getElementById("audio-dock");
+        const audioPanelToggle = document.getElementById("audio-panel-toggle");
         const audioPlay = document.getElementById("audio-play");
         const audioPause = document.getElementById("audio-pause");
         const audioTrack = document.getElementById("audio-track");
@@ -900,6 +912,7 @@
         const AUDIO_ENABLED_KEY = "bosque-da-fantasia-audio-enabled";
         const AUDIO_VOLUME_KEY = "bosque-da-fantasia-audio-volume";
         const AUDIO_TRACK_KEY = "bosque-da-fantasia-audio-track";
+        const AUDIO_PANEL_KEY = "bosque-da-fantasia-audio-panel-open";
         const defaultVolume = 0.12;
         const tracks = {
             serenata: {
@@ -950,10 +963,23 @@
             localStorage.setItem(AUDIO_TRACK_KEY, resolvedTrackKey);
         };
 
+        const syncPanelToggleLabel = () => {
+            const isOpen = !audioDock.classList.contains("is-collapsed");
+            audioPanelToggle.textContent = isOpen ? "Fechar" : (!ambientAudio.paused ? "Som ativo" : "Som");
+            audioPanelToggle.setAttribute("aria-expanded", String(isOpen));
+        };
+
         const updateAudioUi = (isPlaying, message) => {
             audioPlay.disabled = isPlaying;
             audioPause.disabled = !isPlaying;
             audioStatus.textContent = message;
+            syncPanelToggleLabel();
+        };
+
+        const setPanelOpen = (isOpen) => {
+            audioDock.classList.toggle("is-collapsed", !isOpen);
+            syncPanelToggleLabel();
+            localStorage.setItem(AUDIO_PANEL_KEY, String(isOpen));
         };
 
         const setAudioVolume = (value) => {
@@ -967,8 +993,14 @@
             ? storedVolume
             : defaultVolume;
         setAudioVolume(initialVolume);
+        setPanelOpen(localStorage.getItem(AUDIO_PANEL_KEY) === "true");
         const storedTrack = localStorage.getItem(AUDIO_TRACK_KEY);
         setTrack(storedTrack && tracks[storedTrack] ? storedTrack : "serenata");
+
+        audioPanelToggle.addEventListener("click", () => {
+            const isCollapsed = audioDock.classList.contains("is-collapsed");
+            setPanelOpen(isCollapsed);
+        });
 
         audioVolume.addEventListener("input", (event) => {
             const value = Number(event.target.value) / 100;
