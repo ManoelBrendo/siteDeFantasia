@@ -14,6 +14,12 @@
         content="Descubra autores, mitos, livros clássicos e um acervo pesquisável em uma experiência élfica e medieval."
     >
     <meta property="og:type" content="website">
+    <link rel="preconnect" href="https://openlibrary.org">
+    <link rel="preconnect" href="https://covers.openlibrary.org">
+    <link rel="preconnect" href="https://upload.wikimedia.org" crossorigin>
+    <link rel="modulepreload" href="./index-page.js">
+    <link rel="modulepreload" href="./audio-player.js">
+    <link rel="modulepreload" href="./open-library-api.js">
     <style>
         :root {
             color-scheme: dark;
@@ -1163,6 +1169,6 @@
         </footer>
     </div>
 
-    <script type="module" src="assets/js/index-page.js"></script>
+    <script type="module" src="./index-page.js"></script>
 </body>
 </html>

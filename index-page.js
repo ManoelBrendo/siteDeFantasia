@@ -407,4 +407,17 @@ const init = async () => {
     await runSearch({ query: queryFromUrl, page: 1, append: false, label: initialLabel });
 };
 
-init();
+const bootstrap = async () => {
+    try {
+        await init();
+    } catch (error) {
+        initAudioPlayer();
+        console.error("Falha ao inicializar a página:", error);
+
+        if (elements.status) {
+            elements.status.textContent = "A página carregou parcialmente. A trilha sonora continua disponível, mas o acervo precisa ser recarregado.";
+        }
+    }
+};
+
+bootstrap();
