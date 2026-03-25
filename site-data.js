@@ -10,9 +10,21 @@ export const featuredBooks = [
         author: "Lord Dunsany",
         year: "1924",
         cover: "https://commons.wikimedia.org/wiki/Special:FilePath/The%20Hunting%20of%20the%20Unicorn%20by%20Samuel%20Simes%2C%20Frontispiece%20to%20The%20King%20of%20Elfland%27s%20Daughter.png?width=720",
-        description: "Quando um reino humano exige um toque de magia, o príncipe Alveric parte para Elfland e traz de lá a filha do rei. O encontro entre os dois abala as fronteiras entre a vida comum e um mundo feérico que não segue o tempo dos homens.",
-        aura: "Feérico, régio e melancólico",
-        paths: ["elfica", "mitica"]
+        description: "Quando um reino humano exige um toque de magia, o principe Alveric parte para Elfland e traz de la a filha do rei. O encontro entre ambos abala as fronteiras entre a vida comum e um mundo feerico que nao obedece ao tempo dos homens.",
+        aura: "Feerico, regio e melancolico",
+        difficulty: "Entrada contemplativa",
+        difficultyKey: "entrada",
+        themes: ["elfos", "feeria", "reinos encantados", "fronteiras entre mundos"],
+        readerProfile: "Ideal para quem quer entrar na fantasia pelo encanto, pela musica do texto e por uma sensacao de maravilha antiga.",
+        whyRead: "E um dos caminhos mais puros para sentir o tom elfico classico antes mesmo de chegar a obras mais densas do genero.",
+        authorNote: "Lord Dunsany ajudou a formar a imagetica onirica que depois influenciaria boa parte da fantasia moderna.",
+        paths: ["elfica", "mitica"],
+        filters: {
+            clima: "elfico",
+            dificuldade: "entrada",
+            motivo: "feerico"
+        },
+        purchaseUrl: "#compra"
     },
     {
         id: "phantastes",
@@ -21,9 +33,21 @@ export const featuredBooks = [
         author: "George MacDonald",
         year: "1858",
         cover: "https://commons.wikimedia.org/wiki/Special:FilePath/Phantastes%20Title%20Page%201894.jpg?width=720",
-        description: "Depois de herdar uma chave misteriosa, Anodos desperta em uma terra encantada e atravessa florestas, palácios e provações interiores. A trama funciona como viagem espiritual e conto de maravilhamento ao mesmo tempo.",
-        aura: "Onírico, simbólico e iniciático",
-        paths: ["elfica", "iniciatica", "mitica"]
+        description: "Depois de herdar uma chave misteriosa, Anodos desperta em uma terra encantada e atravessa florestas, palacios e provacoes interiores. A jornada funciona ao mesmo tempo como conto de maravilhamento e travessia espiritual.",
+        aura: "Onirico, simbolico e iniciatico",
+        difficulty: "Intermediario lirico",
+        difficultyKey: "intermediario",
+        themes: ["bosques encantados", "simbolismo", "viagem interior", "maravilhamento"],
+        readerProfile: "Bom para leitores que gostam de fantasia mais atmosferica, simbologica e com espaco para interpretacao.",
+        whyRead: "Mostra que fantasia tambem pode ser introspeccao, imagetica espiritual e descoberta de si por meio do maravilhoso.",
+        authorNote: "George MacDonald e um dos ancestrais mais importantes da fantasia literaria, sobretudo na tradicao mais contemplativa.",
+        paths: ["elfica", "iniciatica", "mitica"],
+        filters: {
+            clima: "iniciatico",
+            dificuldade: "intermediario",
+            motivo: "magia"
+        },
+        purchaseUrl: "#compra"
     },
     {
         id: "princesa-goblin",
@@ -32,66 +56,277 @@ export const featuredBooks = [
         author: "George MacDonald",
         year: "1872",
         cover: "https://commons.wikimedia.org/wiki/Special:FilePath/Princess%20and%20the%20Goblin.jpg?width=720",
-        description: "A pequena princesa Irene vive em um castelo ameaçado por goblins escondidos no subterrâneo. Com a ajuda de Curdie, ela precisa enfrentar perigos, descobrir passagens ocultas e confiar em uma proteção misteriosa que paira sobre o reino.",
+        description: "A pequena princesa Irene vive em um castelo ameacado por goblins escondidos no subterraneo. Com a ajuda de Curdie, ela precisa enfrentar perigos, descobrir passagens ocultas e confiar em uma protecao misteriosa que vela pelo reino.",
         aura: "Acolhedor, medieval e aventureiro",
-        paths: ["medieval", "elfica"]
+        difficulty: "Entrada aventureira",
+        difficultyKey: "entrada",
+        themes: ["castelos", "goblins", "aventura juvenil", "protecao invisivel"],
+        readerProfile: "Excelente para quem quer uma porta de entrada mais direta, narrativa e calorosa para o fantastico classico.",
+        whyRead: "Tem ritmo acessivel, imaginario medieval forte e um senso de protecao encantada que conversa bem com iniciantes.",
+        authorNote: "MacDonald mistura simplicidade narrativa com uma base simbolica que ainda recompensa releituras.",
+        paths: ["medieval", "elfica"],
+        filters: {
+            clima: "medieval",
+            dificuldade: "entrada",
+            motivo: "cavaleiros"
+        },
+        purchaseUrl: "#compra"
     },
     {
         id: "well-world-end",
-        title: "O Poço no Fim do Mundo",
+        title: "O Poco no Fim do Mundo",
         originalTitle: "The Well at the World's End",
         author: "William Morris",
         year: "1896",
         cover: "https://commons.wikimedia.org/wiki/Special:FilePath/The%20Well%20at%20the%20World%27s%20End%2C%20design%20by%20William%20Morris%2C%20Hammersmith%2C%20Kelmscott%20Press%2C%201896%20-%20National%20Gallery%20of%20Art%2C%20Washington%20-%20DSC09794.JPG?width=720",
-        description: "Ralph deixa o conforto do lar para procurar um poço lendário ligado à fortuna e ao destino. A jornada o leva por estradas, cortes, combates e encontros que transformam a busca em um romance de formação cavaleiresca.",
+        description: "Ralph deixa o conforto do lar para procurar um poco lendario ligado a fortuna e ao destino. A estrada o leva por cortes, encontros e provacoes que transformam a busca em um romance de formacao cavaleiresca.",
         aura: "Cavaleiresco, antigo e cerimonial",
-        paths: ["medieval", "mitica"]
+        difficulty: "Intermediario medieval",
+        difficultyKey: "intermediario",
+        themes: ["jornada", "cavaleirismo", "destino", "romance de estrada"],
+        readerProfile: "Ideal para quem quer sentir a fantasia medieval antes de Tolkien, com sabor de cronica antiga e caminhar ritual.",
+        whyRead: "Ajuda a perceber como o imaginario medieval artesanal e a quest lendaria moldaram a fantasia posterior.",
+        authorNote: "William Morris liga literatura, artesanato medieval e visao de mundo pastoral em uma prosa muito particular.",
+        paths: ["medieval", "mitica"],
+        filters: {
+            clima: "medieval",
+            dificuldade: "intermediario",
+            motivo: "cavaleiros"
+        },
+        purchaseUrl: "#compra"
+    }
+];
+
+export const authorsCatalog = [
+    {
+        id: "tolkien",
+        name: "J. R. R. Tolkien",
+        status: "Renomado",
+        summary: "O grande arquiteto da fantasia moderna de mundo secundario, com linguas, historia profunda e senso de perda ancestral.",
+        bestFor: "Leitores que querem densidade de mundo, povos bem construidos e horizonte mitico.",
+        climate: "Epico, melancolico e ancestral.",
+        startWith: "O Hobbit, depois O Senhor dos Aneis.",
+        legacy: "Praticamente toda fantasia posterior dialoga com a escala de mundo, a filologia e o imaginario de Tolkien.",
+        works: ["O Hobbit", "O Senhor dos Aneis", "O Silmarillion"]
+    },
+    {
+        id: "leguin",
+        name: "Ursula K. Le Guin",
+        status: "Renomada",
+        summary: "Mostra que fantasia tambem pode ser equilibrio, linguagem precisa, silencio e pensamento moral.",
+        bestFor: "Quem quer fantasia contemplativa, inteligente e centrada em transformacao interior.",
+        climate: "Maritimo, ritual e profundamente humano.",
+        startWith: "Um Feiticeiro de Terramar.",
+        legacy: "Expandiu o genero para territrios de sutileza filosofica e imagetica depurada.",
+        works: ["Um Feiticeiro de Terramar", "As Tumbas de Atuan", "A Mais Longinqua Praia"]
+    },
+    {
+        id: "dunsany",
+        name: "Lord Dunsany",
+        status: "Pouco lembrado",
+        summary: "Mestre do sonho feerico, da distancia mitica e da frase que parece vir de uma lenda recitada a meia-luz.",
+        bestFor: "Quem busca um tom elfico mais puro, nebuloso e musical.",
+        climate: "Regio, nebuloso e quase liturgico.",
+        startWith: "A Filha do Rei de Elfland.",
+        legacy: "Foi uma ponte importante entre mito artificial, prosa encantatoria e a fantasia do seculo XX.",
+        works: ["A Filha do Rei de Elfland", "The Gods of Pegana", "The Book of Wonder"]
+    },
+    {
+        id: "morris",
+        name: "William Morris",
+        status: "Pouco lembrado",
+        summary: "Une artesanato medieval, jornada, paisagem pastoral e linguagem de romance antigo em uma fantasia de forte textura historica.",
+        bestFor: "Leitores atraidos por estrada, corte, destino e sensacao de mundo artesanal.",
+        climate: "Medieval, cerimonial e pastoral.",
+        startWith: "O Poco no Fim do Mundo.",
+        legacy: "Seu medievalismo imaginativo foi decisivo para o formato de quest e para o gosto por mundos pre-industriais.",
+        works: ["O Poco no Fim do Mundo", "The Wood Beyond the World", "The House of the Wolfings"]
+    },
+    {
+        id: "macdonald",
+        name: "George MacDonald",
+        status: "Ancestral do genero",
+        summary: "Uma das fontes mais antigas da fantasia moderna, combinando fe, simbolismo e maravilhamento em narrativas de passagem.",
+        bestFor: "Quem gosta de fantasia iniciatica, com atmosfera de sonho e imaginario moral.",
+        climate: "Onirico, terno e simbolico.",
+        startWith: "Fantastes ou A Princesa e o Goblin.",
+        legacy: "Influenciou C. S. Lewis, Tolkien e muitos autores que enxergaram a fantasia como forma de revelacao interior.",
+        works: ["Fantastes", "A Princesa e o Goblin", "Lilith"]
+    },
+    {
+        id: "mirrlees",
+        name: "Hope Mirrlees",
+        status: "Cultuada",
+        summary: "Uma voz rara, estranha e sofisticada, capaz de misturar cidade, magia e atmosfera de nevoa intelectual.",
+        bestFor: "Leitores que querem algo singular, de fantasia antiga mas menos previsivel.",
+        climate: "Nebuloso, urbano e feerico.",
+        startWith: "Lud-in-the-Mist.",
+        legacy: "Virou referencia cult para escritores que procuram fantasia com estranheza e refinamento literario.",
+        works: ["Lud-in-the-Mist"]
+    }
+];
+
+export const glossaryTerms = [
+    {
+        term: "Feeria",
+        category: "Atmosfera",
+        short: "O territorio do maravilhoso elfico e das cortes encantadas.",
+        long: "Feeria nomeia o sentimento de mundo encantado ligado a fadas, elfos, musica, brilho e estranheza antiga. Nao e apenas um lugar: e uma qualidade de presenca."
+    },
+    {
+        term: "Sidhe",
+        category: "Mitologia celta",
+        short: "Povo feerico associado a montes, nevoas e outro mundo.",
+        long: "Na tradicao celta, os sidhe aparecem como seres ligados ao outro mundo, a moradas ocultas e a uma nobreza estranha. Sao fundamentais para o tom mitico de muitas fantasias celtas."
+    },
+    {
+        term: "Avalon",
+        category: "Arturiano",
+        short: "Ilha simbolica das lendas do rei Artur.",
+        long: "Avalon representa cura, misterio, nevoa ritual e passagem entre mundos. Em fantasia, costuma marcar o encontro entre realeza ferida, memoria e promessa de retorno."
+    },
+    {
+        term: "Mundo secundario",
+        category: "Teoria do genero",
+        short: "Universo ficcional com regras proprias e coerencia interna.",
+        long: "Quando um autor constri um mundo secundario, ele cria geografia, historia, linguas, criaturas e valores que fazem esse universo parecer habitavel."
+    },
+    {
+        term: "Quest",
+        category: "Estrutura narrativa",
+        short: "Jornada em busca de um objeto, um lugar ou uma transformacao.",
+        long: "A quest e a busca cerimonial da fantasia: um caminho que mistura deslocamento fisico, prova moral e mudanca interior."
+    },
+    {
+        term: "Sword and sorcery",
+        category: "Subgenero",
+        short: "Fantasia mais corporal, perigosa e centrada em aventura.",
+        long: "Nesse subgenero, o foco costuma estar em conflitos imediatos, magia visivel, duelos, monstros e sobrevivencia, em vez de grandes genealogias ou cosmologias."
+    },
+    {
+        term: "Alta fantasia",
+        category: "Subgenero",
+        short: "Fantasia de grande escala, geralmente em mundo proprio.",
+        long: "A alta fantasia opera em um registro amplo: reinos, guerras, linguas, povos e destinos coletivos. Tolkien virou seu exemplo mais conhecido."
+    },
+    {
+        term: "Fantasia iniciatica",
+        category: "Leitura",
+        short: "Narrativa em que o percurso exterior tambem e uma formacao interior.",
+        long: "Aqui a viagem funciona como rito de passagem. O leitor acompanha o protagonista por paisagens que refletem medo, desejo, amadurecimento e revelacao."
+    },
+    {
+        term: "Bestiario",
+        category: "Imagario",
+        short: "Conjunto de criaturas, monstros e seres de um universo.",
+        long: "Um bestiario ajuda a medir o tom de um mundo fantastico, revelando se ele privilegia encanto, perigo, humor sombrio ou maravilha."
+    },
+    {
+        term: "Cronica antiga",
+        category: "Estilo",
+        short: "Prosa que soa como registro oral ou memorial de eras passadas.",
+        long: "Esse estilo aproxima a fantasia de uma voz historica, cerimonial ou quase liturgica, muito comum em obras de sabor medieval."
+    },
+    {
+        term: "Outro mundo",
+        category: "Mitologia",
+        short: "Espaco vizinho ao humano, mas regido por outras leis.",
+        long: "O outro mundo pode aparecer como floresta, ilha, monte, salao ou reino secreto. Ele costuma embaralhar tempo, desejo e identidade."
+    },
+    {
+        term: "Materia arturiana",
+        category: "Arturiano",
+        short: "Conjunto de narrativas ligadas a Artur, Camelot e seus circulos.",
+        long: "A materia arturiana sustenta boa parte do imaginario medieval fantastico, de espadas lendarias a ilhas veladas, profecias e reis feridos."
     }
 ];
 
 export const topicThemes = [
-    { label: "Elfos e feéria", query: "elves fantasy", description: "Cortes feéricas, bosques e reinos encantados." },
-    { label: "Mitologia celta", query: "\"celtic mythology\" fantasy", description: "Sidhe, druidas, símbolos e velhas lendas." },
-    { label: "Lendas arturianas", query: "\"arthurian romance\"", description: "Camelot, Avalon e relíquias do reino." },
-    { label: "Espadas e reinos", query: "subject:fantasy", description: "Jornadas, heróis e paisagens de saga." },
-    { label: "Magia e feitiçaria", query: "\"magic fantasy\"", description: "Feitiços, grimórios e aprendizes do arcano." },
-    { label: "Dragões e criaturas", query: "\"dragons fantasy\"", description: "Bestiários, monstros e fôlego antigo." },
+    { label: "Elfos e feeria", query: "elves fantasy", description: "Cortes feericas, bosques e reinos encantados." },
+    { label: "Mitologia celta", query: "\"celtic mythology\" fantasy", description: "Sidhe, druidas, simbolos e velhas lendas." },
+    { label: "Lendas arturianas", query: "\"arthurian romance\"", description: "Camelot, Avalon e reliquias do reino." },
+    { label: "Espadas e reinos", query: "subject:fantasy", description: "Jornadas, herois e paisagens de saga." },
+    { label: "Magia e feiticaria", query: "\"magic fantasy\"", description: "Feiticos, grimorios e aprendizes do arcano." },
+    { label: "Dragoes e criaturas", query: "\"dragons fantasy\"", description: "Bestiarios, monstros e folego antigo." },
     { label: "Bosques encantados", query: "\"fairy tales\" forest", description: "Trilhas verdes e maravilhas do mato." },
-    { label: "Castelos medievais", query: "\"medieval fantasy\"", description: "Pedra, brasões e ecos de corte." }
+    { label: "Castelos medievais", query: "\"medieval fantasy\"", description: "Pedra, brasoes e ecos de corte." }
 ];
 
 export const readingPaths = [
     {
         id: "elfica",
-        name: "Trilha Élfica",
-        description: "Ideal para quem quer delicadeza feérica, bosques antigos, corte encantada e aquele sentimento de maravilha que parece vir de outra estação do mundo.",
-        focusLabel: "Elfos e feéria",
+        name: "Trilha Elfica",
+        description: "Ideal para quem quer delicadeza feerica, bosques antigos, corte encantada e aquele sentimento de maravilha que parece vir de outra estacao do mundo.",
+        focusLabel: "Elfos e feeria",
         focusQuery: "elves fantasy",
-        bookIds: ["elfland", "phantastes", "princesa-goblin"]
+        bookIds: ["elfland", "phantastes", "princesa-goblin"],
+        accent: "#cfe2af"
     },
     {
         id: "mitica",
-        name: "Trilha Celta e Mítica",
-        description: "Feita para leitores atraídos por névoa ritual, símbolos, lendas antigas e fantasia com cheiro de mito oral e paisagem ancestral.",
+        name: "Trilha Celta e Mitica",
+        description: "Feita para leitores atraidos por nevoa ritual, simbolos, lendas antigas e fantasia com cheiro de mito oral e paisagem ancestral.",
         focusLabel: "Mitologia celta",
         focusQuery: "\"celtic mythology\" fantasy",
-        bookIds: ["phantastes", "well-world-end", "elfland"]
+        bookIds: ["phantastes", "well-world-end", "elfland"],
+        accent: "#dcbf83"
     },
     {
         id: "medieval",
         name: "Trilha Medieval de Estrada",
-        description: "Boa para quem quer castelos, jornada, destino, corte, estrada e um senso de aventura de crônica antiga sem perder o encanto literário.",
+        description: "Boa para quem quer castelos, jornada, destino, corte, estrada e um senso de aventura de cronica antiga sem perder o encanto literario.",
         focusLabel: "Castelos medievais",
         focusQuery: "\"medieval fantasy\"",
-        bookIds: ["well-world-end", "princesa-goblin", "elfland"]
+        bookIds: ["well-world-end", "princesa-goblin", "elfland"],
+        accent: "#c7a77b"
     },
     {
         id: "iniciatica",
-        name: "Trilha Onírica e Iniciática",
-        description: "Pensada para quem prefere fantasia contemplativa, simbólica e transformadora, em que a paisagem exterior também é uma travessia interior.",
+        name: "Trilha Onirica e Iniciatica",
+        description: "Pensada para quem prefere fantasia contemplativa, simbolica e transformadora, em que a paisagem exterior tambem e uma travessia interior.",
         focusLabel: "Bosques encantados",
         focusQuery: "\"fairy tales\" forest",
-        bookIds: ["phantastes", "elfland", "well-world-end"]
+        bookIds: ["phantastes", "elfland", "well-world-end"],
+        accent: "#95c1b2"
+    }
+];
+
+export const advancedFilters = [
+    {
+        id: "clima",
+        label: "Clima",
+        defaultValue: "todos",
+        options: [
+            { value: "todos", label: "Tudo" },
+            { value: "elfico", label: "Elfico" },
+            { value: "mitico", label: "Mitico" },
+            { value: "medieval", label: "Medieval" },
+            { value: "iniciatico", label: "Iniciatico" }
+        ]
+    },
+    {
+        id: "dificuldade",
+        label: "Leitura",
+        defaultValue: "todos",
+        options: [
+            { value: "todos", label: "Qualquer nivel" },
+            { value: "entrada", label: "Entrada" },
+            { value: "intermediario", label: "Intermediario" },
+            { value: "denso", label: "Denso" }
+        ]
+    },
+    {
+        id: "motivo",
+        label: "Motivo central",
+        defaultValue: "todos",
+        options: [
+            { value: "todos", label: "Todos" },
+            { value: "feerico", label: "Feeria" },
+            { value: "mitologia", label: "Mitologia" },
+            { value: "cavaleiros", label: "Cavalaria" },
+            { value: "magia", label: "Magia" },
+            { value: "criaturas", label: "Criaturas" }
+        ]
     }
 ];
 
@@ -100,40 +335,40 @@ export const affinityQuestions = [
         id: "entrada",
         title: "Qual portal te chama primeiro?",
         options: [
-            { value: "bosque", label: "Bosque élfico", description: "Encanto, folhas, luar e estranheza suave.", scores: { elfica: 3, iniciatica: 1 } },
-            { value: "mito", label: "Lenda antiga", description: "Sons rituais, ilha, sidhe e memória oral.", scores: { mitica: 3, elfica: 1 } },
-            { value: "castelo", label: "Castelo e corte", description: "Pedra, brasão, jornada e promessa.", scores: { medieval: 3 } },
-            { value: "sonho", label: "Sonho simbólico", description: "Paisagem interior, metáfora e travessia íntima.", scores: { iniciatica: 3, mitica: 1 } }
+            { value: "bosque", label: "Bosque elfico", description: "Encanto, folhas, luar e estranheza suave.", scores: { elfica: 3, iniciatica: 1 } },
+            { value: "mito", label: "Lenda antiga", description: "Sons rituais, ilha, sidhe e memoria oral.", scores: { mitica: 3, elfica: 1 } },
+            { value: "castelo", label: "Castelo e corte", description: "Pedra, brasao, jornada e promessa.", scores: { medieval: 3 } },
+            { value: "sonho", label: "Sonho simbolico", description: "Paisagem interior, metafora e travessia intima.", scores: { iniciatica: 3, mitica: 1 } }
         ]
     },
     {
         id: "ritmo",
-        title: "Que ritmo combina com você?",
+        title: "Que ritmo combina com voce?",
         options: [
-            { value: "contemplativo", label: "Contemplativo", description: "Leitura mais atmosférica e lenta.", scores: { iniciatica: 2, elfica: 1 } },
-            { value: "aventureiro", label: "Aventureiro", description: "Andar rápido, perigo e descoberta.", scores: { medieval: 2, elfica: 1 } },
-            { value: "ritual", label: "Ritual", description: "Peso mítico, símbolos e solenidade.", scores: { mitica: 2 } },
+            { value: "contemplativo", label: "Contemplativo", description: "Leitura mais atmosferica e lenta.", scores: { iniciatica: 2, elfica: 1 } },
+            { value: "aventureiro", label: "Aventureiro", description: "Andar rapido, perigo e descoberta.", scores: { medieval: 2, elfica: 1 } },
+            { value: "ritual", label: "Ritual", description: "Peso mitico, simbolos e solenidade.", scores: { mitica: 2 } },
             { value: "equilibrado", label: "Equilibrado", description: "Mistura de beleza, trama e movimento.", scores: { elfica: 1, medieval: 1, mitica: 1 } }
         ]
     },
     {
         id: "magia",
-        title: "Como você prefere a magia?",
+        title: "Como voce prefere a magia?",
         options: [
-            { value: "sutil", label: "Encantamento sutil", description: "Mistério delicado e presença quase invisível.", scores: { elfica: 2, iniciatica: 1 } },
-            { value: "mitica", label: "Mito e símbolo", description: "Magia como linguagem de lenda.", scores: { mitica: 2, iniciatica: 1 } },
-            { value: "feitiçaria", label: "Feitiço e maravilha", description: "Sensação de mundo encantado bem visível.", scores: { elfica: 1, medieval: 1 } },
-            { value: "destino", label: "Destino e prova", description: "Jornada, promessa e transformação.", scores: { medieval: 2, mitica: 1 } }
+            { value: "sutil", label: "Encantamento sutil", description: "Misterio delicado e presenca quase invisivel.", scores: { elfica: 2, iniciatica: 1 } },
+            { value: "mitica", label: "Mito e simbolo", description: "Magia como linguagem de lenda.", scores: { mitica: 2, iniciatica: 1 } },
+            { value: "feiticaria", label: "Feitico e maravilha", description: "Sensacao de mundo encantado bem visivel.", scores: { elfica: 1, medieval: 1 } },
+            { value: "destino", label: "Destino e prova", description: "Jornada, promessa e transformacao.", scores: { medieval: 2, mitica: 1 } }
         ]
     },
     {
         id: "paisagem",
-        title: "Em que cenário você quer entrar?",
+        title: "Em que cenario voce quer entrar?",
         options: [
-            { value: "verde", label: "Floresta viva", description: "Caminhos verdes, névoa e claridade feérica.", scores: { elfica: 2, iniciatica: 1 } },
-            { value: "ilha", label: "Névoa ritual", description: "Ilhas, costa, lenda e chamada antiga.", scores: { mitica: 2 } },
+            { value: "verde", label: "Floresta viva", description: "Caminhos verdes, nevoa e claridade feerica.", scores: { elfica: 2, iniciatica: 1 } },
+            { value: "ilha", label: "Nevoa ritual", description: "Ilhas, costa, lenda e chamada antiga.", scores: { mitica: 2 } },
             { value: "estrada", label: "Estrada medieval", description: "Ponte, corte, cavaleiro e horizonte.", scores: { medieval: 2 } },
-            { value: "espelho", label: "Paisagem interior", description: "Sonho, prova íntima e símbolo.", scores: { iniciatica: 2, mitica: 1 } }
+            { value: "espelho", label: "Paisagem interior", description: "Sonho, prova intima e simbolo.", scores: { iniciatica: 2, mitica: 1 } }
         ]
     }
 ];

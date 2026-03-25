@@ -1,0 +1,15 @@
+{
+  "name": "bosque-da-fantasia",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Experiencia elfica de literatura fantastica com PWA, acervo, oraculo, glossario e banco local.",
+  "scripts": {
+    "check": "node ./scripts/check.mjs",
+    "dev": "node ./scripts/dev-server.mjs . 4173",
+    "preview": "node ./scripts/dev-server.mjs dist 4174",
+    "build": "node ./scripts/build.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

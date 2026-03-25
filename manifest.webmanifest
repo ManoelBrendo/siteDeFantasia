@@ -1,0 +1,19 @@
+{
+  "name": "Bosque da Fantasia",
+  "short_name": "Bosque",
+  "description": "Guia elfico de literatura fantastica com acervo, glossario, trilha sonora e recomendacao por afinidade.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#09120f",
+  "theme_color": "#102019",
+  "lang": "pt-BR",
+  "icons": [
+    {
+      "src": "./bosque-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

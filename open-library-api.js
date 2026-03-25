@@ -20,7 +20,7 @@ const SUBJECT_TRANSLATIONS = new Map([
     ["magic", "magia"],
     ["wizards", "magos"],
     ["witches", "bruxas"],
-    ["dragons", "dragões"],
+    ["dragons", "dragoes"],
     ["elves", "elfos"],
     ["fairies", "fadas"],
     ["fairy tales", "contos de fadas"],
@@ -31,11 +31,11 @@ const SUBJECT_TRANSLATIONS = new Map([
     ["castles", "castelos"],
     ["adventure", "aventura"],
     ["quests", "jornadas"],
-    ["heroes", "heróis"],
+    ["heroes", "herois"],
     ["legends", "lendas"],
     ["folklore", "folclore"],
     ["monsters", "monstros"],
-    ["epic", "épico"],
+    ["epic", "epico"],
     ["good and evil", "conflito entre luz e sombra"],
     ["friendship", "amizade"],
     ["coming of age", "amadurecimento"],
@@ -44,10 +44,10 @@ const SUBJECT_TRANSLATIONS = new Map([
     ["forests", "florestas"],
     ["medieval", "ambiente medieval"],
     ["love", "amor"],
-    ["mystery", "mistério"],
+    ["mystery", "misterio"],
     ["juvenile fiction", "aventura juvenil"],
     ["young adult fiction", "fantasia jovem"],
-    ["sword and sorcery", "espada e feitiçaria"]
+    ["sword and sorcery", "espada e feiticaria"]
 ]);
 
 const OPEN_LICENSE_FALLBACKS = [
@@ -177,7 +177,7 @@ const writeCachedSearch = (url, data) => {
             data
         }));
     } catch {
-        // Ignora limites de armazenamento e mantém o fluxo normal da aplicação.
+        // Ignora limites de armazenamento e mantem o fluxo normal da aplicacao.
     }
 };
 
@@ -195,11 +195,11 @@ const translateSubject = (subject) => {
     return normalizeSpaces(subject).toLowerCase();
 };
 
-const pickSubjects = (subjects = []) => {
+const pickSubjects = (subjects = [], limit = 4) => {
     return subjects
         .map(translateSubject)
         .filter(Boolean)
-        .slice(0, 4);
+        .slice(0, limit);
 };
 
 const formatSubjectList = (subjects) => {
@@ -218,28 +218,140 @@ const formatSubjectList = (subjects) => {
     return `${subjects[0]}, ${subjects[1]} e ${subjects[2]}`;
 };
 
-const inferAtmosphere = (subjects) => {
-    if (subjects.some((subject) => subject.includes("elfos") || subject.includes("fadas"))) {
-        return "uma atmosfera feérica e de floresta encantada";
+const inferClimateKey = (subjects) => {
+    if (subjects.some((subject) => subject.includes("elfos") || subject.includes("fadas") || subject.includes("contos de fadas"))) {
+        return "elfico";
     }
 
-    if (subjects.some((subject) => subject.includes("mitologia celta") || subject.includes("lendas arturianas"))) {
-        return "um tom mítico e ritual, ligado a lendas antigas";
-    }
-
-    if (subjects.some((subject) => subject.includes("dragões") || subject.includes("monstros"))) {
-        return "um clima de perigo antigo, criaturas raras e aventura";
+    if (subjects.some((subject) => subject.includes("mitologia celta") || subject.includes("lendas arturianas") || subject.includes("lendas"))) {
+        return "mitico";
     }
 
     if (subjects.some((subject) => subject.includes("cavaleiros") || subject.includes("castelos") || subject.includes("ambiente medieval"))) {
+        return "medieval";
+    }
+
+    if (subjects.some((subject) => subject.includes("magia") || subject.includes("misterio"))) {
+        return "iniciatico";
+    }
+
+    return "iniciatico";
+};
+
+const inferClimateLabel = (climateKey) => {
+    if (climateKey === "elfico") {
+        return "Feerico e boscoso";
+    }
+
+    if (climateKey === "mitico") {
+        return "Mitico e ritual";
+    }
+
+    if (climateKey === "medieval") {
+        return "Medieval de estrada";
+    }
+
+    return "Onirico e iniciatico";
+};
+
+const inferAtmosphere = (subjects) => {
+    const climateKey = inferClimateKey(subjects);
+
+    if (climateKey === "elfico") {
+        return "uma atmosfera feerica e de floresta encantada";
+    }
+
+    if (climateKey === "mitico") {
+        return "um tom mitico e ritual, ligado a lendas antigas";
+    }
+
+    if (climateKey === "medieval") {
         return "uma paisagem medieval de jornada, corte e destino";
     }
 
-    if (subjects.some((subject) => subject.includes("magia") || subject.includes("magos") || subject.includes("bruxas"))) {
-        return "um universo de magia, aprendizado e mistério";
+    return "uma jornada fantastica guiada por encanto, descoberta e imaginacao";
+};
+
+const inferMotifKey = (subjects) => {
+    if (subjects.some((subject) => subject.includes("elfos") || subject.includes("fadas") || subject.includes("contos de fadas"))) {
+        return "feerico";
     }
 
-    return "uma jornada fantástica guiada por encanto, descoberta e imaginação";
+    if (subjects.some((subject) => subject.includes("mitologia celta") || subject.includes("lendas arturianas") || subject.includes("lendas"))) {
+        return "mitologia";
+    }
+
+    if (subjects.some((subject) => subject.includes("cavaleiros") || subject.includes("castelos") || subject.includes("ambiente medieval"))) {
+        return "cavaleiros";
+    }
+
+    if (subjects.some((subject) => subject.includes("dragoes") || subject.includes("monstros"))) {
+        return "criaturas";
+    }
+
+    return "magia";
+};
+
+const inferDifficulty = ({ subjects, editionCount, year }) => {
+    if (subjects.some((subject) => subject.includes("aventura juvenil") || subject.includes("fantasia jovem"))) {
+        return { key: "entrada", label: "Entrada amigavel" };
+    }
+
+    if (editionCount >= 120) {
+        return { key: "entrada", label: "Entrada popular" };
+    }
+
+    if (Number(year) > 0 && Number(year) < 1880 && subjects.some((subject) => subject.includes("mitologia") || subject.includes("simbolo") || subject.includes("contos de fadas"))) {
+        return { key: "denso", label: "Denso e antigo" };
+    }
+
+    if (subjects.some((subject) => subject.includes("epico") || subject.includes("ambiente medieval") || subject.includes("jornadas"))) {
+        return { key: "intermediario", label: "Intermediario de jornada" };
+    }
+
+    return { key: "intermediario", label: "Intermediario de descoberta" };
+};
+
+const buildReaderProfile = ({ climateKey, difficultyLabel }) => {
+    if (climateKey === "elfico") {
+        return `Bom para quem procura encanto, delicadeza e um texto com ${difficultyLabel.toLowerCase()}.`;
+    }
+
+    if (climateKey === "mitico") {
+        return `Indicado a leitores que gostam de simbolos, lenda antiga e um percurso ${difficultyLabel.toLowerCase()}.`;
+    }
+
+    if (climateKey === "medieval") {
+        return `Funciona bem para quem prefere castelos, viagem e aventura com leitura ${difficultyLabel.toLowerCase()}.`;
+    }
+
+    return `Serve a quem quer fantasia mais contemplativa, introspectiva e de leitura ${difficultyLabel.toLowerCase()}.`;
+};
+
+const buildWhyRead = ({ author, climateKey, themes }) => {
+    const themeSummary = formatSubjectList(themes.slice(0, 3));
+
+    if (climateKey === "elfico") {
+        return `Vale ler para sentir como ${author} trabalha encanto, estranheza e proximidade com ${themeSummary || "o maravilhoso"}.`;
+    }
+
+    if (climateKey === "mitico") {
+        return `Vale ler para ampliar a trilha de mito, ritual e memoria oral ligada a ${themeSummary || "fantasia de raiz antiga"}.`;
+    }
+
+    if (climateKey === "medieval") {
+        return `Vale ler para expandir a sensacao de estrada, cronica e aventura em torno de ${themeSummary || "jornada medieval"}.`;
+    }
+
+    return `Vale ler para descobrir uma face mais simbolica da fantasia, ligada a ${themeSummary || "transformacao interior"}.`;
+};
+
+const buildAuthorNote = ({ author, editionCount }) => {
+    if (editionCount > 0) {
+        return `${author} aparece com ${editionCount} edicoes registradas nesta trilha do acervo, o que ajuda a aprofundar a pesquisa depois da obra inicial.`;
+    }
+
+    return `${author} aparece aqui como porta de expansao do acervo, mesmo quando os metadados da obra chegam de forma parcial.`;
 };
 
 const truncateText = (value, limit = 220) => {
@@ -256,16 +368,16 @@ const buildPortugueseDescription = ({ author, year, editionCount, subjects }) =>
     const translatedSubjects = pickSubjects(subjects);
     const subjectSummary = formatSubjectList(translatedSubjects);
     const atmosphere = inferAtmosphere(translatedSubjects);
-    const yearText = year && year !== "Ano não informado"
-        ? `Primeira edição conhecida em ${year}.`
-        : "Ano de publicação não informado.";
+    const yearText = year && year !== "Ano nao informado"
+        ? `Primeira edicao conhecida em ${year}.`
+        : "Ano de publicacao nao informado.";
 
     if (subjectSummary) {
         return truncateText(`Obra de ${author} ligada a ${subjectSummary}, com ${atmosphere}. ${yearText}`);
     }
 
     if (editionCount) {
-        return truncateText(`Livro de ${author} com ${editionCount} edições registradas no acervo, associado a ${atmosphere}. ${yearText}`);
+        return truncateText(`Livro de ${author} com ${editionCount} edicoes registradas no acervo, associado a ${atmosphere}. ${yearText}`);
     }
 
     return truncateText(`Livro de ${author} associado a ${atmosphere}. ${yearText}`);
@@ -335,6 +447,58 @@ const buildCoverCandidates = (doc) => {
     return unique(candidates);
 };
 
+const buildBookRecord = (doc, placeholderCover) => {
+    const author = doc.author_name?.[0] || "Autor nao informado";
+    const year = doc.first_publish_year || "Ano nao informado";
+    const subjects = pickSubjects(doc.subject || []);
+    const climateKey = inferClimateKey(subjects);
+    const difficulty = inferDifficulty({
+        subjects,
+        editionCount: doc.edition_count || 0,
+        year
+    });
+
+    return {
+        id: doc.key.replace("/works/", "") || `${doc.title}-${doc.first_publish_year || "sem-ano"}`,
+        title: doc.title,
+        originalTitle: doc.title,
+        author,
+        year,
+        editionCount: doc.edition_count || 0,
+        cover: placeholderCover,
+        coverCandidates: buildCoverCandidates(doc),
+        description: buildPortugueseDescription({
+            author,
+            year,
+            editionCount: doc.edition_count || 0,
+            subjects: doc.subject || []
+        }),
+        aura: inferClimateLabel(climateKey),
+        difficulty: difficulty.label,
+        difficultyKey: difficulty.key,
+        themes: subjects.length > 0 ? subjects : ["fantasia"],
+        readerProfile: buildReaderProfile({
+            climateKey,
+            difficultyLabel: difficulty.label
+        }),
+        whyRead: buildWhyRead({
+            author,
+            climateKey,
+            themes: subjects
+        }),
+        authorNote: buildAuthorNote({
+            author,
+            editionCount: doc.edition_count || 0
+        }),
+        filters: {
+            clima: climateKey,
+            dificuldade: difficulty.key,
+            motivo: inferMotifKey(subjects)
+        },
+        purchaseUrl: "#compra"
+    };
+};
+
 export class OpenLibraryCatalogApi {
     constructor() {
         this.cache = new Map();
@@ -374,7 +538,7 @@ export class OpenLibraryCatalogApi {
         });
 
         if (!response.ok) {
-            throw new Error("O acervo não respondeu agora. Tente novamente em alguns instantes.");
+            throw new Error("O acervo nao respondeu agora. Tente novamente em alguns instantes.");
         }
 
         const payload = await response.json();
@@ -383,22 +547,7 @@ export class OpenLibraryCatalogApi {
             page,
             books: (payload.docs || [])
                 .filter((doc) => doc.title && doc.key)
-                .map((doc) => ({
-                    id: doc.key.replace("/works/", "") || `${doc.title}-${doc.first_publish_year || "sem-ano"}`,
-                    title: doc.title,
-                    author: doc.author_name?.[0] || "Autor não informado",
-                    year: doc.first_publish_year || "Ano não informado",
-                    editionCount: doc.edition_count || 0,
-                    cover: this.placeholderCover,
-                    coverCandidates: buildCoverCandidates(doc),
-                    description: buildPortugueseDescription({
-                        author: doc.author_name?.[0] || "Autor não informado",
-                        year: doc.first_publish_year || "Ano não informado",
-                        editionCount: doc.edition_count || 0,
-                        subjects: doc.subject || []
-                    }),
-                    purchaseUrl: "#compra"
-                }))
+                .map((doc) => buildBookRecord(doc, this.placeholderCover))
         };
 
         this.cache.set(url, result);

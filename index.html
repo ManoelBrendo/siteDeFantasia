@@ -6,20 +6,27 @@
     <title>Bosque da Fantasia | Livros, mitos e reinos antigos</title>
     <meta
         name="description"
-        content="Uma jornada única para quem quer conhecer fantasia literária com atmosfera élfica, mitologia celta, trilha sonora ambiente e um grande acervo de livros."
+        content="Uma jornada para quem quer conhecer fantasia literaria com atmosfera elfica, mitologia celta, guia de leitura e um grande acervo de livros."
     >
     <meta property="og:title" content="Bosque da Fantasia">
     <meta
         property="og:description"
-        content="Descubra autores, mitos, livros clássicos e um acervo pesquisável em uma experiência élfica e medieval."
+        content="Descubra autores, mitos, livros classicos e um acervo pesquisavel em uma experiencia elfica e medieval."
     >
     <meta property="og:type" content="website">
+    <meta name="theme-color" content="#102019">
+    <meta name="mobile-web-app-capable" content="yes">
     <link rel="preconnect" href="https://openlibrary.org">
     <link rel="preconnect" href="https://covers.openlibrary.org">
     <link rel="preconnect" href="https://upload.wikimedia.org" crossorigin>
-    <link rel="modulepreload" href="./index-page.js">
+    <link rel="manifest" href="./manifest.webmanifest">
+    <link rel="icon" href="./bosque-icon.svg" type="image/svg+xml">
+    <link rel="modulepreload" href="./app.js">
     <link rel="modulepreload" href="./audio-player.js">
+    <link rel="modulepreload" href="./catalog-api.js">
+    <link rel="modulepreload" href="./library-db.js">
     <link rel="modulepreload" href="./open-library-api.js">
+    <link rel="modulepreload" href="./pwa.js">
     <link rel="modulepreload" href="./site-data.js">
     <link rel="modulepreload" href="./recommendation-engine.js">
     <script type="application/ld+json">
@@ -519,6 +526,11 @@
                 var(--panel);
             box-shadow: var(--shadow);
             overflow: hidden;
+        }
+
+        .featured-card,
+        .result-card {
+            isolation: isolate;
         }
 
         .lore-card,
@@ -1071,8 +1083,388 @@
             text-underline-offset: 0.16rem;
         }
 
+        .hero-system {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        .hero-system-note {
+            flex-basis: 100%;
+            margin: -0.15rem 0 0;
+            color: var(--muted);
+            font-size: 0.92rem;
+        }
+
+        .pwa-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-height: 2.85rem;
+            padding: 0.72rem 1rem;
+            border-radius: 999px;
+            border: 1px solid rgba(220, 191, 131, 0.16);
+            background: rgba(255, 247, 232, 0.05);
+            color: var(--mist);
+        }
+
+        .pwa-pill[data-tone="ready"] {
+            border-color: rgba(154, 209, 177, 0.34);
+            color: #d9f0df;
+            background: rgba(80, 128, 92, 0.18);
+        }
+
+        .pwa-pill[data-tone="offline"] {
+            border-color: rgba(220, 191, 131, 0.26);
+            color: var(--gold-soft);
+            background: rgba(220, 191, 131, 0.12);
+        }
+
+        .pwa-pill[data-tone="alert"] {
+            border-color: rgba(201, 141, 115, 0.28);
+            color: #f6d4c7;
+            background: rgba(160, 83, 52, 0.16);
+        }
+
+        .authors-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+            gap: 1.15rem;
+        }
+
+        button.author-card {
+            width: 100%;
+            text-align: left;
+            color: var(--text);
+            cursor: pointer;
+            transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+        }
+
+        button.author-card:hover,
+        button.author-card:focus-visible,
+        .author-card.is-active {
+            transform: translateY(-3px);
+            border-color: rgba(220, 191, 131, 0.34);
+            background:
+                linear-gradient(180deg, rgba(220, 191, 131, 0.12), rgba(255, 248, 230, 0.03)),
+                var(--panel);
+        }
+
+        .author-focus-panel,
+        .filters-shell,
+        .recent-shell,
+        .glossary-card {
+            position: relative;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--line);
+            background:
+                linear-gradient(180deg, rgba(255, 248, 230, 0.05), rgba(255, 248, 230, 0.015)),
+                var(--panel);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .author-focus-panel::before,
+        .filters-shell::before,
+        .recent-shell::before,
+        .glossary-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(220, 191, 131, 0.08), transparent 40%);
+            pointer-events: none;
+        }
+
+        .author-focus-panel,
+        .filters-shell,
+        .recent-shell {
+            padding: 1.3rem;
+        }
+
+        .author-focus-copy {
+            position: relative;
+            display: grid;
+            gap: 0.9rem;
+        }
+
+        .author-focus-copy h3 {
+            font-size: clamp(2rem, 4vw, 3rem);
+        }
+
+        .author-focus-copy p {
+            margin: 0;
+            color: var(--muted);
+        }
+
+        .author-focus-grid,
+        .purchase-dossier-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.85rem;
+        }
+
+        .mini-panel {
+            position: relative;
+            padding: 0.95rem 1rem;
+            border-radius: 18px;
+            border: 1px solid rgba(220, 191, 131, 0.14);
+            background: rgba(255, 247, 232, 0.04);
+        }
+
+        .mini-panel strong {
+            display: block;
+            margin-bottom: 0.28rem;
+            color: var(--gold-soft);
+            font-size: 0.9rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .mini-panel span,
+        .mini-panel p {
+            margin: 0;
+            color: var(--muted);
+        }
+
+        .author-work-list,
+        .book-chip-row,
+        .filter-option-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.55rem;
+        }
+
+        .author-work-chip,
+        .book-chip,
+        .filter-chip {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 2.25rem;
+            padding: 0.5rem 0.78rem;
+            border-radius: 999px;
+            border: 1px solid rgba(220, 191, 131, 0.16);
+            background: rgba(255, 247, 232, 0.05);
+            color: var(--mist);
+        }
+
+        .book-chip {
+            font-size: 0.82rem;
+        }
+
+        .filter-chip {
+            cursor: pointer;
+            transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+        }
+
+        .filter-chip:hover,
+        .filter-chip:focus-visible,
+        .filter-chip.is-active {
+            transform: translateY(-2px);
+            border-color: rgba(220, 191, 131, 0.36);
+            background: rgba(220, 191, 131, 0.12);
+            color: var(--gold-soft);
+        }
+
+        .glossary-layout {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .glossary-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.9rem;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .glossary-search {
+            flex: 1 1 19rem;
+            min-height: 3rem;
+            padding: 0.85rem 1rem;
+            border-radius: 18px;
+            border: 1px solid rgba(220, 191, 131, 0.16);
+            background: rgba(255, 247, 232, 0.05);
+            color: var(--text);
+        }
+
+        .glossary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1rem;
+        }
+
+        .glossary-card {
+            padding: 1.2rem;
+        }
+
+        .glossary-card h3 {
+            font-size: 1.35rem;
+        }
+
+        .glossary-card p {
+            margin: 0.65rem 0 0;
+            color: var(--muted);
+        }
+
+        .filters-shell {
+            margin-top: 1rem;
+        }
+
+        .recent-shell {
+            margin-top: 1rem;
+        }
+
+        .recent-query-row {
+            position: relative;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+        }
+
+        .recent-query-chip {
+            min-height: 2.4rem;
+        }
+
+        .filters-head {
+            position: relative;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.8rem;
+            margin-bottom: 0.9rem;
+        }
+
+        .filters-head p {
+            margin: 0;
+            color: var(--muted);
+        }
+
+        .filters-grid {
+            display: grid;
+            gap: 0.95rem;
+        }
+
+        .filter-group {
+            display: grid;
+            gap: 0.55rem;
+        }
+
+        .filter-group strong {
+            color: var(--gold-soft);
+            font-size: 0.95rem;
+        }
+
+        .book-card-link .book-chip-row {
+            margin-top: 0.1rem;
+        }
+
+        .affinity-map-shell {
+            display: grid;
+            gap: 0.75rem;
+            padding: 1rem;
+            border-radius: 20px;
+            border: 1px solid rgba(220, 191, 131, 0.14);
+            background: rgba(255, 247, 232, 0.04);
+        }
+
+        .affinity-map {
+            display: grid;
+            gap: 0.7rem;
+        }
+
+        .affinity-lane {
+            display: grid;
+            gap: 0.4rem;
+        }
+
+        .affinity-lane-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.8rem;
+        }
+
+        .affinity-lane-head strong {
+            color: var(--text);
+            font-size: 0.96rem;
+        }
+
+        .affinity-lane-head span {
+            color: var(--gold-soft);
+            font-size: 0.85rem;
+        }
+
+        .affinity-track {
+            height: 0.8rem;
+            overflow: hidden;
+            border-radius: 999px;
+            background: rgba(255, 247, 232, 0.08);
+            border: 1px solid rgba(220, 191, 131, 0.12);
+        }
+
+        .affinity-fill {
+            height: 100%;
+            width: var(--fill, 0%);
+            background: linear-gradient(90deg, rgba(220, 191, 131, 0.35), var(--accent, rgba(220, 191, 131, 0.88)));
+        }
+
+        .purchase-signal-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+        }
+
+        .purchase-inline-note {
+            padding: 0.95rem 1rem;
+            border-radius: 18px;
+            border: 1px solid rgba(220, 191, 131, 0.14);
+            background: rgba(255, 247, 232, 0.04);
+        }
+
+        .purchase-inline-note strong {
+            display: block;
+            margin-bottom: 0.3rem;
+            color: var(--gold-soft);
+            font-size: 0.88rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .book-save-button {
+            position: absolute;
+            top: 0.9rem;
+            right: 0.9rem;
+            z-index: 2;
+            min-height: 2.2rem;
+            padding: 0.45rem 0.72rem;
+            border-radius: 999px;
+            border: 1px solid rgba(220, 191, 131, 0.2);
+            background: rgba(9, 18, 15, 0.76);
+            color: var(--gold-soft);
+            cursor: pointer;
+            transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+        }
+
+        .book-save-button:hover,
+        .book-save-button:focus-visible,
+        .book-save-button.is-active {
+            transform: translateY(-2px);
+            border-color: rgba(220, 191, 131, 0.4);
+            background: rgba(220, 191, 131, 0.14);
+        }
+
+        .favorites-empty {
+            margin: 1rem 0 0;
+            color: var(--muted);
+        }
+
         @media (max-width: 1080px) {
             .hero,
+            .authors-layout,
             .affinity-layout,
             .oracle-layout,
             .purchase-panel {
@@ -1109,9 +1501,12 @@
             .panorama-grid,
             .affinity-choice-grid,
             .authors-grid,
+            .author-focus-grid,
             .featured-grid,
+            .glossary-grid,
             .results-grid,
             .topics-grid,
+            .purchase-dossier-grid,
             .hero-stage-grid {
                 grid-template-columns: 1fr;
             }
@@ -1137,22 +1532,25 @@
 </head>
 <body>
     <div class="site-shell">
+        
+        
         <header class="topbar">
             <div class="topbar-inner">
-                <a class="brand" href="#inicio" aria-label="Voltar ao início do Bosque da Fantasia">
-                    <div class="brand-mark" aria-hidden="true">✦</div>
+                <a class="brand" href="#inicio" aria-label="Voltar ao inicio do Bosque da Fantasia">
+                    <div class="brand-mark" aria-hidden="true">&#10022;</div>
                     <div class="brand-copy">
                         <strong>Bosque da Fantasia</strong>
-                        <span>Liturgia de livros, mitos e reinos antigos</span>
+                        <span>Literatura fantastica para comecar bem</span>
                     </div>
                 </a>
-                <nav class="topnav" aria-label="Navegação principal">
-                    <a href="#panorama">Panorama</a>
-                    <a href="#afinidade">Afinidade</a>
+                <nav class="topnav" aria-label="Navegacao principal">
+                    <a href="#panorama">Como comecar</a>
+                    <a href="#afinidade">Seu perfil</a>
                     <a href="#autores">Autores</a>
+                    <a href="#glossario">Glossario</a>
                     <a href="#estante">Estante</a>
                     <a href="#oraculo">Busca</a>
-                    <a href="#compra">Compra</a>
+                    <a href="#compra">Livro</a>
                 </nav>
             </div>
         </header>
@@ -1160,33 +1558,39 @@
         <main>
             <section id="inicio" class="hero" aria-labelledby="titulo-principal">
                 <div class="hero-copy">
-                    <div class="eyebrow">Um portal para novos leitores</div>
-                    <h1 id="titulo-principal">Entre no reino da fantasia sem se perder na névoa.</h1>
-                    <p>Esta página foi redesenhada para apresentar fantasia literária de forma viva, intuitiva e encantada.</p>
+                    <div class="eyebrow">Um portal para quem esta comecando</div>
+                    <h1 id="titulo-principal">Descubra fantasia com calma, sem precisar conhecer nada antes.</h1>
+                    <p>O Bosque organiza autores, livros, termos e trilhas de leitura em um caminho simples: primeiro voce entende o seu gosto, depois explora o acervo e escolhe por onde comecar.</p>
                     <div class="hero-actions">
-                        <a class="button primary" href="#estante">Começar pela estante</a>
-                        <a class="button secondary" href="#afinidade">Descobrir minha trilha</a>
+                        <a class="button primary" href="#afinidade">Descobrir meu perfil</a>
+                        <a class="button secondary" href="#estante">Ver livros para comecar</a>
                     </div>
-                    <div class="hero-ritual" aria-label="Destaques do site">
-                        <article><strong>1</strong><span>Página única com acervo, autores e descoberta.</span></article>
-                        <article><strong>3</strong><span>Trilhas sonoras para manter o clima do bosque.</span></article>
-                        <article><strong>12+</strong><span>Resultados por rodada no acervo pesquisável.</span></article>
+                    <div class="hero-system">
+                        <span id="pwa-status" class="pwa-pill" data-tone="idle">Modo offline preparando o bosque...</span>
+                        <button id="install-app" class="button ghost" type="button" hidden>Instalar app</button>
+                        <button id="ambient-toggle" class="button ghost" type="button" aria-pressed="false">Ativar violino ambiente</button>
+                        <p id="ambient-status" class="hero-system-note" aria-live="polite">Som suave opcional para acompanhar a leitura sem distrair a navegacao.</p>
+                    </div>
+                    <div class="hero-ritual" aria-label="Como usar o site">
+                        <article><strong>1</strong><span>Descubra seu clima de leitura com o Oraculo de Afinidade.</span></article>
+                        <article><strong>2</strong><span>Abra livros iniciais ja explicados em portugues claro.</span></article>
+                        <article><strong>3</strong><span>Pesquise autores, temas e criaturas em um acervo maior.</span></article>
                     </div>
                 </div>
-                <div class="hero-stage" aria-label="Painel visual do universo fantástico">
+                <div class="hero-stage" aria-label="Painel visual do universo fantastico">
                     <div class="hero-stage-grid">
                         <figure class="hero-visual hero-visual-tall">
-                            <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Rackham_elves.jpg?width=900" alt="Ilustração histórica de elfos em um bosque" decoding="async" fetchpriority="high">
+                            <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Rackham_elves.jpg?width=900" alt="Ilustracao historica de elfos em um bosque" decoding="async" fetchpriority="high">
                             <figcaption class="hero-plaque">
-                                <strong>Tom élfico e crepuscular</strong>
-                                <span>Feéria, mata antiga e um brilho de lenda em volta dos livros.</span>
+                                <strong>Tom elfico e crepuscular</strong>
+                                <span>Feeria, mata antiga e um brilho de lenda em volta dos livros.</span>
                             </figcaption>
                         </figure>
                         <figure class="hero-visual">
-                            <img src="https://commons.wikimedia.org/wiki/Special:FilePath/The%20Hunting%20of%20the%20Unicorn%20by%20Samuel%20Simes%2C%20Frontispiece%20to%20The%20King%20of%20Elfland%27s%20Daughter.png?width=720" alt="Frontispício histórico de A Filha do Rei de Elfland" loading="lazy" decoding="async">
+                            <img src="https://commons.wikimedia.org/wiki/Special:FilePath/The%20Hunting%20of%20the%20Unicorn%20by%20Samuel%20Simes%2C%20Frontispiece%20to%20The%20King%20of%20Elfland%27s%20Daughter.png?width=720" alt="Frontispicio historico de A Filha do Rei de Elfland" loading="lazy" decoding="async">
                         </figure>
                         <figure class="hero-visual">
-                            <img src="https://commons.wikimedia.org/wiki/Special:FilePath/The%20Well%20at%20the%20World%27s%20End%2C%20design%20by%20William%20Morris%2C%20Hammersmith%2C%20Kelmscott%20Press%2C%201896%20-%20National%20Gallery%20of%20Art%2C%20Washington%20-%20DSC09794.JPG?width=720" alt="Edição histórica ornamentada de O Poço no Fim do Mundo" loading="lazy" decoding="async">
+                            <img src="https://commons.wikimedia.org/wiki/Special:FilePath/The%20Well%20at%20the%20World%27s%20End%2C%20design%20by%20William%20Morris%2C%20Hammersmith%2C%20Kelmscott%20Press%2C%201896%20-%20National%20Gallery%20of%20Art%2C%20Washington%20-%20DSC09794.JPG?width=720" alt="Edicao historica ornamentada de O Poco no Fim do Mundo" loading="lazy" decoding="async">
                         </figure>
                     </div>
                 </div>
@@ -1195,27 +1599,27 @@
             <section id="panorama" class="section" aria-labelledby="panorama-titulo">
                 <div class="section-header">
                     <div class="section-header-copy">
-                        <div class="eyebrow">Primeiros passos</div>
-                        <h2 id="panorama-titulo">Como entrar nesse universo sem se sentir estrangeiro.</h2>
-                        <p>Fantasia não é só dragão e espada. Ela também pode ser intimista, lírica, folclórica, sombria, espiritual ou cavaleiresca.</p>
+                        <div class="eyebrow">Tres portas de entrada</div>
+                        <h2 id="panorama-titulo">Nem toda fantasia comeca do mesmo lugar.</h2>
+                        <p>Alguns leitores entram pelo encanto elfico; outros, por mitologia, estrada medieval ou descoberta interior. Escolha a atmosfera que mais conversa com voce.</p>
                     </div>
                     <div class="knot" aria-hidden="true"></div>
                 </div>
                 <div class="panorama-grid">
                     <article class="lore-card">
                         <span>Porta I</span>
-                        <h3>Feéria e encantamento</h3>
-                        <p>Ideal para quem quer elfos, bosques, reinos além do mundo comum e uma sensação de maravilha antiga.</p>
+                        <h3>Feeria e encanto</h3>
+                        <p>Ideal para quem quer elfos, bosques, reinos alem do mundo comum e uma sensacao de maravilha antiga.</p>
                     </article>
                     <article class="lore-card">
                         <span>Porta II</span>
-                        <h3>Mitologia celta e memória oral</h3>
-                        <p>Para leitores atraídos por sidhe, druidas, Avalon, símbolos solares e histórias que parecem ter sido guardadas por bardos.</p>
+                        <h3>Mitologia celta e memoria oral</h3>
+                        <p>Para leitores atraidos por sidhe, druidas, Avalon, simbolos antigos e historias que parecem ter sido guardadas por bardos.</p>
                     </article>
                     <article class="lore-card">
                         <span>Porta III</span>
-                        <h3>Idade média sonhada</h3>
-                        <p>Aqui entram cavaleiros, castelos, jornadas e livros com peso de crônica antiga.</p>
+                        <h3>Idade Media sonhada</h3>
+                        <p>Aqui entram cavaleiros, castelos, jornadas e livros com peso de cronica antiga.</p>
                     </article>
                 </div>
             </section>
@@ -1223,12 +1627,9 @@
             <section id="afinidade" class="section" aria-labelledby="afinidade-titulo">
                 <div class="section-header">
                     <div class="section-header-copy">
-                        <div class="eyebrow">Oráculo de afinidade</div>
-                        <h2 id="afinidade-titulo">Descubra qual trilha combina com seu imaginário antes mesmo de abrir o acervo.</h2>
-                        <p>
-                            Em vez de começar no escuro, responda às quatro perguntas abaixo. O site cruza suas respostas e sugere uma trilha de leitura com clima,
-                            foco temático e livros de entrada mais coerentes com o seu perfil.
-                        </p>
+                        <div class="eyebrow">Oraculo de afinidade</div>
+                        <h2 id="afinidade-titulo">Descubra qual trilha combina com o seu imaginario antes de abrir o acervo.</h2>
+                        <p>Responda as quatro perguntas e o site monta um ponto de partida coerente com seu gosto, seu ritmo de leitura e a atmosfera que voce procura.</p>
                     </div>
                     <div class="knot" aria-hidden="true"></div>
                 </div>
@@ -1244,10 +1645,14 @@
 
                     <article id="affinity-result" class="affinity-result-card" data-state="idle">
                         <div class="eyebrow">Leitura sugerida</div>
-                        <h3 id="affinity-result-name" class="affinity-result-name">Responda às quatro perguntas</h3>
-                        <p id="affinity-result-description">O Oráculo de Afinidade vai sugerir uma trilha de leitura coerente com seu gosto.</p>
+                        <h3 id="affinity-result-name" class="affinity-result-name">Responda as quatro perguntas</h3>
+                        <p id="affinity-result-description">O Oraculo de Afinidade vai sugerir uma trilha de leitura coerente com seu gosto.</p>
                         <p id="affinity-result-reason">Escolha um portal, um ritmo, uma forma de magia e uma paisagem.</p>
-                        <p id="affinity-result-alt" class="affinity-result-alt">Uma trilha complementar aparece aqui quando o oraculo encontrar um segundo caminho compativel.</p>
+                        <p id="affinity-result-alt" class="affinity-result-alt">Se houver uma segunda trilha compativel, ela aparece aqui como caminho complementar.</p>
+                        <div class="affinity-map-shell">
+                            <div class="eyebrow">Mapa do oraculo</div>
+                            <div id="affinity-map" class="affinity-map" aria-live="polite"></div>
+                        </div>
                         <div id="affinity-result-books" class="affinity-result-books" aria-live="polite"></div>
                         <button id="affinity-explore" class="button secondary" type="button" disabled>Explorar essa trilha</button>
                     </article>
@@ -1257,70 +1662,95 @@
             <section id="autores" class="section" aria-labelledby="autores-titulo">
                 <div class="section-header">
                     <div class="section-header-copy">
-                        <div class="eyebrow">Autores guardiões</div>
-                        <h2 id="autores-titulo">Vozes renomadas e nomes menos lembrados que merecem a tocha acesa.</h2>
-                        <p>A ideia aqui não é listar tudo, mas orientar quem chega agora à fantasia.</p>
+                        <div class="eyebrow">Autores para comecar</div>
+                        <h2 id="autores-titulo">Dos nomes mais famosos aos menos lembrados, aqui estao boas portas de entrada.</h2>
+                        <p>Selecione um autor para entender o estilo, o clima e por qual livro vale comecar.</p>
                     </div>
                     <div class="knot" aria-hidden="true"></div>
                 </div>
-                <div class="authors-grid">
-                    <article class="author-card">
-                        <span>Renomados</span>
-                        <h3>J. R. R. Tolkien</h3>
-                        <p>O grande arquiteto da fantasia moderna.</p>
-                        <ul>
-                            <li>Bom para: leitores que querem profundidade de mundo.</li>
-                            <li>Clima: épico, melancólico e ancestral.</li>
-                        </ul>
+                <div class="authors-layout">
+                    <div id="authors-grid" class="authors-grid" aria-live="polite"></div>
+                    <article class="author-focus-panel">
+                        <div class="author-focus-copy">
+                            <div class="eyebrow">Ficha do autor</div>
+                            <h3 id="author-focus-name">Selecione um autor</h3>
+                            <p id="author-focus-summary">Cada autor aqui funciona como uma porta de entrada diferente para a fantasia.</p>
+                            <div class="author-focus-grid">
+                                <div class="mini-panel">
+                                    <strong>Bom para</strong>
+                                    <span id="author-focus-best-for">Profundidade de mundo, lirismo, mito ou jornada.</span>
+                                </div>
+                                <div class="mini-panel">
+                                    <strong>Clima</strong>
+                                    <span id="author-focus-climate">O tom do autor aparece aqui.</span>
+                                </div>
+                                <div class="mini-panel">
+                                    <strong>Como comecar</strong>
+                                    <span id="author-focus-start">A porta de entrada sugerida aparece aqui.</span>
+                                </div>
+                                <div class="mini-panel">
+                                    <strong>Legado</strong>
+                                    <span id="author-focus-legacy">A importancia historica do autor aparece aqui.</span>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="eyebrow">Obras de entrada</div>
+                                <div id="author-focus-works" class="author-work-list" aria-live="polite"></div>
+                            </div>
+                        </div>
                     </article>
-                    <article class="author-card">
-                        <span>Renomados</span>
-                        <h3>Ursula K. Le Guin</h3>
-                        <p>Mostra que fantasia também pode ser pensamento, silêncio e equilíbrio.</p>
-                        <ul>
-                            <li>Bom para: fantasia inteligente e contemplativa.</li>
-                            <li>Clima: ritual, marítimo e profundamente humano.</li>
-                        </ul>
-                    </article>
-                    <article class="author-card">
-                        <span>Pouco lembrados</span>
-                        <h3>Lord Dunsany</h3>
-                        <p>Um dos mestres do sonho feérico e da distância mítica.</p>
-                        <ul>
-                            <li>Bom para: quem quer um tom élfico mais puro.</li>
-                            <li>Clima: régio, nebuloso e quase litúrgico.</li>
-                        </ul>
-                    </article>
-                    <article class="author-card">
-                        <span>Pouco lembrados</span>
-                        <h3>William Morris</h3>
-                        <p>Une artesanato medieval, imaginário de jornada e prosa com sabor de romance antigo.</p>
-                        <ul>
-                            <li>Bom para: estrada, destino e cavaleirismo.</li>
-                            <li>Clima: medieval, cerimonial e pastoral.</li>
-                        </ul>
-                    </article>
+                </div>
+            </section>
+
+            <section id="glossario" class="section" aria-labelledby="glossario-titulo">
+                <div class="section-header">
+                    <div class="section-header-copy">
+                        <div class="eyebrow">Glossario pratico</div>
+                        <h2 id="glossario-titulo">Se um termo soar estranho, procure aqui.</h2>
+                        <p>Use o glossario como apoio rapido durante a navegacao. Ele foi pensado para quem esta comecando.</p>
+                    </div>
+                    <div class="knot" aria-hidden="true"></div>
+                </div>
+                <div class="glossary-layout">
+                    <div class="glossary-toolbar">
+                        <input id="glossary-search" class="glossary-search" type="search" placeholder="Buscar termo, ex.: feeria, Avalon, quest..." autocomplete="off">
+                        <span id="glossary-count" class="pwa-pill" data-tone="idle">0 verbetes revelados</span>
+                    </div>
+                    <div id="glossary-grid" class="glossary-grid" aria-live="polite"></div>
                 </div>
             </section>
 
             <section id="estante" class="section" aria-labelledby="estante-titulo">
                 <div class="section-header">
                     <div class="section-header-copy">
-                        <div class="eyebrow">Estante cerimonial</div>
-                        <h2 id="estante-titulo">Livros escolhidos como quem acende lampiões antes de entrar no bosque.</h2>
-                        <p>Clique na capa ou no texto para levar a obra ao painel de compra.</p>
+                        <div class="eyebrow">Livros para comecar</div>
+                        <h2 id="estante-titulo">Uma selecao inicial para entrar no fantastico sem cair num catalogo confuso.</h2>
+                        <p>Clique em qualquer capa para abrir a ficha do livro, entender o clima da leitura e guardar a obra no seu relicario.</p>
                     </div>
                     <div class="knot" aria-hidden="true"></div>
                 </div>
                 <div id="curated-grid" class="featured-grid" aria-live="polite"></div>
             </section>
 
+            <section id="relicario" class="section" aria-labelledby="relicario-titulo" hidden>
+                <div class="section-header">
+                    <div class="section-header-copy">
+                        <div class="eyebrow">Seu relicario</div>
+                        <h2 id="relicario-titulo">Salve os livros que chamarem sua atencao e continue depois.</h2>
+                        <p>Quando voce guarda uma obra, ela fica registrada neste dispositivo para facilitar sua volta ao site.</p>
+                    </div>
+                    <div class="knot" aria-hidden="true"></div>
+                </div>
+                <div id="favorites-grid" class="featured-grid" aria-live="polite"></div>
+                <p id="favorites-empty" class="favorites-empty">Guarde livros no relicario para montar sua propria trilha pessoal neste dispositivo.</p>
+            </section>
+
             <section id="oraculo" class="section" aria-labelledby="oraculo-titulo">
                 <div class="section-header">
                     <div class="section-header-copy">
-                        <div class="eyebrow">Oráculo do acervo</div>
-                        <h2 id="oraculo-titulo">Pesquise o que quiser em um pergaminho vivo e expanda o reino.</h2>
-                        <p>Pesquise elfos, mitologia celta, castelos, magia, autores ou qualquer trilha que você queira seguir.</p>
+                        <div class="eyebrow">Busca guiada</div>
+                        <h2 id="oraculo-titulo">Pesquise autores, criaturas, mitos e atmosferas em um so lugar.</h2>
+                        <p>Escreva o que procura ou use os temas sugeridos. Depois refine o resultado com filtros de clima, leitura e motivo central.</p>
                     </div>
                     <div class="knot" aria-hidden="true"></div>
                 </div>
@@ -1329,17 +1759,17 @@
                         <div class="scroll-shell">
                             <form id="catalog-search-form" class="catalog-search-form">
                                 <div>
-                                    <label class="scroll-label" for="catalog-search">Escreva seu interesse no pergaminho</label>
+                                    <label class="scroll-label" for="catalog-search">Digite um tema, autor ou criatura</label>
                                     <div class="catalog-search-row">
                                         <input
                                             id="catalog-search"
                                             class="catalog-search-input"
                                             type="search"
                                             name="busca"
-                                            placeholder="Ex.: elfos, mitologia celta, Avalon, fantasia medieval..."
+                                            placeholder="Ex.: elfos, Avalon, magia, castelos, Tolkien..."
                                             autocomplete="off"
                                         >
-                                        <button id="catalog-submit" class="button catalog-search-submit" type="submit">Consultar o acervo</button>
+                                        <button id="catalog-submit" class="button catalog-search-submit" type="submit">Pesquisar</button>
                                     </div>
                                 </div>
                                 <span id="active-theme" class="active-theme">Espadas e reinos</span>
@@ -1347,15 +1777,34 @@
                         </div>
                         <div style="height: 1rem;" aria-hidden="true"></div>
                         <div id="topics-grid" class="topics-grid" aria-label="Temas para explorar"></div>
+                        <div id="recent-shell" class="recent-shell" hidden>
+                            <div class="filters-head">
+                                <div>
+                                    <h3>Buscas recentes</h3>
+                                    <p>Retome pesquisas anteriores sem comecar do zero.</p>
+                                </div>
+                            </div>
+                            <div id="recent-queries" class="recent-query-row" aria-live="polite"></div>
+                        </div>
+                        <div class="filters-shell">
+                            <div class="filters-head">
+                                <div>
+                                    <h3>Refinar resultados</h3>
+                                    <p id="filter-summary">Sem filtros extras no momento.</p>
+                                </div>
+                                <button id="clear-filters" class="button ghost" type="button">Limpar filtros</button>
+                            </div>
+                            <div id="filters-grid" class="filters-grid" aria-live="polite"></div>
+                        </div>
                     </section>
 
                     <section id="acervo" class="catalog-panel" aria-labelledby="acervo-titulo">
                         <div class="catalog-toolbar">
                             <div>
-                                <h3 id="acervo-titulo">Acervo revelado</h3>
-                                <p id="catalog-status" class="catalog-status">O oráculo ainda vai revelar os livros.</p>
+                                <h3 id="acervo-titulo">Resultados do acervo</h3>
+                                <p id="catalog-status" class="catalog-status">Faca uma busca ou escolha um tema para revelar livros do acervo.</p>
                             </div>
-                            <a class="button ghost" href="#compra">Ir para o painel de compra</a>
+                            <a class="button ghost" href="#compra">Ir para a ficha do livro</a>
                         </div>
                         <div id="results-grid" class="results-grid" aria-live="polite"></div>
                         <div class="load-more-wrap">
@@ -1368,9 +1817,9 @@
             <section id="compra" class="section" aria-labelledby="compra-titulo">
                 <div class="section-header">
                     <div class="section-header-copy">
-                        <div class="eyebrow">Sala de compra</div>
-                        <h2 id="compra-titulo">Cada livro selecionado passa por aqui antes de seguir para o destino final.</h2>
-                        <p>Este painel já está preparado para o momento em que você adicionar o link real de compra.</p>
+                        <div class="eyebrow">Proximo passo</div>
+                        <h2 id="compra-titulo">Veja por que esse livro faz sentido para voce antes de procurar uma edicao.</h2>
+                        <p>Esta ficha resume o clima, o nivel de leitura e o papel da obra dentro do genero. O link de compra pode ser ligado depois.</p>
                     </div>
                     <div class="knot" aria-hidden="true"></div>
                 </div>
@@ -1380,15 +1829,30 @@
                     </div>
                     <div class="purchase-copy">
                         <div class="eyebrow">Obra escolhida</div>
-                        <h3 id="purchase-title">Aguardando seleção</h3>
-                        <p id="purchase-original" class="purchase-original">Clique em uma obra da estante ou do acervo.</p>
+                        <h3 id="purchase-title">Aguardando selecao</h3>
+                        <p id="purchase-original" class="purchase-original">Selecione um livro na estante ou nos resultados da busca.</p>
                         <p id="purchase-meta" class="purchase-meta">Autor e ano aparecem aqui.</p>
-                        <p id="purchase-description">A descrição da obra selecionada será exibida neste painel.</p>
-                        <div class="purchase-actions">
-                            <a id="purchase-link" class="button primary" href="#compra">Link de compra em breve</a>
-                            <a class="button secondary" href="#oraculo">Voltar ao oráculo</a>
+                        <p id="purchase-description">A sinopse curta e os sinais de leitura aparecem aqui.</p>
+                        <div id="purchase-signal-row" class="purchase-signal-row" aria-live="polite"></div>
+                        <div id="purchase-dossier-grid" class="purchase-dossier-grid" aria-live="polite"></div>
+                        <div class="purchase-inline-note">
+                            <strong>Por que ler</strong>
+                            <p id="purchase-why-read">A motivacao de leitura da obra aparece aqui.</p>
                         </div>
-                        <p id="purchase-hint" class="purchase-hint">Quando o link real estiver pronto, basta trocar o destino desse botão para a loja escolhida.</p>
+                        <div class="purchase-inline-note">
+                            <strong>Para quem</strong>
+                            <p id="purchase-reader-profile">O perfil de leitor indicado aparece aqui.</p>
+                        </div>
+                        <div class="purchase-inline-note">
+                            <strong>Nota do autor</strong>
+                            <p id="purchase-author-note">A importancia do autor ou da obra aparece aqui.</p>
+                        </div>
+                        <div class="purchase-actions">
+                            <a id="purchase-link" class="button primary" href="#compra">Abrir link de compra</a>
+                            <button id="purchase-save" class="button ghost" type="button" aria-pressed="false">Guardar no relicario</button>
+                            <a class="button secondary" href="#oraculo">Voltar a busca</a>
+                        </div>
+                        <p id="purchase-hint" class="purchase-hint">Quando o link real estiver pronto, basta trocar o destino deste botao para a loja escolhida.</p>
                     </div>
                 </article>
             </section>
@@ -1396,17 +1860,17 @@
 
         <footer class="footer">
             <div class="footer-card">
-                <p>Bosque da Fantasia agora funciona como uma única experiência: entrada guiada, autores, estante, busca ampla e painel de compra no mesmo fluxo.</p>
+                <p>Bosque da Fantasia reune orientacao para iniciantes, acervo pesquisavel, autores, glossario e fichas de leitura em uma unica jornada.</p>
                 <details>
-                    <summary>Notas de crédito e licença</summary>
-                    <p>As imagens históricas e os áudios continuam com licença aberta ou status compatível indicado nas respectivas fontes.</p>
+                    <summary>Creditos e licencas</summary>
+                    <p>As imagens historicas e a trilha de violino continuam com licenca aberta ou status compativel indicado nas respectivas fontes.</p>
                     <p style="margin-top: 0.75rem;">
-                        Nas capas do acervo, o site tenta primeiro a Open Library Covers API. Quando uma obra não retorna capa por lá,
-                        ele tenta algumas imagens históricas com licença aberta verificadas no Wikimedia Commons. Se ainda assim não houver
-                        uma opção segura, a página mantém a capa cerimonial do próprio site em vez de usar uma imagem sem clareza de direitos.
+                        Nas capas do acervo, o site tenta primeiro a Open Library Covers API. Quando uma obra nao retorna capa por la,
+                        ele tenta algumas imagens historicas com licenca aberta verificadas no Wikimedia Commons. Se ainda assim nao houver
+                        uma opcao segura, a pagina mantem a capa cerimonial do proprio site em vez de usar uma imagem sem clareza de direitos.
                     </p>
                     <div class="footer-links">
-                        <a href="CREDITOS-IMAGENS.md">Abrir créditos locais</a>
+                        <a href="CREDITOS-IMAGENS.md">Abrir creditos completos</a>
                         <a href="https://openlibrary.org/search/howto" target="_blank" rel="noreferrer">Open Library Search API</a>
                         <a href="https://covers.openlibrary.org/" target="_blank" rel="noreferrer">Open Library Covers API</a>
                     </div>
@@ -1415,45 +1879,24 @@
         </footer>
     </div>
 
-    <div class="audio-dock is-collapsed" id="audio-dock" aria-label="Controle da trilha sonora ambiente">
-        <div class="audio-head">
-            <div class="audio-head-text">
-                <h3>Trilha do bosque</h3>
-                <p id="audio-meta" class="audio-meta">Escolha uma trilha e deixe o ambiente correr em segundo plano.</p>
-            </div>
-            <button id="audio-panel-toggle" class="button secondary audio-panel-toggle" type="button" aria-expanded="false" aria-controls="audio-controls">Som</button>
-        </div>
-        <div class="audio-controls" id="audio-controls">
-            <div class="audio-select">
-                <label for="audio-track">Trilha sonora</label>
-                <select id="audio-track">
-                    <option value="serenata">Serenata do Bosque</option>
-                    <option value="violino">Violino ao Longe</option>
-                    <option value="nevoa">Nevoa de Camara</option>
-                </select>
-            </div>
-            <div class="audio-buttons">
-                <button id="audio-play" class="button secondary audio-action" type="button">Tocar</button>
-                <button id="audio-pause" class="button secondary audio-action" type="button">Pausar</button>
-            </div>
-            <div class="audio-slider">
-                <label for="audio-volume">Volume ambiente</label>
-                <input id="audio-volume" type="range" min="0" max="100" step="1" value="12">
-            </div>
-            <p id="audio-status" class="audio-status">A trilha comeca quando voce tocar no botao de tocar.</p>
-        </div>
-        <audio id="ambient-audio" loop preload="metadata" crossorigin="anonymous" playsinline></audio>
-    </div>
+    <audio id="ambient-audio" loop preload="none" crossorigin="anonymous" playsinline></audio>
 
     <script type="module">
         import { initAudioPlayer } from "./audio-player.js";
+        import { initPwaFeatures } from "./pwa.js";
 
         try {
             initAudioPlayer();
         } catch (error) {
-            console.error("Falha ao iniciar o player de audio:", error);
+            console.error("Falha ao iniciar o som ambiente:", error);
+        }
+
+        try {
+            initPwaFeatures();
+        } catch (error) {
+            console.error("Falha ao iniciar os recursos PWA:", error);
         }
     </script>
-    <script type="module" src="./index-page.js"></script>
+    <script type="module" src="./app.js"></script>
 </body>
 </html>
