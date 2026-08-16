@@ -239,8 +239,8 @@ style.textContent = `
         display: none;
         align-self: center;
         justify-self: end;
-        width: min(15rem, 24vw);
-        min-width: 11rem;
+        width: clamp(10.5rem, 18vw, 13.5rem);
+        min-width: 0;
     }
     .account-widget.is-ready {
         display: block;
@@ -308,7 +308,7 @@ style.textContent = `
         top: calc(100% + 0.75rem);
         right: 0;
         z-index: 40;
-        width: min(92vw, 25rem);
+        width: min(92vw, 26rem);
         padding: 1rem;
         border: 1px solid rgba(240, 223, 176, 0.24);
         border-radius: 22px;
@@ -377,11 +377,22 @@ style.textContent = `
         margin-top: 0.85rem;
     }
     .account-mini-card {
-        min-height: 5.4rem;
+        min-height: 4.85rem;
         padding: 0.75rem;
         border: 1px solid rgba(240, 223, 176, 0.14);
         border-radius: 16px;
         background: rgba(255, 247, 232, 0.045);
+    }
+    .account-mini-card[data-span="wide"] {
+        grid-column: 1 / -1;
+        min-height: auto;
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        align-items: center;
+        column-gap: 0.8rem;
+    }
+    .account-mini-card[data-span="wide"] span {
+        margin-top: 0;
     }
     .account-mini-card strong {
         display: block;
@@ -409,6 +420,10 @@ style.textContent = `
         font-size: 0.72rem;
         font-weight: 700;
         text-transform: uppercase;
+    }
+    .account-mode-badge[data-mode="remote"] {
+        background: rgba(139, 186, 153, 0.16);
+        color: #d8f0df;
     }
     .account-nickname-row {
         display: grid;
@@ -500,7 +515,11 @@ style.textContent = `
         .account-panel {
             left: 0;
             right: auto;
-            width: min(92vw, 24rem);
+            width: 100%;
+        }
+        .account-mini-card[data-span="wide"] {
+            grid-template-columns: 1fr;
+            row-gap: 0.2rem;
         }
         .account-profile-grid,
         .account-actions {
@@ -607,12 +626,14 @@ const getDefaultNickname = (user) => {
 const getSessionModeLabel = (user) => {
     if (user?.localOnly || bosqueApi.getMode() === "local") {
         return {
+            mode: "local",
             label: "Modo local",
             description: "Sessao salva apenas neste navegador."
         };
     }
 
     return {
+        mode: "remote",
         label: "API legada",
         description: "Sessao conectada ao backend."
     };
@@ -822,7 +843,7 @@ const renderAccountWidget = async (user, { refresh = false } = {}) => {
             <div>
                 <h2 class="account-name">${escapeHtml(activeUser.name || "Leitor do Bosque")}</h2>
                 <p class="account-email">${escapeHtml(activeUser.email || "")}</p>
-                <span class="account-mode-badge">${escapeHtml(sessionMode.label)}</span>
+                <span class="account-mode-badge" data-mode="${escapeHtml(sessionMode.mode)}">${escapeHtml(sessionMode.label)}</span>
             </div>
         </div>
         <div class="account-profile-grid">
@@ -842,7 +863,7 @@ const renderAccountWidget = async (user, { refresh = false } = {}) => {
                 <strong>Entrada</strong>
                 <span>${escapeHtml(getReadableDate(activeUser.createdAt))}</span>
             </div>
-            <div class="account-mini-card">
+            <div class="account-mini-card" data-span="wide">
                 <strong>Conexão</strong>
                 <span>${escapeHtml(sessionMode.description)}</span>
             </div>
