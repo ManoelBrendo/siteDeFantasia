@@ -79,7 +79,6 @@ const request = async (path, options = {}) => {
         throw error;
     }
 };
-
 const requireSessionPayload = (result) => {
     if (!result?.token || !result?.user) {
         throw new Error("A API de autenticacao respondeu sem usuario ou token.");
