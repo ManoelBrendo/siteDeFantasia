@@ -126,6 +126,8 @@ const motifLabel = (value) => humanFilterLabel("motivo", value);
 const climaLabel = (value) => humanFilterLabel("clima", value);
 
 const normalizeBook = (book) => {
+    const publicReadUrl = book.publicDomain && book.readUrl ? book.readUrl : "";
+
     return {
         ...book,
         originalTitle: book.originalTitle || book.title,
@@ -141,8 +143,16 @@ const normalizeBook = (book) => {
             dificuldade: book.filters?.dificuldade || book.difficultyKey || "intermediario",
             motivo: book.filters?.motivo || "magia"
         },
-        purchaseUrl: book.purchaseUrl || "#compra"
+        publicDomain: Boolean(book.publicDomain),
+        readUrl: publicReadUrl,
+        purchaseUrl: publicReadUrl || book.purchaseUrl || "#compra"
     };
+};
+
+const sortBooksByTitle = (books) => {
+    return [...books].sort((firstBook, secondBook) => {
+        return firstBook.title.localeCompare(secondBook.title, "pt-BR", { sensitivity: "base" });
+    });
 };
 
 const registerBooks = (books) => {
@@ -386,8 +396,9 @@ const buildFilterGroupMarkup = (group) => `
 `;
 
 const renderCuratedShelf = () => {
-    registerBooks(featuredBooks);
-    elements.curatedGrid.innerHTML = featuredBooks.map(buildCuratedMarkup).join("");
+    const sortedBooks = sortBooksByTitle(featuredBooks.map(normalizeBook));
+    registerBooks(sortedBooks);
+    elements.curatedGrid.innerHTML = sortedBooks.map(buildCuratedMarkup).join("");
     hydrateBookImages(elements.curatedGrid);
     syncFavoriteButtons();
 };
@@ -575,6 +586,7 @@ const updatePurchasePanel = (bookInput) => {
     elements.purchaseCover.alt = `Capa de ${book.title}`;
     applyBookCover(elements.purchaseCover, book);
     elements.purchaseLink.href = book.purchaseUrl || "#compra";
+    elements.purchaseLink.textContent = book.publicDomain ? "Abrir leitura pública" : "Abrir link de compra";
     elements.purchaseLink.setAttribute("aria-disabled", String(!book.purchaseUrl || book.purchaseUrl === "#compra"));
     elements.purchaseWhyRead.textContent = book.whyRead;
     elements.purchaseReaderProfile.textContent = book.readerProfile;
@@ -794,7 +806,7 @@ const runSearch = async ({ query, append = false, page = 1, label } = {}) => {
             signal: state.controller.signal
         });
 
-        const nextBooks = result.books.map(normalizeBook);
+        const nextBooks = sortBooksByTitle(result.books.map(normalizeBook));
         registerBooks(nextBooks);
         state.query = query;
         state.page = page;

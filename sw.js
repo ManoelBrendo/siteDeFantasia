@@ -1,9 +1,16 @@
-const SHELL_CACHE = "bosque-shell-v5";
-const RUNTIME_CACHE = "bosque-runtime-v5";
+const SHELL_CACHE = "bosque-shell-v6";
+const RUNTIME_CACHE = "bosque-runtime-v6";
 const APP_SHELL = [
     "./",
     "./index.html",
+    "./livros.html",
+    "./compra.html",
     "./app.js",
+    "./fantasy-effects.js",
+    "./account-api.js",
+    "./account-panel.js",
+    "./assets/js/books-page.js",
+    "./assets/js/purchase-page.js",
     "./audio-player.js",
     "./catalog-api.js",
     "./library-db.js",
@@ -83,11 +90,12 @@ self.addEventListener("fetch", (event) => {
             fetch(event.request)
                 .then((response) => {
                     const responseClone = response.clone();
-                    caches.open(SHELL_CACHE).then((cache) => cache.put("./index.html", responseClone));
+                    caches.open(SHELL_CACHE).then((cache) => cache.put(event.request, responseClone));
                     return response;
                 })
                 .catch(async () => {
-                    return caches.match("./index.html", { ignoreSearch: true });
+                    return await caches.match(event.request, { ignoreSearch: true })
+                        || await caches.match("./index.html", { ignoreSearch: true });
                 })
         );
         return;

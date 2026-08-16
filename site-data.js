@@ -18,6 +18,8 @@ export const featuredBooks = [
         readerProfile: "Ideal para quem quer entrar na fantasia pelo encanto, pela musica do texto e por uma sensacao de maravilha antiga.",
         whyRead: "E um dos caminhos mais puros para sentir o tom elfico classico antes mesmo de chegar a obras mais densas do genero.",
         authorNote: "Lord Dunsany ajudou a formar a imagetica onirica que depois influenciaria boa parte da fantasia moderna.",
+        publicDomain: true,
+        readUrl: "https://openlibrary.org/works/OL1136778W/The_King_of_Elfland%27s_Daughter",
         paths: ["elfica", "mitica"],
         filters: {
             clima: "elfico",
@@ -41,6 +43,8 @@ export const featuredBooks = [
         readerProfile: "Bom para leitores que gostam de fantasia mais atmosferica, simbologica e com espaco para interpretacao.",
         whyRead: "Mostra que fantasia tambem pode ser introspeccao, imagetica espiritual e descoberta de si por meio do maravilhoso.",
         authorNote: "George MacDonald e um dos ancestrais mais importantes da fantasia literaria, sobretudo na tradicao mais contemplativa.",
+        publicDomain: true,
+        readUrl: "https://openlibrary.org/works/OL15520W/Phantastes",
         paths: ["elfica", "iniciatica", "mitica"],
         filters: {
             clima: "iniciatico",
@@ -64,6 +68,8 @@ export const featuredBooks = [
         readerProfile: "Excelente para quem quer uma porta de entrada mais direta, narrativa e calorosa para o fantastico classico.",
         whyRead: "Tem ritmo acessivel, imaginario medieval forte e um senso de protecao encantada que conversa bem com iniciantes.",
         authorNote: "MacDonald mistura simplicidade narrativa com uma base simbolica que ainda recompensa releituras.",
+        publicDomain: true,
+        readUrl: "https://openlibrary.org/works/OL15524W/The_Princess_and_the_Goblin",
         paths: ["medieval", "elfica"],
         filters: {
             clima: "medieval",
@@ -87,11 +93,88 @@ export const featuredBooks = [
         readerProfile: "Ideal para quem quer sentir a fantasia medieval antes de Tolkien, com sabor de cronica antiga e caminhar ritual.",
         whyRead: "Ajuda a perceber como o imaginario medieval artesanal e a quest lendaria moldaram a fantasia posterior.",
         authorNote: "William Morris liga literatura, artesanato medieval e visao de mundo pastoral em uma prosa muito particular.",
+        publicDomain: true,
+        readUrl: "https://openlibrary.org/works/OL15258W/The_Well_at_the_World%27s_End",
         paths: ["medieval", "mitica"],
         filters: {
             clima: "medieval",
             dificuldade: "intermediario",
             motivo: "cavaleiros"
+        },
+        purchaseUrl: "#compra"
+    },
+    {
+        id: "alice-wonderland",
+        title: "Alice no País das Maravilhas",
+        originalTitle: "Alice's Adventures in Wonderland",
+        author: "Lewis Carroll",
+        year: "1865",
+        cover: "https://commons.wikimedia.org/wiki/Special:FilePath/Alice%27s%20Adventures%20in%20Wonderland%20-%20Carroll%2C%20Robinson%20-%20Scribner%27s%201906.djvu?page=11&width=720",
+        description: "Alice atravessa uma toca e encontra um mundo de lógica torta, jogos de linguagem, criaturas excêntricas e mudanças constantes de tamanho e sentido.",
+        aura: "Surreal, lúdico e inquietante",
+        difficulty: "Entrada inventiva",
+        difficultyKey: "entrada",
+        themes: ["maravilha", "sonho", "criaturas fantasticas", "absurdo"],
+        readerProfile: "Boa escolha para quem gosta de fantasia estranha, rápida e cheia de humor verbal.",
+        whyRead: "É uma das portas mais famosas para o maravilhoso moderno, onde a regra principal é a instabilidade da imaginação.",
+        authorNote: "Lewis Carroll transformou nonsense, lógica e sonho em uma matriz duradoura para a fantasia posterior.",
+        publicDomain: true,
+        readUrl: "https://openlibrary.org/works/OL819350W/Alice%27s_Adventures_in_Wonderland",
+        paths: ["iniciatica", "elfica"],
+        filters: {
+            clima: "iniciatico",
+            dificuldade: "entrada",
+            motivo: "criaturas"
+        },
+        purchaseUrl: "#compra"
+    },
+    {
+        id: "wizard-oz",
+        title: "O Maravilhoso Mágico de Oz",
+        originalTitle: "The Wonderful Wizard of Oz",
+        author: "L. Frank Baum",
+        year: "1900",
+        cover: "https://commons.wikimedia.org/wiki/Special:FilePath/The%20Wonderful%20Wizard%20of%20Oz%20cover.jpg?width=720",
+        description: "Dorothy é levada por um ciclone a uma terra de bruxas, cidades coloridas, companheiros improváveis e provas que misturam aventura, afeto e imaginação popular.",
+        aura: "Colorido, aventureiro e luminoso",
+        difficulty: "Entrada classica",
+        difficultyKey: "entrada",
+        themes: ["jornada", "bruxas", "companheiros", "mundo encantado"],
+        readerProfile: "Ideal para quem quer uma fantasia acessível, visual e cheia de episódios memoráveis.",
+        whyRead: "É um clássico de domínio público que ajuda a entender a fantasia infantil e a jornada de grupo.",
+        authorNote: "Baum criou um imaginário americano duradouro, mais solar e episódico que a fantasia medieval europeia.",
+        publicDomain: true,
+        readUrl: "https://openlibrary.org/works/OL18417W/The_Wonderful_Wizard_of_Oz",
+        paths: ["iniciatica", "medieval"],
+        filters: {
+            clima: "iniciatico",
+            dificuldade: "entrada",
+            motivo: "magia"
+        },
+        purchaseUrl: "#compra"
+    },
+    {
+        id: "peter-pan",
+        title: "Peter Pan",
+        originalTitle: "Peter and Wendy",
+        author: "J. M. Barrie",
+        year: "1911",
+        cover: "https://commons.wikimedia.org/wiki/Special:FilePath/Peter%20and%20Wendy%20-%20cover%2C%201911.jpg?width=720",
+        description: "Wendy e seus irmãos voam para a Terra do Nunca, onde infância, aventura, perigo e imaginação convivem em uma paisagem de fadas, piratas e criaturas fantásticas.",
+        aura: "Aventureiro, nostálgico e feérico",
+        difficulty: "Entrada classica",
+        difficultyKey: "entrada",
+        themes: ["fadas", "infancia", "aventura", "Terra do Nunca"],
+        readerProfile: "Boa entrada para quem busca fantasia rápida, simbólica e marcada por encanto e melancolia.",
+        whyRead: "É uma obra central para entender a fantasia de infância e o fascínio por mundos que recusam crescer.",
+        authorNote: "Barrie criou uma mitologia moderna sobre infância, memória e fuga imaginativa.",
+        publicDomain: true,
+        readUrl: "https://openlibrary.org/works/OL138052W/Peter_Pan",
+        paths: ["elfica", "iniciatica"],
+        filters: {
+            clima: "elfico",
+            dificuldade: "entrada",
+            motivo: "feerico"
         },
         purchaseUrl: "#compra"
     }
@@ -242,6 +325,7 @@ export const glossaryTerms = [
 ];
 
 export const topicThemes = [
+    { label: "Domínio público", query: "subject:fantasy", description: "Obras com leitura pública indicada pela Open Library.", publicDomain: true },
     { label: "Elfos e feeria", query: "elves fantasy", description: "Cortes feericas, bosques e reinos encantados." },
     { label: "Mitologia celta", query: "\"celtic mythology\" fantasy", description: "Sidhe, druidas, simbolos e velhas lendas." },
     { label: "Lendas arturianas", query: "\"arthurian romance\"", description: "Camelot, Avalon e reliquias do reino." },

@@ -65,6 +65,18 @@ export class BosqueCatalogApi {
         }
     }
 
+    async searchPublicDomainBooks({ query, page = 1, limit = 9, signal } = {}) {
+        const result = await this.remoteApi.searchPublicDomainBooks({
+            query,
+            page,
+            limit,
+            signal
+        });
+
+        await this.database.storeBooks(result.books).catch(() => null);
+        return result;
+    }
+
     async saveUiState(payload) {
         await this.database.setState(UI_STATE_KEY, payload).catch(() => null);
     }

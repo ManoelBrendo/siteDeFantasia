@@ -6,12 +6,12 @@
     <title>Bosque da Fantasia | Livros, mitos e reinos antigos</title>
     <meta
         name="description"
-        content="Uma jornada para quem quer conhecer fantasia literaria com atmosfera elfica, mitologia celta, guia de leitura e um grande acervo de livros."
+        content="Uma jornada para quem quer conhecer fantasia literária com atmosfera élfica, mitologia celta, guia de leitura e um grande acervo de livros."
     >
     <meta property="og:title" content="Bosque da Fantasia">
     <meta
         property="og:description"
-        content="Descubra autores, mitos, livros classicos e um acervo pesquisavel em uma experiencia elfica e medieval."
+        content="Descubra autores, mitos, livros clássicos e um acervo pesquisável em uma experiência élfica e medieval."
     >
     <meta property="og:type" content="website">
     <meta name="theme-color" content="#102019">
@@ -19,6 +19,10 @@
     <link rel="preconnect" href="https://openlibrary.org">
     <link rel="preconnect" href="https://covers.openlibrary.org">
     <link rel="preconnect" href="https://upload.wikimedia.org" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <link rel="manifest" href="./manifest.webmanifest">
     <link rel="icon" href="./bosque-icon.svg" type="image/svg+xml">
     <link rel="modulepreload" href="./app.js">
@@ -29,18 +33,21 @@
     <link rel="modulepreload" href="./pwa.js">
     <link rel="modulepreload" href="./site-data.js">
     <link rel="modulepreload" href="./recommendation-engine.js">
+    <link rel="modulepreload" href="./fantasy-effects.js">
+    <link rel="modulepreload" href="./account-api.js">
+    <link rel="modulepreload" href="./account-panel.js">
     <script type="application/ld+json">
         {
             "@context": "https://schema.org",
             "@type": "WebSite",
             "name": "Bosque da Fantasia",
             "inLanguage": "pt-BR",
-            "description": "Guia de entrada para literatura fantastica com curadoria elfica, busca em acervo e recomendacao por afinidade.",
+            "description": "Guia de entrada para literatura fantástica com curadoria élfica, busca em acervo e recomendação por afinidade.",
             "about": [
-                "fantasia literaria",
+                "fantasia literária",
                 "mitologia celta",
                 "fantasia medieval",
-                "livros fantasticos"
+                "livros fantásticos"
             ],
             "hasPart": {
                 "@type": "ItemList",
@@ -76,7 +83,7 @@
                     {
                         "@type": "Book",
                         "position": 4,
-                        "name": "O Poco no Fim do Mundo",
+                        "name": "O Poço no Fim do Mundo",
                         "author": {
                             "@type": "Person",
                             "name": "William Morris"
@@ -215,18 +222,31 @@
             top: 0;
             z-index: 20;
             backdrop-filter: blur(14px);
-            background: rgba(8, 14, 12, 0.72);
+            background:
+                linear-gradient(180deg, rgba(8, 14, 12, 0.92), rgba(8, 14, 12, 0.74)),
+                rgba(8, 14, 12, 0.72);
             border-bottom: 1px solid rgba(220, 191, 131, 0.12);
+            box-shadow: 0 18px 48px rgba(0, 0, 0, 0.22);
+        }
+
+        .topbar::before {
+            content: "";
+            position: absolute;
+            inset: auto 0 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(240, 223, 176, 0.42), transparent);
+            pointer-events: none;
         }
 
         .topbar-inner {
             width: var(--content-width);
             margin: 0 auto;
-            min-height: 4.5rem;
-            display: flex;
+            min-height: 4.75rem;
+            display: grid;
+            grid-template-columns: minmax(14rem, auto) minmax(0, 1fr) auto;
             align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
+            gap: 0.85rem;
+            padding: 0.65rem 0;
         }
 
         .brand {
@@ -234,20 +254,23 @@
             align-items: center;
             gap: 0.85rem;
             min-width: 0;
+            padding: 0.35rem 0.45rem 0.35rem 0;
         }
 
         .brand-mark {
-            width: 2.7rem;
-            height: 2.7rem;
+            width: 2.9rem;
+            height: 2.9rem;
             display: grid;
             place-items: center;
             border-radius: 50%;
             color: var(--gold-soft);
             border: 1px solid rgba(220, 191, 131, 0.34);
             background:
+                conic-gradient(from 30deg, rgba(240, 223, 176, 0.26), transparent, rgba(139, 186, 153, 0.18), transparent),
                 radial-gradient(circle at 30% 30%, rgba(220, 191, 131, 0.25), transparent 55%),
                 rgba(255, 249, 235, 0.04);
             font-size: 1.18rem;
+            box-shadow: inset 0 0 18px rgba(240, 223, 176, 0.08), 0 0 24px rgba(139, 186, 153, 0.08);
         }
 
         .brand-copy {
@@ -256,35 +279,56 @@
         }
 
         .brand-copy strong {
-            font-size: 1rem;
+            font-size: 0.96rem;
             letter-spacing: 0.08em;
             text-transform: uppercase;
+            white-space: nowrap;
         }
 
         .brand-copy span {
             color: var(--muted);
-            font-size: 0.82rem;
+            font-size: 0.78rem;
+            white-space: nowrap;
         }
 
         .topnav {
             display: flex;
             align-items: center;
-            gap: 0.45rem;
-            flex-wrap: wrap;
-            justify-content: flex-end;
+            justify-content: center;
+            gap: 0.25rem;
+            min-width: 0;
+            max-width: 100%;
+            padding: 0.28rem;
+            border: 1px solid rgba(240, 223, 176, 0.12);
+            border-radius: 999px;
+            background: rgba(255, 247, 232, 0.035);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .topnav::-webkit-scrollbar {
+            display: none;
         }
 
         .topnav a {
-            padding: 0.55rem 0.9rem;
+            flex: 0 0 auto;
+            min-height: 2.25rem;
+            display: inline-flex;
+            align-items: center;
+            padding: 0.42rem 0.72rem;
             border-radius: 999px;
             color: var(--mist);
             border: 1px solid transparent;
+            font-size: 0.88rem;
+            line-height: 1;
+            white-space: nowrap;
             transition: background 180ms ease, border-color 180ms ease, color 180ms ease;
         }
 
         .topnav a:hover,
         .topnav a:focus-visible {
-            background: rgba(255, 246, 221, 0.06);
+            background: rgba(255, 246, 221, 0.09);
             border-color: rgba(220, 191, 131, 0.18);
             color: var(--gold-soft);
         }
@@ -1463,6 +1507,16 @@
         }
 
         @media (max-width: 1080px) {
+            .topbar-inner {
+                grid-template-columns: minmax(13rem, auto) minmax(0, 1fr);
+            }
+
+            .topnav {
+                order: 3;
+                grid-column: 1 / -1;
+                justify-content: flex-start;
+            }
+
             .hero,
             .authors-layout,
             .affinity-layout,
@@ -1481,11 +1535,31 @@
         }
 
         @media (max-width: 780px) {
-            .topbar-inner,
             .section-header,
             .catalog-toolbar {
                 flex-direction: column;
                 align-items: flex-start;
+            }
+
+            .topbar-inner {
+                grid-template-columns: minmax(0, 1fr);
+                gap: 0.55rem;
+                padding: 0.55rem 0;
+            }
+
+            .brand {
+                width: 100%;
+                padding-right: 0;
+            }
+
+            .brand-copy strong,
+            .brand-copy span {
+                white-space: normal;
+            }
+
+            .topnav {
+                width: 100%;
+                order: 2;
             }
 
             .hero {
@@ -1540,11 +1614,11 @@
                     <div class="brand-mark" aria-hidden="true">&#10022;</div>
                     <div class="brand-copy">
                         <strong>Bosque da Fantasia</strong>
-                        <span>Literatura fantastica para comecar bem</span>
+                        <span>Literatura fantástica para começar bem</span>
                     </div>
                 </a>
-                <nav class="topnav" aria-label="Navegacao principal">
-                    <a href="#panorama">Como comecar</a>
+                <nav class="topnav" aria-label="Navegação principal">
+                    <a href="#panorama">Como começar</a>
                     <a href="#afinidade">Seu perfil</a>
                     <a href="#autores">Autores</a>
                     <a href="#glossario">Glossario</a>
@@ -1557,46 +1631,46 @@
 
         <main>
             <section id="inicio" class="hero" aria-labelledby="titulo-principal">
-                <div class="hero-copy">
-                    <div class="eyebrow">Um portal para quem esta comecando</div>
+                <div class="hero-copy animate__animated animate__fadeIn">
+                    <div class="eyebrow">Um portal para quem está começando</div>
                     <h1 id="titulo-principal">Descubra fantasia com calma, sem precisar conhecer nada antes.</h1>
-                    <p>O Bosque organiza autores, livros, termos e trilhas de leitura em um caminho simples: primeiro voce entende o seu gosto, depois explora o acervo e escolhe por onde comecar.</p>
+                    <p>O Bosque organiza autores, livros, termos e trilhas de leitura em um caminho simples: primeiro você entende o seu gosto, depois explora o acervo e escolhe por onde começar.</p>
                     <div class="hero-actions">
                         <a class="button primary" href="#afinidade">Descobrir meu perfil</a>
-                        <a class="button secondary" href="#estante">Ver livros para comecar</a>
+                        <a class="button secondary" href="#estante">Ver livros para começar</a>
                     </div>
                     <div class="hero-system">
                         <span id="pwa-status" class="pwa-pill" data-tone="idle">Modo offline preparando o bosque...</span>
                         <button id="install-app" class="button ghost" type="button" hidden>Instalar app</button>
                         <button id="ambient-toggle" class="button ghost" type="button" aria-pressed="false">Ativar violino ambiente</button>
-                        <p id="ambient-status" class="hero-system-note" aria-live="polite">Som suave opcional para acompanhar a leitura sem distrair a navegacao.</p>
+                        <p id="ambient-status" class="hero-system-note" aria-live="polite">Som suave opcional para acompanhar a leitura sem distrair a navegação.</p>
                     </div>
                     <div class="hero-ritual" aria-label="Como usar o site">
-                        <article><strong>1</strong><span>Descubra seu clima de leitura com o Oraculo de Afinidade.</span></article>
-                        <article><strong>2</strong><span>Abra livros iniciais ja explicados em portugues claro.</span></article>
+                        <article><strong>1</strong><span>Descubra seu clima de leitura com o Oráculo de Afinidade.</span></article>
+                        <article><strong>2</strong><span>Abra livros iniciais já explicados em português claro.</span></article>
                         <article><strong>3</strong><span>Pesquise autores, temas e criaturas em um acervo maior.</span></article>
                     </div>
                 </div>
-                <div class="hero-stage" aria-label="Painel visual do universo fantastico">
+                <div class="hero-stage animate__animated animate__fadeInUp" aria-label="Painel visual do universo fantástico">
                     <div class="hero-stage-grid">
                         <figure class="hero-visual hero-visual-tall">
-                            <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Rackham_elves.jpg?width=900" alt="Ilustracao historica de elfos em um bosque" decoding="async" fetchpriority="high">
+                            <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Rackham_elves.jpg?width=900" alt="Ilustração histórica de elfos em um bosque" decoding="async" fetchpriority="high">
                             <figcaption class="hero-plaque">
-                                <strong>Tom elfico e crepuscular</strong>
+                                <strong>Tom élfico e crepuscular</strong>
                                 <span>Feeria, mata antiga e um brilho de lenda em volta dos livros.</span>
                             </figcaption>
                         </figure>
                         <figure class="hero-visual">
-                            <img src="https://commons.wikimedia.org/wiki/Special:FilePath/The%20Hunting%20of%20the%20Unicorn%20by%20Samuel%20Simes%2C%20Frontispiece%20to%20The%20King%20of%20Elfland%27s%20Daughter.png?width=720" alt="Frontispicio historico de A Filha do Rei de Elfland" loading="lazy" decoding="async">
+                            <img src="https://commons.wikimedia.org/wiki/Special:FilePath/The%20Hunting%20of%20the%20Unicorn%20by%20Samuel%20Simes%2C%20Frontispiece%20to%20The%20King%20of%20Elfland%27s%20Daughter.png?width=720" alt="Frontispício histórico de A Filha do Rei de Elfland" loading="lazy" decoding="async">
                         </figure>
                         <figure class="hero-visual">
-                            <img src="https://commons.wikimedia.org/wiki/Special:FilePath/The%20Well%20at%20the%20World%27s%20End%2C%20design%20by%20William%20Morris%2C%20Hammersmith%2C%20Kelmscott%20Press%2C%201896%20-%20National%20Gallery%20of%20Art%2C%20Washington%20-%20DSC09794.JPG?width=720" alt="Edicao historica ornamentada de O Poco no Fim do Mundo" loading="lazy" decoding="async">
+                            <img src="https://commons.wikimedia.org/wiki/Special:FilePath/The%20Well%20at%20the%20World%27s%20End%2C%20design%20by%20William%20Morris%2C%20Hammersmith%2C%20Kelmscott%20Press%2C%201896%20-%20National%20Gallery%20of%20Art%2C%20Washington%20-%20DSC09794.JPG?width=720" alt="Edição histórica ornamentada de O Poço no Fim do Mundo" loading="lazy" decoding="async">
                         </figure>
                     </div>
                 </div>
             </section>
 
-            <section id="panorama" class="section" aria-labelledby="panorama-titulo">
+            <section id="panorama" class="section" aria-labelledby="panorama-titulo" data-aos="fade-up">
                 <div class="section-header">
                     <div class="section-header-copy">
                         <div class="eyebrow">Tres portas de entrada</div>
@@ -1624,7 +1698,7 @@
                 </div>
             </section>
 
-            <section id="afinidade" class="section" aria-labelledby="afinidade-titulo">
+            <section id="afinidade" class="section" aria-labelledby="afinidade-titulo" data-aos="fade-up">
                 <div class="section-header">
                     <div class="section-header-copy">
                         <div class="eyebrow">Oraculo de afinidade</div>
@@ -1659,7 +1733,7 @@
                 </div>
             </section>
 
-            <section id="autores" class="section" aria-labelledby="autores-titulo">
+            <section id="autores" class="section" aria-labelledby="autores-titulo" data-aos="fade-up">
                 <div class="section-header">
                     <div class="section-header-copy">
                         <div class="eyebrow">Autores para comecar</div>
@@ -1702,7 +1776,7 @@
                 </div>
             </section>
 
-            <section id="glossario" class="section" aria-labelledby="glossario-titulo">
+            <section id="glossario" class="section" aria-labelledby="glossario-titulo" data-aos="fade-up">
                 <div class="section-header">
                     <div class="section-header-copy">
                         <div class="eyebrow">Glossario pratico</div>
@@ -1720,7 +1794,7 @@
                 </div>
             </section>
 
-            <section id="estante" class="section" aria-labelledby="estante-titulo">
+            <section id="estante" class="section" aria-labelledby="estante-titulo" data-aos="fade-up">
                 <div class="section-header">
                     <div class="section-header-copy">
                         <div class="eyebrow">Livros para comecar</div>
@@ -1732,7 +1806,7 @@
                 <div id="curated-grid" class="featured-grid" aria-live="polite"></div>
             </section>
 
-            <section id="relicario" class="section" aria-labelledby="relicario-titulo" hidden>
+            <section id="relicario" class="section" aria-labelledby="relicario-titulo" hidden data-aos="fade-up">
                 <div class="section-header">
                     <div class="section-header-copy">
                         <div class="eyebrow">Seu relicario</div>
@@ -1745,7 +1819,7 @@
                 <p id="favorites-empty" class="favorites-empty">Guarde livros no relicario para montar sua propria trilha pessoal neste dispositivo.</p>
             </section>
 
-            <section id="oraculo" class="section" aria-labelledby="oraculo-titulo">
+            <section id="oraculo" class="section" aria-labelledby="oraculo-titulo" data-aos="fade-up">
                 <div class="section-header">
                     <div class="section-header-copy">
                         <div class="eyebrow">Busca guiada</div>
@@ -1798,7 +1872,7 @@
                         </div>
                     </section>
 
-                    <section id="acervo" class="catalog-panel" aria-labelledby="acervo-titulo">
+                    <section id="acervo" class="catalog-panel" aria-labelledby="acervo-titulo" data-aos="fade-up">
                         <div class="catalog-toolbar">
                             <div>
                                 <h3 id="acervo-titulo">Resultados do acervo</h3>
@@ -1814,7 +1888,7 @@
                 </div>
             </section>
 
-            <section id="compra" class="section" aria-labelledby="compra-titulo">
+            <section id="compra" class="section" aria-labelledby="compra-titulo" data-aos="fade-up">
                 <div class="section-header">
                     <div class="section-header-copy">
                         <div class="eyebrow">Proximo passo</div>
@@ -1858,6 +1932,7 @@
             </section>
         </main>
 
+
         <footer class="footer">
             <div class="footer-card">
                 <p>Bosque da Fantasia reune orientacao para iniciantes, acervo pesquisavel, autores, glossario e fichas de leitura em uma unica jornada.</p>
@@ -1881,6 +1956,30 @@
 
     <audio id="ambient-audio" loop preload="none" crossorigin="anonymous" playsinline></audio>
 
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.2/lib/anime.min.js"></script>
+    <script>
+        if (window.AOS && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            window.AOS.init({
+                duration: 700,
+                easing: "ease-out-cubic",
+                once: true,
+                offset: 80
+            });
+        }
+
+        if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches && window.gsap) {
+            window.gsap.from(".topbar", {
+                y: -18,
+                opacity: 0,
+                duration: 0.72,
+                ease: "power3.out"
+            });
+        }
+    </script>
+    <script type="module" src="./fantasy-effects.js"></script>
+    <script type="module" src="./account-panel.js"></script>
     <script type="module">
         import { initAudioPlayer } from "./audio-player.js";
         import { initPwaFeatures } from "./pwa.js";

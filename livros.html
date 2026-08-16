@@ -8,6 +8,8 @@
     <meta property="og:title" content="Bosque da Fantasia | Acervo">
     <meta property="og:description" content="Pesquise livros de fantasia em um grande catálogo com visual de pergaminho e rotas por tema.">
     <meta property="og:type" content="website">
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <title>Bosque da Fantasia | Acervo</title>
     <style>
         :root {
@@ -274,8 +276,8 @@
     </header>
 
     <main>
-        <section class="container hero">
-            <div>
+        <section class="container hero" data-aos="fade-up">
+            <div class="animate__animated animate__fadeIn">
                 <p class="eyebrow">Acervo vivo</p>
                 <h1 id="catalog-title">Acervo para Fantasia</h1>
                 <p id="catalog-summary" class="lead">Pesquise por autor, saga, criatura, magia ou abra um dos assuntos do pergaminho logo abaixo.</p>
@@ -349,6 +351,13 @@
         </div>
     </footer>
 
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        if (window.AOS && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            window.AOS.init({ duration: 650, easing: "ease-out-cubic", once: true, offset: 70 });
+        }
+    </script>
+    <script type="module" src="./fantasy-effects.js"></script>
     <script type="module" src="assets/js/books-page.js"></script>
 </body>
 </html>

@@ -134,7 +134,7 @@
         </div>
     </header>
 
-    <main class="container hero">
+    <main class="container hero animate__animated animate__fadeIn" data-aos="fade-up">
         <div class="card">
             <div class="cover-shell">
                 <img id="purchase-cover" src="" alt="Capa do livro selecionado">
@@ -152,6 +152,13 @@
         </div>
     </main>
 
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        if (window.AOS && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            window.AOS.init({ duration: 650, easing: "ease-out-cubic", once: true, offset: 70 });
+        }
+    </script>
+    <script type="module" src="./fantasy-effects.js"></script>
     <script type="module" src="assets/js/purchase-page.js"></script>
 </body>
 </html>

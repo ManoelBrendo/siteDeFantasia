@@ -12,6 +12,10 @@ const OPEN_LIBRARY_FIELDS = [
     "edition_key",
     "isbn",
     "edition_count",
+    "ebook_access",
+    "has_fulltext",
+    "ia",
+    "public_scan_b",
     "subject"
 ].join(",");
 
@@ -477,6 +481,10 @@ const buildBookRecord = (doc, placeholderCover) => {
         difficulty: difficulty.label,
         difficultyKey: difficulty.key,
         themes: subjects.length > 0 ? subjects : ["fantasia"],
+        publicDomain: Boolean(doc.public_scan_b || doc.ebook_access === "public"),
+        readUrl: Array.isArray(doc.ia) && doc.ia.length > 0
+            ? `https://archive.org/details/${doc.ia[0]}`
+            : `https://openlibrary.org${doc.key}`,
         readerProfile: buildReaderProfile({
             climateKey,
             difficultyLabel: difficulty.label
@@ -553,5 +561,24 @@ export class OpenLibraryCatalogApi {
         this.cache.set(url, result);
         writeCachedSearch(url, result);
         return result;
+    }
+
+    async searchPublicDomainBooks({ query = "subject:fantasy", page = 1, limit = 9, signal } = {}) {
+        const publicQuery = `(${query}) has_fulltext:true ebook_access:public`;
+        const result = await this.searchBooks({
+            query: publicQuery,
+            page,
+            limit,
+            signal
+        });
+
+        return {
+            ...result,
+            books: result.books.map((book) => ({
+                ...book,
+                publicDomain: true,
+                purchaseUrl: book.readUrl || book.purchaseUrl
+            }))
+        };
     }
 }

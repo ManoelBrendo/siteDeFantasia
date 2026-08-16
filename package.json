@@ -6,6 +6,7 @@
   "scripts": {
     "check": "node ./scripts/check.mjs",
     "dev": "node ./scripts/dev-server.mjs . 4173",
+    "api": "node ./backend/server.mjs",
     "preview": "node ./scripts/dev-server.mjs dist 4174",
     "build": "node ./scripts/build.mjs"
   },
