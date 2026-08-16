@@ -1,0 +1,40 @@
+# Bosque da Fantasia API
+
+Backend local para login, arquivos e integracao Amazon.
+
+## Banco de dados local
+
+As contas e os registros de arquivos ficam em `backend/data/bosque-db.json`.
+O arquivo usa colecoes separadas para `users` e `files`, mantendo os dados em um unico banco local.
+Para zerar as contas criadas, deixe `users` como uma lista vazia.
+
+## Rodar
+
+```bash
+npm run api
+```
+
+Servidor:
+
+```text
+http://127.0.0.1:4180
+```
+
+## Rotas
+
+- `GET /api/health`
+- `POST /api/auth/register`
+- `POST /api/auth/login`
+- `GET /api/me`
+- `GET /api/files`
+- `POST /api/files`
+- `GET /api/files/:id`
+- `GET /api/amazon/search?q=tolkien`
+
+## Amazon
+
+As chaves devem ficar em variaveis de ambiente. Copie `.env.example` como referencia.
+
+A PA-API exige assinatura AWS SigV4. Este backend ja assina `SearchItems` quando `AMAZON_ACCESS_KEY`, `AMAZON_SECRET_KEY` e `AMAZON_PARTNER_TAG` estiverem definidos.
+
+Como a documentacao atual indica depreciacao da PA-API e migracao para Creators API, a integracao foi isolada em `lib/amazon.mjs` para troca futura sem mexer no frontend.

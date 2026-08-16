@@ -1,0 +1,5 @@
+dist/
+*.log
+backend/data/
+backend/uploads/
+backend/.env
