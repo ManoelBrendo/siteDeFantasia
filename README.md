@@ -43,6 +43,8 @@ Se o terminal ainda nao reconhecer `node` ou `npm`, feche e abra o terminal nova
 - `scripts/check.mjs`: validacao automatizada da estrutura do projeto.
 - `scripts/dev-server.mjs`: servidor local leve, sem dependencias externas.
 - `scripts/build.mjs`: geracao de `dist` para entrega e deploy.
+- `docs/REQUISITOS-FUNCIONALIDADES.md`: levantamento de requisitos, funcionalidades e criterios de aceite.
+- `docs/PLANO-MELHORIAS-W.md`: plano de melhorias visuais, arquiteturais e de infraestrutura com metodo em W.
 
 ## O que o projeto entrega
 

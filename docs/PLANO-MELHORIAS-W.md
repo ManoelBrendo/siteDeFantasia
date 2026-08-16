@@ -1,0 +1,242 @@
+# Plano de melhorias com metodo em W
+
+Este plano organiza proximas rodadas de evolucao do Bosque da Fantasia. A regra de trabalho e: toda funcionalidade nasce com requisito, passa por desenho, implementacao, verificacao e aprendizado antes de ser considerada pronta.
+
+## Metodo em W adotado
+
+O W aqui e um ciclo de ida e volta entre produto, experiencia, codigo e validacao.
+
+```text
+W1 Descoberta       W3 Implementacao       W5 Aprendizado
+ \                 / \                    /
+  W2 Desenho -----     W4 Verificacao ----
+```
+
+### W1 Descoberta
+
+Objetivo: entender problema, usuario, risco e valor.
+
+Perguntas:
+- Qual usuario ganha algo com isso?
+- Qual comportamento atual esta ruim, ausente ou fragil?
+- O que fica fora do escopo desta rodada?
+- Existe impacto em login, dados locais, API, offline ou deploy?
+
+Saida esperada:
+- Requisito escrito.
+- Criterios de aceite.
+- Riscos conhecidos.
+
+### W2 Desenho
+
+Objetivo: definir como a solucao deve aparecer e se encaixar.
+
+Perguntas:
+- Qual estado visual inicial, carregando, erro, vazio e sucesso?
+- Em quais arquivos a mudanca entra?
+- O componente segue o estilo do site?
+- Precisa alterar dados em `site-data.js`, IndexedDB, API ou service worker?
+
+Saida esperada:
+- Desenho de fluxo.
+- Contrato de dados.
+- Lista de arquivos afetados.
+
+### W3 Implementacao
+
+Objetivo: construir com menor ruptura possivel.
+
+Perguntas:
+- A mudanca respeita padroes atuais?
+- Evita duplicacao desnecessaria?
+- Tem degradacao para offline/API indisponivel?
+- Evita introduzir dependencia nova sem necessidade?
+
+Saida esperada:
+- Codigo alterado.
+- Documentacao atualizada quando necessario.
+- Sem mudancas laterais fora do escopo.
+
+### W4 Verificacao
+
+Objetivo: provar que funciona e nao quebrou o restante.
+
+Checklist minimo:
+- `npm run check`
+- `npm run build`
+- Teste manual no fluxo alterado.
+- Teste de regressao do login.
+- Teste de mobile ou largura estreita quando houver UI.
+- Conferencia de console.
+
+Saida esperada:
+- Evidencia do que foi testado.
+- Bugs encontrados ou riscos aceitos.
+
+### W5 Aprendizado
+
+Objetivo: registrar o que ficou melhor e o que precisa da proxima rodada.
+
+Perguntas:
+- O requisito foi atendido?
+- O que ficou pendente?
+- A arquitetura ficou mais simples ou mais complexa?
+- Ha nova divida tecnica?
+
+Saida esperada:
+- Nota de release/commit.
+- Proximo passo priorizado.
+- Atualizacao do levantamento se a funcionalidade mudou de comportamento.
+
+## Rodadas planejadas
+
+### Rodada 1: consolidar login e API legada
+
+Objetivo:
+- Garantir que o site funcione em GitHub Pages e tambem com backend real.
+
+Melhorias:
+- Mostrar indicador discreto "modo local" no painel de conta.
+- Adicionar `GET /api/health` visual no portal para informar se a API esta conectada.
+- Separar melhor mensagens de erro: credencial invalida, API fora, sessao expirada.
+- Criar guia de deploy do backend em provedor separado.
+
+Checagem em W:
+- W1: confirmar se a meta e conta local, conta remota ou as duas.
+- W2: desenhar estado de conectividade no painel.
+- W3: implementar sem bloquear acesso offline.
+- W4: testar com API ligada, API desligada e GitHub Pages.
+- W5: decidir se conta local continua como fallback permanente.
+
+### Rodada 2: melhoria visual do portal e densidade de interface
+
+Objetivo:
+- Refinar a primeira impressao e reduzir excesso visual onde atrapalha leitura.
+
+Melhorias:
+- Revisar hierarquia tipografica em secoes densas.
+- Reduzir cards grandes em areas operacionais.
+- Melhorar contraste de textos secundarios.
+- Padronizar botoes, chips e estados ativos.
+- Revisar mobile: topo, conta, busca e ficha de livro.
+
+Checagem em W:
+- W1: mapear pontos de friccao visual.
+- W2: definir tokens visuais: espacamento, borda, sombra, estados.
+- W3: aplicar em CSS sem reescrever a pagina inteira.
+- W4: testar 360px, 768px, 1366px.
+- W5: registrar antes/depois e proximas telas.
+
+### Rodada 3: arquitetura de frontend
+
+Objetivo:
+- Reduzir tamanho e acoplamento de `app.js` e `index.html`.
+
+Melhorias:
+- Extrair renderizadores: `render-books.js`, `render-affinity.js`, `render-profile.js`.
+- Criar modulo de estado para UI, favoritos e recentes.
+- Separar CSS inline de `index.html` em arquivo dedicado.
+- Remover duplicidade entre `index-page.js` e `app.js` se uma versao nao for mais usada.
+- Criar contratos claros para `Book`, `Author`, `ReadingPath` em documentacao.
+
+Checagem em W:
+- W1: escolher uma extracao pequena por vez.
+- W2: definir fronteiras de modulo.
+- W3: mover codigo mantendo comportamento.
+- W4: comparar fluxo antes/depois e rodar build.
+- W5: medir se reduziu complexidade real.
+
+### Rodada 4: dados editoriais e curadoria
+
+Objetivo:
+- Tornar a curadoria mais facil de manter e expandir.
+
+Melhorias:
+- Separar `site-data.js` em arquivos por dominio: livros, autores, glossario, temas.
+- Criar validação de schema no `scripts/check.mjs`.
+- Adicionar IDs estaveis e campos obrigatorios documentados.
+- Criar checklist de licencas para imagens novas.
+- Incluir status editorial: rascunho, revisado, publicado.
+
+Checagem em W:
+- W1: definir quais dados mudam com mais frequencia.
+- W2: desenhar schema simples.
+- W3: migrar um dominio por vez.
+- W4: validar schema e renderizacao.
+- W5: registrar padrao para novas entradas.
+
+### Rodada 5: busca e recomendacao
+
+Objetivo:
+- Melhorar qualidade de resultados e explicabilidade.
+
+Melhorias:
+- Mostrar origem do resultado: Open Library, cache local ou curadoria.
+- Evitar duplicatas por titulo/autor.
+- Melhorar ranking local por titulo, autor, tema e trilha.
+- Tornar o Oraculo mais explicavel: "por que recebi esta trilha".
+- Adicionar trilhas salvas ou historico de recomendacoes.
+
+Checagem em W:
+- W1: definir problema de relevancia.
+- W2: desenhar regra de ranking e explicacao.
+- W3: implementar com testes em consultas conhecidas.
+- W4: testar buscas comuns e termos sem resultado.
+- W5: ajustar pesos com base nos resultados.
+
+### Rodada 6: PWA, performance e offline
+
+Objetivo:
+- Fazer o modo offline parecer confiavel, nao acidental.
+
+Melhorias:
+- Pagina/estado dedicado para offline.
+- Botao "baixar trilha inicial" para cachear curadoria.
+- Revisao de estrategia cache-first vs stale-while-revalidate.
+- Versao de cache automatizada pelo build.
+- Compressao/minificacao simples no build se necessario.
+
+Checagem em W:
+- W1: definir o que deve funcionar sem rede.
+- W2: desenhar estrategia por tipo de recurso.
+- W3: ajustar `sw.js` e build.
+- W4: testar primeira visita, segunda visita, offline e cache antigo.
+- W5: documentar comportamento esperado.
+
+### Rodada 7: infraestrutura e deploy
+
+Objetivo:
+- Separar site estatico, backend e dados com clareza.
+
+Melhorias:
+- Documentar arquitetura de producao: GitHub Pages + backend Node.
+- Criar variaveis obrigatorias para backend (`BOSQUE_JWT_SECRET`, Amazon etc.).
+- Adicionar workflow de CI para `npm run check` e `npm run build`.
+- Criar checklist pre-deploy.
+- Definir ambiente de staging antes de producao.
+
+Checagem em W:
+- W1: escolher provedor e restricoes.
+- W2: desenhar fluxo de deploy.
+- W3: configurar scripts/workflow.
+- W4: validar deploy limpo e rollback.
+- W5: registrar runbook operacional.
+
+## Checklist pre-commit
+
+- Requisito atualizado em `docs/REQUISITOS-FUNCIONALIDADES.md`.
+- Plano da rodada atualizado neste documento.
+- `npm run check` executado.
+- `npm run build` executado quando alterar JS/HTML/PWA.
+- Fluxo de login testado se tocar `account-*`, `sw.js` ou backend.
+- Cache do service worker versionado se mudar shell essencial.
+- README atualizado se mudar forma de rodar, publicar ou configurar.
+
+## Checklist pre-producao
+
+- Branch limpa antes do push.
+- Commit com mensagem clara.
+- Sem `.env`, `backend/data`, `backend/uploads` ou `dist` no Git.
+- GitHub Pages publicado na branch correta.
+- Link de producao aberto apos deploy.
+- Teste manual: login/cadastro, busca, oraculo, favoritos e offline basico.
