@@ -7,6 +7,7 @@ const LOCAL_USERS_KEY = "bosque-local-users";
 const LOCAL_TOKEN_PREFIX = "local:";
 const LOCAL_MODE = "local";
 const REMOTE_MODE = "remote";
+const HEALTH_TIMEOUT_MS = 1800;
 
 const API_BASE = (() => {
     const { hostname, origin, port, protocol } = window.location;
@@ -274,7 +275,18 @@ export const bosqueApi = {
     getToken,
     getStoredUser,
     getMode: () => storage?.getItem(SESSION_MODE_KEY) || "",
+    getApiBase: () => API_BASE || window.location.origin,
     clearSession,
+    async health() {
+        const controller = new AbortController();
+        const timer = window.setTimeout(() => controller.abort(), HEALTH_TIMEOUT_MS);
+
+        try {
+            return await request("/api/health", { signal: controller.signal });
+        } finally {
+            window.clearTimeout(timer);
+        }
+    },
     async register(payload) {
         try {
             const result = requireSessionPayload(await request("/api/auth/register", {

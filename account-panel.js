@@ -120,6 +120,24 @@ style.textContent = `
     }
     .auth-form input::placeholder { color: rgba(217, 212, 196, 0.72); }
     .auth-note { margin: 0; font-size: 0.9rem; }
+    .auth-api-status {
+        margin: 0;
+        padding: 0.62rem 0.75rem;
+        border: 1px solid rgba(240, 223, 176, 0.16);
+        border-radius: 14px;
+        background: rgba(255, 247, 232, 0.045);
+        color: #d9d4c4;
+        font-size: 0.86rem;
+        line-height: 1.35;
+    }
+    .auth-api-status[data-tone="ready"] {
+        border-color: rgba(139, 186, 153, 0.38);
+        color: #d8f0df;
+    }
+    .auth-api-status[data-tone="local"] {
+        border-color: rgba(240, 223, 176, 0.3);
+        color: #f0dfb0;
+    }
     .auth-loading {
         display: none;
         align-items: center;
@@ -380,6 +398,18 @@ style.textContent = `
         font-size: 0.92rem;
         line-height: 1.35;
     }
+    .account-mode-badge {
+        display: inline-flex;
+        width: fit-content;
+        margin-top: 0.45rem;
+        padding: 0.24rem 0.5rem;
+        border-radius: 999px;
+        background: rgba(240, 223, 176, 0.13);
+        color: #f0dfb0;
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
     .account-nickname-row {
         display: grid;
         grid-template-columns: minmax(0, 1fr) auto;
@@ -509,6 +539,17 @@ const setLoading = (isLoading, message = "Abrindo o portal...") => {
     loading.classList.toggle("is-visible", isLoading);
 };
 
+const setApiStatus = (message, tone = "idle") => {
+    const status = document.getElementById("auth-api-status");
+
+    if (!status) {
+        return;
+    }
+
+    status.textContent = message;
+    status.dataset.tone = tone;
+};
+
 const delay = (duration) => {
     return new Promise((resolve) => window.setTimeout(resolve, duration));
 };
@@ -561,6 +602,20 @@ const getCompactName = (name = "") => {
 
 const getDefaultNickname = (user) => {
     return String(user?.name || "Leitor do Bosque").trim().split(/\s+/)[0] || "Leitor";
+};
+
+const getSessionModeLabel = (user) => {
+    if (user?.localOnly || bosqueApi.getMode() === "local") {
+        return {
+            label: "Modo local",
+            description: "Sessao salva apenas neste navegador."
+        };
+    }
+
+    return {
+        label: "API legada",
+        description: "Sessao conectada ao backend."
+    };
 };
 
 const getStoredNickname = (user) => {
@@ -752,6 +807,7 @@ const renderAccountWidget = async (user, { refresh = false } = {}) => {
         .map((entry) => entry.label || entry.query)
         .filter(Boolean)
         .slice(0, 4);
+    const sessionMode = getSessionModeLabel(activeUser);
 
     widget.classList.add("is-ready");
     animateAccountEntrance(widget);
@@ -766,6 +822,7 @@ const renderAccountWidget = async (user, { refresh = false } = {}) => {
             <div>
                 <h2 class="account-name">${escapeHtml(activeUser.name || "Leitor do Bosque")}</h2>
                 <p class="account-email">${escapeHtml(activeUser.email || "")}</p>
+                <span class="account-mode-badge">${escapeHtml(sessionMode.label)}</span>
             </div>
         </div>
         <div class="account-profile-grid">
@@ -784,6 +841,10 @@ const renderAccountWidget = async (user, { refresh = false } = {}) => {
             <div class="account-mini-card">
                 <strong>Entrada</strong>
                 <span>${escapeHtml(getReadableDate(activeUser.createdAt))}</span>
+            </div>
+            <div class="account-mini-card">
+                <strong>Conexão</strong>
+                <span>${escapeHtml(sessionMode.description)}</span>
             </div>
         </div>
         <div class="account-nickname-row">
@@ -850,6 +911,7 @@ const ensureAuthGate = () => {
                     <button class="auth-tab" type="button" data-auth-tab="register">Criar conta</button>
                 </div>
                 <p id="auth-status" class="auth-status">Faça login para atravessar o portal.</p>
+                <p id="auth-api-status" class="auth-api-status" data-tone="idle">Verificando conexão com a API legada...</p>
                 <div id="auth-loading" class="auth-loading" aria-live="polite">Abrindo o portal...</div>
                 <form id="login-form" class="auth-form is-active">
                     <input name="email" type="email" placeholder="E-mail" autocomplete="email" required>
@@ -1011,11 +1073,25 @@ const bindForms = () => {
     });
 };
 
+const syncApiHealth = async () => {
+    setApiStatus("Verificando conexão com a API legada...", "idle");
+
+    try {
+        const health = await bosqueApi.health();
+        setApiStatus(health?.amazonConfigured
+            ? "API legada conectada. Login remoto e Amazon estão disponíveis."
+            : "API legada conectada. Login remoto disponível.", "ready");
+    } catch {
+        setApiStatus("API legada indisponível. O acesso local neste navegador será usado.", "local");
+    }
+};
+
 const initAuthGate = async () => {
     ensureAuthGate();
     ensureAccountWidget();
     bindTabs();
     bindForms();
+    syncApiHealth().catch(() => null);
     window.addEventListener("bosque:session", (event) => {
         renderAccountWidget(event.detail?.user || null, { refresh: Boolean(event.detail?.user) }).catch(() => null);
     });
