@@ -226,6 +226,7 @@ Checagem em W:
 
 - Requisito atualizado em `docs/REQUISITOS-FUNCIONALIDADES.md`.
 - Plano da rodada atualizado neste documento.
+- Deploy/rollback atualizado em `docs/DEPLOY-RUNBOOK.md` quando mudar publicacao ou backend.
 - `npm run check` executado.
 - `npm run build` executado quando alterar JS/HTML/PWA.
 - Fluxo de login testado se tocar `account-*`, `sw.js` ou backend.

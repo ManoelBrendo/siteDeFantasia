@@ -45,6 +45,7 @@ Se o terminal ainda nao reconhecer `node` ou `npm`, feche e abra o terminal nova
 - `scripts/build.mjs`: geracao de `dist` para entrega e deploy.
 - `docs/REQUISITOS-FUNCIONALIDADES.md`: levantamento de requisitos, funcionalidades e criterios de aceite.
 - `docs/PLANO-MELHORIAS-W.md`: plano de melhorias visuais, arquiteturais e de infraestrutura com metodo em W.
+- `docs/DEPLOY-RUNBOOK.md`: checklist de deploy, ambientes e rollback.
 
 ## O que o projeto entrega
 
