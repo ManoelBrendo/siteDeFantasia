@@ -20,6 +20,18 @@ Servidor:
 http://127.0.0.1:4180
 ```
 
+## Frontend em producao estatica
+
+Quando o site estiver em GitHub Pages ou outra hospedagem estatica, publique este backend em um host separado e informe a base da API antes de carregar `account-api.js`:
+
+```html
+<script>
+  window.BOSQUE_API_BASE = "https://sua-api.example.com";
+</script>
+```
+
+Se essa API nao responder, o frontend libera uma conta local salva apenas no navegador do usuario.
+
 ## Rotas
 
 - `GET /api/health`

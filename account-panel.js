@@ -862,7 +862,7 @@ const ensureAuthGate = () => {
                     <input name="password" type="password" placeholder="Senha com 6+ caracteres" autocomplete="new-password" required>
                     <button class="button secondary" type="submit">Criar conta e entrar</button>
                 </form>
-                <p class="auth-note">A conta é necessária para acessar o site e preparar recursos como arquivos, favoritos e integrações.</p>
+                <p class="auth-note">Se a API legada não responder, a conta é criada em modo local neste navegador para liberar o acesso sem perder favoritos e trilhas.</p>
             </div>
         </div>
     `;
@@ -970,11 +970,13 @@ const bindForms = () => {
 
         try {
             setLoading(true, "Conferindo as runas de acesso...");
-            const { user } = await bosqueApi.login({
+            const { user, mode } = await bosqueApi.login({
                 email: form.get("email"),
                 password: form.get("password")
             });
-            setStatus(`Bem-vindo de volta, ${user.name}.`);
+            setStatus(mode === "local"
+                ? `Bem-vindo de volta, ${user.name}. Sessão local ativa.`
+                : `Bem-vindo de volta, ${user.name}.`);
             setLoading(true, "Portal autorizado. Preparando travessia...");
             await delay(LOGIN_ENTRY_DELAY_MS);
             unlockSite({ withPortal: true });
@@ -991,12 +993,14 @@ const bindForms = () => {
 
         try {
             setLoading(true, "Gravando seu nome no livro do Bosque...");
-            const { user } = await bosqueApi.register({
+            const { user, mode } = await bosqueApi.register({
                 name: form.get("name"),
                 email: form.get("email"),
                 password: form.get("password")
             });
-            setStatus(`Conta criada para ${user.name}.`);
+            setStatus(mode === "local"
+                ? `Conta local criada para ${user.name}.`
+                : `Conta criada para ${user.name}.`);
             setLoading(true, "Conta criada. Preparando travessia...");
             await delay(LOGIN_ENTRY_DELAY_MS);
             unlockSite({ withPortal: true });
