@@ -239,7 +239,7 @@ style.textContent = `
         display: none;
         align-self: center;
         justify-self: end;
-        width: clamp(10.5rem, 18vw, 13.5rem);
+        width: clamp(9.6rem, 14vw, 11.8rem);
         min-width: 0;
     }
     .account-widget.is-ready {
@@ -250,8 +250,8 @@ style.textContent = `
         min-height: 2.9rem;
         display: inline-flex;
         align-items: center;
-        gap: 0.55rem;
-        padding: 0.32rem 0.55rem 0.32rem 0.35rem;
+        gap: 0.46rem;
+        padding: 0.28rem 0.5rem 0.28rem 0.32rem;
         border: 1px solid rgba(240, 223, 176, 0.16);
         border-radius: 999px;
         background:
@@ -271,8 +271,8 @@ style.textContent = `
     }
     .account-avatar {
         flex: 0 0 auto;
-        width: 2rem;
-        height: 2rem;
+        width: 1.86rem;
+        height: 1.86rem;
         display: grid;
         place-items: center;
         border-radius: 50%;
@@ -499,6 +499,16 @@ style.textContent = `
     @keyframes deniedScene { 0% { opacity: 0; transform: scale(0.94); } 12%, 78% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(1.02); } }
     @keyframes wizardStand { from { transform: translateY(0) rotate(-0.6deg); } to { transform: translateY(-5px) rotate(0.6deg); } }
     @keyframes staffFlash { from { opacity: 0.35; transform: scale(0.82); } to { opacity: 1; transform: scale(1.18); } }
+    @media (min-width: 761px) and (max-width: 1240px) {
+        .account-widget {
+            grid-column: 2;
+            justify-self: end;
+            width: clamp(9.8rem, 22vw, 12.4rem);
+        }
+        .account-trigger {
+            min-height: 2.55rem;
+        }
+    }
     @media (max-width: 760px) {
         body.auth-locked .site-shell,
         body.auth-locked > audio {
