@@ -86,4 +86,5 @@ Metodo em W:
 - Dados locais ficam por navegador; nao devem ser vendidos como conta sincronizada.
 - Service worker pode servir cache antigo; sempre incrementar cache quando mudar shell essencial.
 - Efeitos visuais podem prejudicar performance se crescerem sem limite; usar `prefers-reduced-motion`.
+- Mobile deve usar experiencia visual leve por padrao: sem canvas animado, parallax, particulas, compasso fixo ou bibliotecas de motion nao essenciais.
 - Uploads e Amazon dependem do backend; esconder ou degradar controles quando a API estiver indisponivel.

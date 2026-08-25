@@ -500,8 +500,31 @@ style.textContent = `
     @keyframes wizardStand { from { transform: translateY(0) rotate(-0.6deg); } to { transform: translateY(-5px) rotate(0.6deg); } }
     @keyframes staffFlash { from { opacity: 0.35; transform: scale(0.82); } to { opacity: 1; transform: scale(1.18); } }
     @media (max-width: 760px) {
-        .auth-card { grid-template-columns: 1fr; }
+        body.auth-locked .site-shell,
+        body.auth-locked > audio {
+            filter: brightness(0.54);
+            transform: none;
+        }
+        .auth-gate {
+            background: rgba(4, 8, 7, 0.92);
+        }
+        .auth-card {
+            grid-template-columns: 1fr;
+            border-radius: 20px;
+            box-shadow: 0 18px 48px rgba(0, 0, 0, 0.48);
+        }
+        .auth-card::before {
+            display: none;
+        }
         .auth-copy { min-height: 14rem; }
+        .auth-copy,
+        .auth-forms {
+            border-radius: 16px;
+        }
+        .auth-forms,
+        .login-denied-card {
+            backdrop-filter: none;
+        }
         .account-widget {
             width: 100%;
             min-width: 0;
@@ -516,6 +539,8 @@ style.textContent = `
             left: 0;
             right: auto;
             width: 100%;
+            border-radius: 18px;
+            box-shadow: 0 18px 44px rgba(0, 0, 0, 0.44);
         }
         .account-mini-card[data-span="wide"] {
             grid-template-columns: 1fr;

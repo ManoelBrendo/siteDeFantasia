@@ -1,4 +1,6 @@
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const mobileMotionQuery = window.matchMedia("(max-width: 780px), (pointer: coarse)");
+const prefersLeanExperience = () => prefersReducedMotion || mobileMotionQuery.matches;
 
 const style = document.createElement("style");
 style.textContent = `
@@ -344,11 +346,43 @@ style.textContent = `
             display: none;
         }
     }
+
+    @media (max-width: 780px), (pointer: coarse) {
+        .fantasy-atmosphere,
+        .fantasy-canvas,
+        .cursor-wisp,
+        .floating-relics,
+        .realm-compass,
+        .arcane-portal {
+            display: none !important;
+        }
+
+        .fx-float,
+        .fx-aura,
+        .fx-breathe,
+        .fx-glimmer::after,
+        .button:hover,
+        .theme-card:hover,
+        .lore-card:hover,
+        .featured-card:hover,
+        .result-card:hover,
+        .topic-card:hover,
+        .book-card:hover {
+            animation: none !important;
+        }
+
+        .fx-reveal {
+            opacity: 1;
+            transform: none;
+            filter: none;
+            transition: opacity 180ms ease;
+        }
+    }
 `;
 document.head.append(style);
 
 const addArcaneCanvas = () => {
-    if (prefersReducedMotion || document.querySelector(".fantasy-canvas")) {
+    if (prefersLeanExperience() || document.querySelector(".fantasy-canvas")) {
         return;
     }
 
@@ -363,7 +397,7 @@ const addArcaneCanvas = () => {
     canvas.setAttribute("aria-hidden", "true");
     document.body.prepend(canvas);
 
-    const nodes = Array.from({ length: 54 }, (_, index) => ({
+    const nodes = Array.from({ length: 42 }, (_, index) => ({
         x: (index * 137.5) % 100,
         y: 8 + ((index * 29) % 88),
         radius: 0.6 + (index % 5) * 0.22,
@@ -434,7 +468,7 @@ const addArcaneCanvas = () => {
 };
 
 const addAtmosphere = () => {
-    if (prefersReducedMotion || document.querySelector(".fantasy-atmosphere")) {
+    if (prefersLeanExperience() || document.querySelector(".fantasy-atmosphere")) {
         return;
     }
 
@@ -457,6 +491,10 @@ const addAtmosphere = () => {
 };
 
 const addHeroPortal = () => {
+    if (prefersLeanExperience()) {
+        return;
+    }
+
     const hero = document.querySelector(".hero");
 
     if (!hero || hero.querySelector(".arcane-portal")) {
@@ -470,7 +508,7 @@ const addHeroPortal = () => {
 };
 
 const addFloatingRelics = () => {
-    if (prefersReducedMotion || document.querySelector(".floating-relics")) {
+    if (prefersLeanExperience() || document.querySelector(".floating-relics")) {
         return;
     }
 
@@ -494,7 +532,7 @@ const addFloatingRelics = () => {
 };
 
 const addCursorWisp = () => {
-    if (prefersReducedMotion || window.matchMedia("(pointer: coarse)").matches || document.querySelector(".cursor-wisp")) {
+    if (prefersLeanExperience() || document.querySelector(".cursor-wisp")) {
         return;
     }
 
@@ -529,6 +567,10 @@ const addCursorWisp = () => {
 };
 
 const addRealmCompass = () => {
+    if (prefersLeanExperience()) {
+        return;
+    }
+
     const sections = [...document.querySelectorAll("main section[id]")];
 
     if (sections.length === 0 || document.querySelector(".realm-compass")) {
@@ -599,7 +641,7 @@ const prepareRevealElement = (element, index = 0) => {
     element.classList.add("fx-reveal");
     element.style.transitionDelay = `${Math.min(index % 8, 6) * 45}ms`;
 
-    if (prefersReducedMotion || !revealObserver) {
+    if (prefersLeanExperience() || !revealObserver) {
         element.classList.add("is-visible");
         return;
     }
@@ -610,7 +652,7 @@ const prepareRevealElement = (element, index = 0) => {
 const addReveal = () => {
     const revealElements = [...document.querySelectorAll(revealSelectors)];
 
-    if (!prefersReducedMotion && "IntersectionObserver" in window) {
+    if (!prefersLeanExperience() && "IntersectionObserver" in window) {
         revealObserver = new IntersectionObserver((entries) => {
             entries.forEach((entry) => {
                 if (entry.isIntersecting) {
@@ -635,6 +677,10 @@ const motionSelectors = {
 };
 
 const addMotionClasses = (root = document) => {
+    if (prefersLeanExperience()) {
+        return;
+    }
+
     root.querySelectorAll(motionSelectors.floating).forEach((element) => {
         element.classList.add("fx-float");
     });
@@ -665,7 +711,10 @@ const watchDynamicContent = () => {
                 }
 
                 node.querySelectorAll(revealSelectors).forEach(prepareRevealElement);
-                addMotionClasses(node);
+
+                if (!prefersLeanExperience()) {
+                    addMotionClasses(node);
+                }
             });
         });
     });
@@ -677,7 +726,7 @@ const watchDynamicContent = () => {
 };
 
 const addPointerParallax = () => {
-    if (prefersReducedMotion || window.matchMedia("(pointer: coarse)").matches) {
+    if (prefersLeanExperience()) {
         return;
     }
 
@@ -694,7 +743,7 @@ const addPointerParallax = () => {
 };
 
 const addCardLightTracking = () => {
-    if (prefersReducedMotion || window.matchMedia("(pointer: coarse)").matches) {
+    if (prefersLeanExperience()) {
         return;
     }
 
