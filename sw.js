@@ -1,5 +1,5 @@
-const SHELL_CACHE = "bosque-shell-v13";
-const RUNTIME_CACHE = "bosque-runtime-v13";
+const SHELL_CACHE = "bosque-shell-v14";
+const RUNTIME_CACHE = "bosque-runtime-v14";
 const APP_SHELL = [
     "./",
     "./index.html",
@@ -41,7 +41,9 @@ const cacheFirst = async (request, cacheName) => {
     }
 
     const networkResponse = await fetch(request);
-    cache.put(request, networkResponse.clone());
+    if (networkResponse.ok) {
+        cache.put(request, networkResponse.clone());
+    }
     return networkResponse;
 };
 
@@ -50,7 +52,9 @@ const staleWhileRevalidate = async (request, cacheName) => {
     const cachedResponse = await cache.match(request);
     const networkPromise = fetch(request)
         .then((response) => {
-            cache.put(request, response.clone());
+            if (response.ok) {
+                cache.put(request, response.clone());
+            }
             return response;
         })
         .catch(() => cachedResponse);
@@ -86,6 +90,10 @@ self.addEventListener("fetch", (event) => {
     const requestUrl = new URL(event.request.url);
 
     if (requestUrl.pathname.startsWith("/api/")) {
+        return;
+    }
+
+    if (event.request.headers.has("range")) {
         return;
     }
 

@@ -1,6 +1,6 @@
 # Creditos das Imagens e do Audio
 
-As imagens usadas no site foram escolhidas com prioridade para licencas abertas, dominio publico ou reutilizacao claramente indicada na fonte. A trilha ambiente atual e gerada localmente no navegador.
+As imagens e o audio usados no site foram escolhidos com prioridade para licencas abertas, dominio publico ou reutilizacao claramente indicada na fonte.
 
 ## Politica das capas do acervo
 
@@ -59,16 +59,17 @@ As imagens usadas no site foram escolhidas com prioridade para licencas abertas,
 
 ## Audio usado na pagina
 
-### 1. Trilha elfica local
-- Uso: trilha ambiente opcional do site.
-- Fonte: sintetizada pelo navegador com Web Audio em `audio-player.js`.
-- Status: sem arquivo externo de audio e sem dependencia de licenca de midia.
+### 1. O frondens 2.ogg
+- Uso: trilha ambiente opcional do site, com fallback MP3/OGG.
+- Fonte: https://commons.wikimedia.org/wiki/File:O_frondens_2.ogg
+- Arquivo direto: https://upload.wikimedia.org/wikipedia/commons/a/ad/O_frondens_2.ogg
+- Status informado na fonte: composicao em dominio publico; performance publicada sob GFDL e CC BY-SA 3.0.
 
 ## Observacoes
 
 - A Open Library Covers API pode devolver capas de edicoes especificas do acervo. A disponibilidade varia conforme a obra e a edicao.
 - Para obras contemporaneas ou sem fonte aberta confirmada, o site prefere mostrar a capa cerimonial do projeto.
-- Navegadores modernos podem bloquear autoplay com som. Por isso a trilha elfica e ativada por toque ou clique do usuario.
+- Navegadores modernos podem bloquear autoplay com som. Por isso a trilha ambiente e ativada por toque ou clique do usuario.
 
 ## Nota
 

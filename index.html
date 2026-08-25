@@ -111,7 +111,7 @@
             --radius-xl: 34px;
             --radius-lg: 24px;
             --radius-md: 18px;
-            --content-width: min(1120px, calc(100% - 1.5rem));
+            --content-width: min(1040px, calc(100% - 1.5rem));
         }
 
         * {
@@ -349,16 +349,17 @@
         .hero {
             width: var(--content-width);
             margin: 0 auto;
-            padding: 3.6rem 0 2rem;
+            max-width: 1040px;
+            padding: 2.6rem 0 1.4rem;
             display: grid;
-            grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
-            gap: 2rem;
+            grid-template-columns: minmax(0, 0.98fr) minmax(280px, 0.82fr);
+            gap: clamp(1.1rem, 3vw, 1.7rem);
             align-items: center;
         }
 
         .hero-copy {
             position: relative;
-            padding: 2rem 0 2rem;
+            padding: 1.1rem 0;
         }
 
         .eyebrow {
@@ -391,16 +392,16 @@
         }
 
         .hero-copy h1 {
-            font-size: clamp(3rem, 5.5vw, 5.4rem);
-            max-width: 10ch;
+            font-size: clamp(2.45rem, 4.9vw, 4.55rem);
+            max-width: 12ch;
             text-wrap: balance;
         }
 
         .hero-copy p {
-            max-width: 62ch;
-            margin: 1.35rem 0 0;
+            max-width: 56ch;
+            margin: 1rem 0 0;
             color: var(--muted);
-            font-size: 1.08rem;
+            font-size: 1rem;
         }
 
         .hero-actions {
@@ -413,13 +414,13 @@
         .hero-ritual {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 0.95rem;
-            margin-top: 2rem;
+            gap: 0.7rem;
+            margin-top: 1.25rem;
         }
 
         .hero-ritual article {
-            padding: 1rem 1rem 1.1rem;
-            border-radius: var(--radius-md);
+            padding: 0.82rem 0.88rem;
+            border-radius: 16px;
             border: 1px solid rgba(220, 191, 131, 0.16);
             background: rgba(255, 247, 232, 0.04);
             box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
@@ -439,8 +440,8 @@
 
         .hero-stage {
             position: relative;
-            padding: 1.4rem;
-            border-radius: calc(var(--radius-xl) + 6px);
+            padding: 1rem;
+            border-radius: 28px;
             border: 1px solid rgba(220, 191, 131, 0.16);
             background:
                 radial-gradient(circle at top, rgba(221, 193, 131, 0.16), transparent 30%),
@@ -452,8 +453,8 @@
         .hero-stage::before {
             content: "";
             position: absolute;
-            inset: 1rem;
-            border-radius: calc(var(--radius-xl) - 6px);
+            inset: 0.75rem;
+            border-radius: 22px;
             border: 1px solid rgba(220, 191, 131, 0.14);
             pointer-events: none;
         }
@@ -463,14 +464,14 @@
             display: grid;
             grid-template-columns: 1.15fr 0.85fr;
             grid-template-rows: auto auto;
-            gap: 1rem;
+            gap: 0.75rem;
         }
 
         .hero-visual {
             position: relative;
-            border-radius: 30px;
+            border-radius: 22px;
             overflow: hidden;
-            min-height: 18rem;
+            min-height: 14rem;
             background: rgba(255, 255, 255, 0.04);
         }
 
@@ -483,7 +484,7 @@
 
         .hero-visual-tall {
             grid-row: span 2;
-            min-height: 27rem;
+            min-height: 22rem;
         }
 
         .hero-plaque {
@@ -1202,6 +1203,7 @@
             flex-wrap: wrap;
             gap: 0.8rem;
             margin-top: 1rem;
+            align-items: center;
         }
 
         .hero-system-note {
@@ -1239,6 +1241,80 @@
             border-color: rgba(201, 141, 115, 0.28);
             color: #f6d4c7;
             background: rgba(160, 83, 52, 0.16);
+        }
+
+        .audio-player {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(8rem, 11rem);
+            align-items: center;
+            gap: 0.75rem;
+            max-width: 29rem;
+            padding: 0.42rem 0.48rem;
+            border-radius: 999px;
+            border: 1px solid rgba(220, 191, 131, 0.18);
+            background: rgba(255, 247, 232, 0.055);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+        }
+
+        .audio-main {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            min-width: 0;
+        }
+
+        .audio-control-button {
+            flex: 0 0 auto;
+            min-width: 4.4rem;
+            min-height: 2.25rem;
+            padding: 0.45rem 0.7rem;
+            border-radius: 999px;
+            border: 1px solid rgba(220, 191, 131, 0.26);
+            background: rgba(220, 191, 131, 0.12);
+            color: var(--gold-soft);
+            cursor: pointer;
+        }
+
+        .audio-player[data-state="playing"] .audio-control-button {
+            border-color: rgba(154, 209, 177, 0.42);
+            background: rgba(52, 99, 70, 0.6);
+            color: #e8f7df;
+        }
+
+        .audio-track-meta {
+            display: grid;
+            min-width: 0;
+            gap: 0.02rem;
+        }
+
+        .audio-track-meta strong,
+        .audio-track-meta span {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .audio-track-meta strong {
+            color: var(--text);
+            font-size: 0.92rem;
+            line-height: 1.15;
+        }
+
+        .audio-track-meta span {
+            color: var(--muted);
+            font-size: 0.78rem;
+        }
+
+        .audio-volume-label {
+            display: grid;
+            gap: 0.18rem;
+            color: var(--muted);
+            font-size: 0.76rem;
+        }
+
+        .audio-volume {
+            width: 100%;
+            accent-color: var(--gold);
         }
 
         .ambient-dock {
@@ -1909,12 +1985,22 @@
             }
 
             .hero {
-                padding-top: 2.5rem;
-                gap: 1.2rem;
+                padding-top: 1.45rem;
+                gap: 1rem;
             }
 
             .hero-copy {
-                padding: 0.8rem 0 0.4rem;
+                padding: 0.45rem 0 0.25rem;
+            }
+
+            .hero-copy h1 {
+                font-size: clamp(2.15rem, 12vw, 3.1rem);
+                max-width: 11ch;
+            }
+
+            .hero-copy p {
+                font-size: 0.96rem;
+                margin-top: 0.8rem;
             }
 
             .hero-stage,
@@ -1936,7 +2022,7 @@
             }
 
             .hero-visual {
-                min-height: 12rem;
+                min-height: 10rem;
                 border-radius: 18px;
             }
 
@@ -1960,7 +2046,7 @@
             }
 
             .hero-visual-tall {
-                min-height: 16rem;
+                min-height: 13.5rem;
             }
 
             .hero-plaque {
@@ -1982,6 +2068,19 @@
             .catalog-search-submit,
             .button {
                 width: 100%;
+            }
+
+            .hero-actions,
+            .hero-system {
+                gap: 0.62rem;
+            }
+
+            .audio-player {
+                width: 100%;
+                max-width: none;
+                grid-template-columns: 1fr;
+                border-radius: 18px;
+                padding: 0.65rem;
             }
 
             .filters-actions {
@@ -2068,8 +2167,20 @@
                     <div class="hero-system">
                         <span id="pwa-status" class="pwa-pill" data-tone="idle">Modo offline preparando o bosque...</span>
                         <button id="install-app" class="button ghost" type="button" hidden>Instalar app</button>
-                        <button id="ambient-toggle" class="button ghost" type="button" aria-pressed="false">Ativar trilha elfica</button>
-                        <p id="ambient-status" class="hero-system-note" aria-live="polite">Som ambiente opcional gerado no navegador para acompanhar a leitura sem pesar a pagina.</p>
+                        <div id="ambient-player" class="audio-player" data-state="idle" role="group" aria-label="Player da trilha sonora ambiente">
+                            <div class="audio-main">
+                                <button id="ambient-toggle" class="audio-control-button" type="button" aria-pressed="false">Tocar</button>
+                                <div class="audio-track-meta">
+                                    <strong>O frondens</strong>
+                                    <span>Canto medieval ambiente</span>
+                                </div>
+                            </div>
+                            <label class="audio-volume-label" for="ambient-volume">
+                                <span>Volume</span>
+                                <input id="ambient-volume" class="audio-volume" type="range" min="0" max="1" step="0.01" value="0.35">
+                            </label>
+                        </div>
+                        <p id="ambient-status" class="hero-system-note" aria-live="polite">Trilha opcional. Toque em Tocar para liberar o audio no navegador.</p>
                     </div>
                     <div class="hero-ritual" aria-label="Como usar o site">
                         <article><strong>1</strong><span>Descubra seu clima de leitura com o Oráculo de Afinidade.</span></article>
@@ -2367,7 +2478,7 @@
                 <p>Bosque da Fantasia reune orientacao para iniciantes, acervo pesquisavel, autores, glossario e fichas de leitura em uma unica jornada.</p>
                 <details>
                     <summary>Creditos e licencas</summary>
-                    <p>As imagens historicas continuam com licenca aberta ou status compativel indicado nas respectivas fontes. A trilha ambiente e gerada localmente no navegador.</p>
+                    <p>As imagens historicas e a trilha ambiente usam fontes abertas ou status compativel indicado nos creditos.</p>
                     <p style="margin-top: 0.75rem;">
                         Nas capas do acervo, o site tenta primeiro a Open Library Covers API. Quando uma obra nao retorna capa por la,
                         ele tenta algumas imagens historicas com licenca aberta verificadas no Wikimedia Commons. Se ainda assim nao houver
@@ -2383,8 +2494,11 @@
         </footer>
     </div>
 
-    <button id="ambient-dock" class="ambient-dock" type="button" aria-pressed="false">Trilha elfica</button>
-    <audio id="ambient-audio" loop preload="none" crossorigin="anonymous" playsinline></audio>
+    <button id="ambient-dock" class="ambient-dock" type="button" aria-pressed="false">Trilha sonora</button>
+    <audio id="ambient-audio" loop preload="metadata" crossorigin="anonymous" playsinline>
+        <source src="https://upload.wikimedia.org/wikipedia/commons/transcoded/a/ad/O_frondens_2.ogg/O_frondens_2.ogg.mp3" type="audio/mpeg">
+        <source src="https://upload.wikimedia.org/wikipedia/commons/a/ad/O_frondens_2.ogg" type="audio/ogg">
+    </audio>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
