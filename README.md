@@ -39,7 +39,7 @@ Se o terminal ainda nao reconhecer `node` ou `npm`, feche e abra o terminal nova
 - `sw.js`: service worker para cache offline.
 - `manifest.webmanifest`: manifesto da aplicacao instalavel.
 - `bosque-icon.svg`: icone do app.
-- `audio-player.js`: controle leve da trilha ambiente de violino.
+- `audio-player.js`: controle leve da trilha ambiente elfica gerada no navegador.
 - `scripts/check.mjs`: validacao automatizada da estrutura do projeto.
 - `scripts/dev-server.mjs`: servidor local leve, sem dependencias externas.
 - `scripts/build.mjs`: geracao de `dist` para entrega e deploy.
@@ -49,7 +49,7 @@ Se o terminal ainda nao reconhecer `node` ou `npm`, feche e abra o terminal nova
 
 ## O que o projeto entrega
 
-- Modo offline para shell da aplicacao e cache progressivo de acervo, capas e trilhas acessadas.
+- Modo offline para shell da aplicacao e cache progressivo de acervo, capas e consultas acessadas.
 - Banco local para guardar consultas, livros e colecoes essenciais no navegador.
 - API da aplicacao em camada separada, desacoplando interface e fonte de dados externa.
 - Fallback de busca no banco local quando a rede falha ou o usuario volta offline.
@@ -67,5 +67,5 @@ Se o terminal ainda nao reconhecer `node` ou `npm`, feche e abra o terminal nova
 - O projeto continua sem build e sem dependencias de instalacao.
 - O modo offline completo funciona quando o site esta publicado em HTTPS, como no GitHub Pages.
 - O login usa modo local no navegador por padrao e nao precisa de API rodando. Para contas centralizadas, publique o backend e defina `window.BOSQUE_API_BASE`.
-- A trilha ambiente usa um unico violino suave, sem player visual, e depende de um toque ou clique inicial para respeitar as regras dos navegadores.
-- O audio ambiente e algumas imagens dependem de fontes externas na primeira visita, mas passam a se beneficiar do cache offline depois de acessados.
+- A trilha ambiente e gerada localmente com Web Audio, sem arquivo externo, e depende de um toque ou clique inicial para respeitar as regras dos navegadores.
+- Algumas imagens dependem de fontes externas na primeira visita, mas passam a se beneficiar do cache offline depois de acessadas.

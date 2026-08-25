@@ -1,6 +1,6 @@
 # Creditos das Imagens e do Audio
 
-As imagens e o audio usados no site foram escolhidos com prioridade para licencas abertas, dominio publico ou reutilizacao claramente indicada na fonte.
+As imagens usadas no site foram escolhidas com prioridade para licencas abertas, dominio publico ou reutilizacao claramente indicada na fonte. A trilha ambiente atual e gerada localmente no navegador.
 
 ## Politica das capas do acervo
 
@@ -59,16 +59,16 @@ As imagens e o audio usados no site foram escolhidos com prioridade para licenca
 
 ## Audio usado na pagina
 
-### 1. Street musician violin.ogg
-- Uso: trilha ambiente unica do site.
-- Fonte: https://commons.wikimedia.org/wiki/File:Street_musician_violin.ogg
-- Status informado na fonte: dominio publico.
+### 1. Trilha elfica local
+- Uso: trilha ambiente opcional do site.
+- Fonte: sintetizada pelo navegador com Web Audio em `audio-player.js`.
+- Status: sem arquivo externo de audio e sem dependencia de licenca de midia.
 
 ## Observacoes
 
 - A Open Library Covers API pode devolver capas de edicoes especificas do acervo. A disponibilidade varia conforme a obra e a edicao.
 - Para obras contemporaneas ou sem fonte aberta confirmada, o site prefere mostrar a capa cerimonial do projeto.
-- Navegadores modernos podem bloquear autoplay com som. Por isso a trilha de violino e ativada por toque ou clique do usuario.
+- Navegadores modernos podem bloquear autoplay com som. Por isso a trilha elfica e ativada por toque ou clique do usuario.
 
 ## Nota
 

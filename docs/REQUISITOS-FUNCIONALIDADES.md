@@ -27,7 +27,7 @@ O Bosque da Fantasia e uma experiencia web/PWA para orientar leitores iniciantes
 | Relicario | `app.js`, `catalog-api.js`, `library-db.js` | Salva favoritos no navegador. | Favoritos unicos, persistentes e sincronizados na UI. | Guardar/remover livro e recarregar. |
 | Ficha de livro | `app.js`, `compra.html`, `assets/js/purchase-page.js` | Mostra capa, descricao, sinais editoriais e link de compra/leitura. | Atualizar ao selecionar livro, proteger link vazio, `alt` adequado. | Clicar livro, verificar ficha e botao. |
 | PWA/offline | `pwa.js`, `sw.js`, `manifest.webmanifest` | Instala app, cacheia shell e mostra status de rede. | Nao interceptar `/api/`, versionar cache, funcionar em HTTPS. | Registrar SW, testar offline e status. |
-| Audio ambiente | `audio-player.js` | Toca violino opcional em volume baixo. | Respeitar autoplay, persistir preferencia, tratar erro. | Alternar botao e recarregar. |
+| Audio ambiente | `audio-player.js` | Gera trilha elfica opcional em volume baixo no navegador. | Respeitar autoplay, persistir preferencia, nao depender de arquivo/API externa. | Alternar botao, recarregar e confirmar que pede toque para reativar. |
 | Backend legado/local | `backend/server.mjs`, `backend/lib/*.mjs` | API de auth, usuario, arquivos e Amazon. | Health JSON, CORS, hash de senha, payload limitado. | `/api/health`, cadastro, login, `/api/me`. |
 
 ## Modelo de requisito por nova funcionalidade

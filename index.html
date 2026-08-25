@@ -1014,11 +1014,68 @@
         }
 
         .results-grid {
-            grid-template-columns: repeat(3, minmax(0, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+            align-items: stretch;
+        }
+
+        .result-card .book-card-link {
+            grid-template-columns: 5.8rem minmax(0, 1fr);
+            align-items: start;
+            gap: 0.85rem;
+            padding: 0.78rem;
         }
 
         .result-card .book-cover-shell {
-            min-height: 13rem;
+            min-height: auto;
+            aspect-ratio: 3 / 4.1;
+            border-radius: 14px;
+        }
+
+        .result-card .book-copy {
+            min-width: 0;
+            gap: 0.36rem;
+            padding-right: 3.6rem;
+        }
+
+        .result-card .book-copy h3 {
+            font-size: clamp(1.05rem, 1.4vw, 1.28rem);
+            line-height: 1.15;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            overflow: hidden;
+        }
+
+        .result-card .book-author {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .result-card .book-description {
+            -webkit-line-clamp: 3;
+            font-size: 0.94rem;
+        }
+
+        .result-card .book-chip-row {
+            gap: 0.4rem;
+            margin-top: 0;
+        }
+
+        .result-card .book-chip,
+        .result-card .book-meta span {
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .result-card .book-save-button {
+            top: 0.58rem;
+            right: 0.58rem;
+            min-height: 1.95rem;
+            padding: 0.32rem 0.54rem;
+            font-size: 0.8rem;
         }
 
         .load-more-wrap {
@@ -1655,6 +1712,20 @@
             .knot {
                 display: none;
             }
+
+            .result-card .book-card-link {
+                grid-template-columns: 4.8rem minmax(0, 1fr);
+                gap: 0.7rem;
+                padding: 0.68rem;
+            }
+
+            .result-card .book-copy {
+                padding-right: 3.25rem;
+            }
+
+            .result-card .book-description {
+                -webkit-line-clamp: 2;
+            }
         }
     </style>
 </head>
@@ -1696,8 +1767,8 @@
                     <div class="hero-system">
                         <span id="pwa-status" class="pwa-pill" data-tone="idle">Modo offline preparando o bosque...</span>
                         <button id="install-app" class="button ghost" type="button" hidden>Instalar app</button>
-                        <button id="ambient-toggle" class="button ghost" type="button" aria-pressed="false">Ativar violino ambiente</button>
-                        <p id="ambient-status" class="hero-system-note" aria-live="polite">Som suave opcional para acompanhar a leitura sem distrair a navegação.</p>
+                        <button id="ambient-toggle" class="button ghost" type="button" aria-pressed="false">Ativar trilha elfica</button>
+                        <p id="ambient-status" class="hero-system-note" aria-live="polite">Som ambiente opcional gerado no navegador para acompanhar a leitura sem pesar a pagina.</p>
                     </div>
                     <div class="hero-ritual" aria-label="Como usar o site">
                         <article><strong>1</strong><span>Descubra seu clima de leitura com o Oráculo de Afinidade.</span></article>
