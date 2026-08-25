@@ -67,5 +67,5 @@ Se o terminal ainda nao reconhecer `node` ou `npm`, feche e abra o terminal nova
 - O projeto continua sem build e sem dependencias de instalacao.
 - O modo offline completo funciona quando o site esta publicado em HTTPS, como no GitHub Pages.
 - O login usa modo local no navegador por padrao e nao precisa de API rodando. Para contas centralizadas, publique o backend e defina `window.BOSQUE_API_BASE`.
-- A trilha ambiente e gerada localmente com Web Audio, sem arquivo externo, e depende de um toque ou clique inicial para respeitar as regras dos navegadores.
+- A trilha ambiente e gerada localmente com Web Audio, sem arquivo externo, e pode ser ligada pelo botao do topo ou pelo controle flutuante.
 - Algumas imagens dependem de fontes externas na primeira visita, mas passam a se beneficiar do cache offline depois de acessadas.

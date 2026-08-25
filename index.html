@@ -1228,6 +1228,30 @@
             background: rgba(160, 83, 52, 0.16);
         }
 
+        .ambient-dock {
+            position: fixed;
+            right: max(1rem, env(safe-area-inset-right));
+            bottom: max(1rem, env(safe-area-inset-bottom));
+            z-index: 30;
+            min-height: 2.65rem;
+            padding: 0.66rem 0.92rem;
+            border-radius: 999px;
+            border: 1px solid rgba(220, 191, 131, 0.24);
+            background: rgba(7, 13, 11, 0.84);
+            color: var(--gold-soft);
+            box-shadow: 0 16px 42px rgba(0, 0, 0, 0.34);
+            backdrop-filter: blur(12px);
+            cursor: pointer;
+            transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+        }
+
+        .ambient-dock:hover,
+        .ambient-dock:focus-visible {
+            transform: translateY(-2px);
+            border-color: rgba(220, 191, 131, 0.42);
+            background: rgba(18, 35, 29, 0.9);
+        }
+
         .authors-layout {
             display: grid;
             grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
@@ -1563,6 +1587,201 @@
             color: var(--muted);
         }
 
+        .panorama-grid,
+        .authors-grid,
+        .featured-grid,
+        .glossary-grid,
+        .topics-grid {
+            align-items: stretch;
+        }
+
+        .lore-card,
+        button.author-card,
+        .glossary-card,
+        .theme-card,
+        .affinity-question-card,
+        .affinity-choice,
+        .mini-panel,
+        .affinity-book-link,
+        .purchase-inline-note {
+            border-radius: 16px;
+        }
+
+        .lore-card,
+        button.author-card,
+        .glossary-card {
+            padding: 1rem;
+        }
+
+        .lore-card span,
+        .author-card span {
+            margin-bottom: 0.55rem;
+            padding: 0.24rem 0.58rem;
+            font-size: 0.72rem;
+        }
+
+        .lore-card h3,
+        .author-card h3,
+        .glossary-card h3,
+        .theme-card strong,
+        .affinity-choice strong,
+        .affinity-question-head h3 {
+            line-height: 1.14;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            overflow: hidden;
+        }
+
+        .lore-card p,
+        .author-card p,
+        .author-card li,
+        .glossary-card p,
+        .theme-card span,
+        .affinity-choice span,
+        .mini-panel span,
+        .mini-panel p,
+        .purchase-inline-note p {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .lore-card p,
+        .theme-card span,
+        .affinity-choice span,
+        .mini-panel span,
+        .mini-panel p {
+            -webkit-line-clamp: 2;
+        }
+
+        .author-card p,
+        .glossary-card p,
+        .purchase-inline-note p {
+            -webkit-line-clamp: 3;
+        }
+
+        .author-card ul {
+            margin-top: 0.55rem;
+        }
+
+        .author-card li {
+            -webkit-line-clamp: 1;
+        }
+
+        .featured-card .book-card-link {
+            gap: 0.72rem;
+            padding: 0.78rem;
+        }
+
+        .featured-card .book-cover-shell {
+            min-height: 11.6rem;
+            border-radius: 16px;
+        }
+
+        .featured-card .book-copy {
+            gap: 0.34rem;
+            min-width: 0;
+        }
+
+        .featured-card .book-copy h3 {
+            font-size: clamp(1.04rem, 1.3vw, 1.24rem);
+            line-height: 1.15;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            overflow: hidden;
+        }
+
+        .featured-card .book-author,
+        .featured-card .book-original {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .featured-card .book-description {
+            -webkit-line-clamp: 3;
+            font-size: 0.94rem;
+        }
+
+        .affinity-panel,
+        .affinity-result-card,
+        .search-panel,
+        .catalog-panel,
+        .purchase-panel,
+        .author-focus-panel,
+        .filters-shell,
+        .recent-shell {
+            padding: 1rem;
+        }
+
+        .affinity-question-stack,
+        .affinity-result-card,
+        .filters-grid,
+        .glossary-layout,
+        .author-focus-copy {
+            gap: 0.75rem;
+        }
+
+        .affinity-choice {
+            padding: 0.78rem 0.85rem;
+        }
+
+        .affinity-result-card h3,
+        .author-focus-copy h3,
+        .purchase-copy h3 {
+            font-size: clamp(1.65rem, 3.2vw, 2.35rem);
+            line-height: 1.08;
+        }
+
+        .author-focus-copy p,
+        #purchase-description {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 4;
+            overflow: hidden;
+        }
+
+        .mini-panel,
+        .purchase-inline-note,
+        .affinity-map-shell {
+            padding: 0.78rem 0.85rem;
+        }
+
+        .scroll-shell {
+            padding: 1rem;
+        }
+
+        .theme-card {
+            padding: 0.82rem 0.9rem;
+        }
+
+        .catalog-search-input {
+            min-height: 3rem;
+        }
+
+        .glossary-grid {
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 15.5rem), 1fr));
+        }
+
+        .topics-grid {
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 13.5rem), 1fr));
+        }
+
+        .purchase-panel {
+            grid-template-columns: minmax(190px, 0.58fr) minmax(0, 1.42fr);
+        }
+
+        .purchase-cover-wrap {
+            padding: 0.65rem;
+        }
+
+        .purchase-dossier-grid,
+        .author-focus-grid {
+            gap: 0.65rem;
+        }
+
         @media (max-width: 1080px) {
             .topbar-inner {
                 grid-template-columns: minmax(13rem, auto) minmax(0, 1fr);
@@ -1725,6 +1944,15 @@
 
             .result-card .book-description {
                 -webkit-line-clamp: 2;
+            }
+
+            .ambient-dock {
+                right: max(0.75rem, env(safe-area-inset-right));
+                bottom: max(0.75rem, env(safe-area-inset-bottom));
+                max-width: calc(100vw - 1.5rem);
+                min-height: 2.45rem;
+                padding: 0.56rem 0.74rem;
+                font-size: 0.86rem;
             }
         }
     </style>
@@ -2063,7 +2291,7 @@
                 <p>Bosque da Fantasia reune orientacao para iniciantes, acervo pesquisavel, autores, glossario e fichas de leitura em uma unica jornada.</p>
                 <details>
                     <summary>Creditos e licencas</summary>
-                    <p>As imagens historicas e a trilha de violino continuam com licenca aberta ou status compativel indicado nas respectivas fontes.</p>
+                    <p>As imagens historicas continuam com licenca aberta ou status compativel indicado nas respectivas fontes. A trilha ambiente e gerada localmente no navegador.</p>
                     <p style="margin-top: 0.75rem;">
                         Nas capas do acervo, o site tenta primeiro a Open Library Covers API. Quando uma obra nao retorna capa por la,
                         ele tenta algumas imagens historicas com licenca aberta verificadas no Wikimedia Commons. Se ainda assim nao houver
@@ -2079,6 +2307,7 @@
         </footer>
     </div>
 
+    <button id="ambient-dock" class="ambient-dock" type="button" aria-pressed="false">Trilha elfica</button>
     <audio id="ambient-audio" loop preload="none" crossorigin="anonymous" playsinline></audio>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
