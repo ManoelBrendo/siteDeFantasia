@@ -1,5 +1,4 @@
 const API_PORT = "4180";
-const FALLBACK_API_BASE = `http://127.0.0.1:${API_PORT}`;
 const TOKEN_KEY = "bosque-api-token";
 const USER_KEY = "bosque-api-user";
 const SESSION_MODE_KEY = "bosque-session-mode";
@@ -9,26 +8,35 @@ const LOCAL_MODE = "local";
 const REMOTE_MODE = "remote";
 const HEALTH_TIMEOUT_MS = 1800;
 
-const API_BASE = (() => {
+const resolveApiConnection = () => {
     const { hostname, origin, port, protocol } = window.location;
     const isFile = protocol === "file:";
     const isLocalHost = ["127.0.0.1", "localhost", "::1", "0.0.0.0", ""].includes(hostname);
     const apiHost = hostname && hostname !== "0.0.0.0" ? hostname : "127.0.0.1";
 
     if (window.BOSQUE_API_BASE) {
-        return String(window.BOSQUE_API_BASE).replace(/\/+$/g, "");
+        return {
+            base: String(window.BOSQUE_API_BASE).replace(/\/+$/g, ""),
+            enabled: true
+        };
     }
 
     if (port === API_PORT) {
-        return "";
+        return {
+            base: "",
+            enabled: true
+        };
     }
 
-    if (isFile || isLocalHost || port) {
-        return `${isFile ? "http:" : protocol}//${apiHost}:${API_PORT}`;
-    }
+    return {
+        base: isFile || isLocalHost || port ? `${isFile ? "http:" : protocol}//${apiHost}:${API_PORT}` : origin,
+        enabled: false
+    };
+};
 
-    return origin;
-})();
+const API_CONNECTION = resolveApiConnection();
+const API_BASE = API_CONNECTION.base;
+const REMOTE_API_ENABLED = API_CONNECTION.enabled;
 
 const getStorage = () => {
     try {
@@ -100,13 +108,13 @@ const fetchJson = async (path, options, base = API_BASE) => {
 };
 
 const request = async (path, options = {}) => {
+    if (!REMOTE_API_ENABLED) {
+        throw buildRemoteUnavailableError(new Error("API remota nao configurada para hospedagem estatica."));
+    }
+
     try {
         return await fetchJson(path, options);
     } catch (error) {
-        if (error.code === "API_UNAVAILABLE" && API_BASE !== FALLBACK_API_BASE && window.location.protocol === "file:") {
-            return fetchJson(path, options, FALLBACK_API_BASE);
-        }
-
         throw error;
     }
 };
@@ -276,6 +284,7 @@ export const bosqueApi = {
     getStoredUser,
     getMode: () => storage?.getItem(SESSION_MODE_KEY) || "",
     getApiBase: () => API_BASE || window.location.origin,
+    canUseRemoteApi: () => REMOTE_API_ENABLED,
     clearSession,
     async health() {
         const controller = new AbortController();

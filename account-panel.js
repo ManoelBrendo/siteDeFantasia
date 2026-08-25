@@ -932,7 +932,7 @@ const ensureAuthGate = () => {
                     <button class="auth-tab" type="button" data-auth-tab="register">Criar conta</button>
                 </div>
                 <p id="auth-status" class="auth-status">Faça login para atravessar o portal.</p>
-                <p id="auth-api-status" class="auth-api-status" data-tone="idle">Verificando conexão com a API legada...</p>
+                <p id="auth-api-status" class="auth-api-status" data-tone="idle">Preparando acesso...</p>
                 <div id="auth-loading" class="auth-loading" aria-live="polite">Abrindo o portal...</div>
                 <form id="login-form" class="auth-form is-active">
                     <input name="email" type="email" placeholder="E-mail" autocomplete="email" required>
@@ -945,7 +945,7 @@ const ensureAuthGate = () => {
                     <input name="password" type="password" placeholder="Senha com 6+ caracteres" autocomplete="new-password" required>
                     <button class="button secondary" type="submit">Criar conta e entrar</button>
                 </form>
-                <p class="auth-note">Se a API legada não responder, a conta é criada em modo local neste navegador para liberar o acesso sem perder favoritos e trilhas.</p>
+                <p class="auth-note">A conta local deste navegador libera o acesso sem exigir API rodando e preserva favoritos e trilhas neste dispositivo.</p>
             </div>
         </div>
     `;
@@ -1095,6 +1095,11 @@ const bindForms = () => {
 };
 
 const syncApiHealth = async () => {
+    if (!bosqueApi.canUseRemoteApi()) {
+        setApiStatus("Acesso local pronto. Nenhuma API precisa estar rodando.", "local");
+        return;
+    }
+
     setApiStatus("Verificando conexão com a API legada...", "idle");
 
     try {

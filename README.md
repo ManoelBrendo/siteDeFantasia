@@ -20,9 +20,9 @@ Aplicacao web estatica com atmosfera elfica, mitologia celta, acervo pesquisavel
 1. Abra um terminal na pasta do projeto.
 2. Rode `npm run check` para validar a estrutura.
 3. Rode `npm run dev` para abrir um servidor local em `http://127.0.0.1:4173`.
-4. Rode `npm run api` para abrir o backend local de login em `http://127.0.0.1:4180`.
-5. Rode `npm run build` para gerar uma pasta `dist` pronta para deploy.
-6. Se quiser revisar a versao gerada, rode `npm run preview`.
+4. Rode `npm run build` para gerar uma pasta `dist` pronta para deploy.
+5. Se quiser revisar a versao gerada, rode `npm run preview`.
+6. Opcional: rode `npm run api` apenas se quiser testar conta centralizada pelo backend local em `http://127.0.0.1:4180`.
 
 Se o terminal ainda nao reconhecer `node` ou `npm`, feche e abra o terminal novamente apos a instalacao do Node.js.
 
@@ -66,6 +66,6 @@ Se o terminal ainda nao reconhecer `node` ou `npm`, feche e abra o terminal nova
 
 - O projeto continua sem build e sem dependencias de instalacao.
 - O modo offline completo funciona quando o site esta publicado em HTTPS, como no GitHub Pages.
-- Em hospedagem estatica sem backend, o login usa modo local no navegador quando a API legada nao responde. Para contas centralizadas, publique o backend junto do site e defina `window.BOSQUE_API_BASE`.
+- O login usa modo local no navegador por padrao e nao precisa de API rodando. Para contas centralizadas, publique o backend e defina `window.BOSQUE_API_BASE`.
 - A trilha ambiente usa um unico violino suave, sem player visual, e depende de um toque ou clique inicial para respeitar as regras dos navegadores.
 - O audio ambiente e algumas imagens dependem de fontes externas na primeira visita, mas passam a se beneficiar do cache offline depois de acessados.
