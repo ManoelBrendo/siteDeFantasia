@@ -6,9 +6,9 @@ Este runbook descreve o caminho seguro para publicar o Bosque da Fantasia e chec
 
 | Ambiente | Uso | Observacao |
 | --- | --- | --- |
-| Local estatico | Desenvolvimento rapido | `npm run dev` em `http://127.0.0.1:4173`. |
-| Local com API | Teste de login remoto | `npm run api` em `http://127.0.0.1:4180`. |
-| Producao estatica | GitHub Pages | Site sem backend embutido; usa modo local se API legada nao responder. |
+| Local estatico | Desenvolvimento padrao | `npm run dev`; login local funciona sem backend. |
+| Local com API | Teste opcional de login remoto | `npm run api` em `http://127.0.0.1:4180` ou definir `window.BOSQUE_API_BASE`. |
+| Producao estatica | GitHub Pages | Site sem backend embutido; usa modo local por padrao. |
 | Producao com API | Backend Node publicado | Definir `window.BOSQUE_API_BASE` antes de `account-api.js`. |
 
 ## Pre-deploy
@@ -39,7 +39,7 @@ Este runbook descreve o caminho seguro para publicar o Bosque da Fantasia e chec
 
 ## Deploy do backend
 
-O backend Node precisa de um host que execute processo persistente.
+O site nao precisa do backend para login local. O backend Node e opcional e serve para conta centralizada, arquivos e integracoes.
 
 Variaveis importantes:
 
@@ -52,7 +52,7 @@ AMAZON_SECRET_KEY=
 AMAZON_PARTNER_TAG=
 ```
 
-Depois de publicar, configurar o frontend:
+Depois de publicar, configurar o frontend antes de carregar `account-api.js`:
 
 ```html
 <script>

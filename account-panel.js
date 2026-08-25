@@ -1,4 +1,4 @@
-import { bosqueApi } from "./account-api.js";
+import { bosqueApi } from "./account-api.js?v=local-auth-v2";
 import { BosqueLibraryDb } from "./library-db.js";
 import { affinityQuestions, readingPaths } from "./site-data.js";
 import { recommendFromAnswers } from "./recommendation-engine.js";

@@ -18,7 +18,7 @@ O Bosque da Fantasia e uma experiencia web/PWA para orientar leitores iniciantes
 | Funcionalidade | Arquivos principais | O que faz | Requisitos centrais | Checagem minima |
 | --- | --- | --- | --- | --- |
 | Portal inicial | `index.html`, `app.js`, `fantasy-effects.js` | Apresenta proposta, secoes e jornada inicial. | Carregar sem backend, navegar por ancoras, manter responsividade. | Abrir desktop/mobile, testar links e console. |
-| Autenticacao e conta | `account-api.js`, `account-panel.js`, `backend/lib/auth.mjs` | Login remoto quando ha API e fallback local quando API legada falha. | Nao travar site estatico, limpar sessao no logout, nao enviar token local como bearer. | Login remoto/local, cadastro local, logout. |
+| Autenticacao e conta | `account-api.js`, `account-panel.js`, `backend/lib/auth.mjs` | Login local por padrao e login remoto somente quando API for configurada. | Nao exigir API rodando, limpar sessao no logout, nao enviar token local como bearer. | Login local, cadastro local, logout e API opcional. |
 | Acervo pesquisavel | `catalog-api.js`, `open-library-api.js`, `library-db.js` | Busca na Open Library, normaliza metadados e usa cache local. | Ter fallback offline, capa alternativa, paginacao e status de erro. | Buscar termo, carregar mais, simular falha de rede. |
 | Filtros avancados | `app.js`, `site-data.js` | Filtra por clima, dificuldade e motivo central. | Mapear para `book.filters`, preservar estado, limpar filtros. | Ativar filtros, estado vazio, limpar. |
 | Oraculo de afinidade | `recommendation-engine.js`, `app.js`, `site-data.js` | Calcula trilha de leitura por respostas. | Exigir todas as respostas, pontuar trilhas, iniciar busca sugerida. | Responder, resetar, explorar trilha. |
@@ -81,7 +81,7 @@ Metodo em W:
 
 ## Dependencias e riscos
 
-- GitHub Pages nao executa backend; autenticacao centralizada exige API publicada fora do Pages ou outro provedor.
+- O login nao depende do backend por padrao. Autenticacao centralizada exige API publicada e configuracao explicita em `window.BOSQUE_API_BASE`.
 - Open Library e Wikimedia sao fontes externas; falhas devem degradar para cache, curadoria local ou placeholder.
 - Dados locais ficam por navegador; nao devem ser vendidos como conta sincronizada.
 - Service worker pode servir cache antigo; sempre incrementar cache quando mudar shell essencial.

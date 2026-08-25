@@ -1,6 +1,6 @@
 # Bosque da Fantasia API
 
-Backend local para login, arquivos e integracao Amazon.
+Backend opcional para conta centralizada, arquivos e integracao Amazon. O site funciona com login local mesmo sem este processo rodando.
 
 ## Banco de dados local
 
@@ -20,9 +20,9 @@ Servidor:
 http://127.0.0.1:4180
 ```
 
-## Frontend em producao estatica
+## Frontend com API centralizada
 
-Quando o site estiver em GitHub Pages ou outra hospedagem estatica, publique este backend em um host separado e informe a base da API antes de carregar `account-api.js`:
+Quando quiser usar conta centralizada, publique este backend em um host separado e informe a base da API antes de carregar `account-api.js`:
 
 ```html
 <script>
@@ -30,7 +30,7 @@ Quando o site estiver em GitHub Pages ou outra hospedagem estatica, publique est
 </script>
 ```
 
-Se essa API nao responder, o frontend libera uma conta local salva apenas no navegador do usuario.
+Sem essa configuracao, o frontend usa conta local salva apenas no navegador do usuario.
 
 ## Rotas
 
