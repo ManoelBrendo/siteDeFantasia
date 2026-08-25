@@ -16,8 +16,12 @@ const getControls = () => [
 
 const setUi = ({ controls, statusElement, isPlaying, message }) => {
     controls.forEach((control) => {
-        control.textContent = isPlaying ? "Silenciar trilha" : "Trilha elfica";
+        const isDock = control.id === "ambient-dock";
+        control.textContent = isDock
+            ? (isPlaying ? "Som ligado" : "Trilha elfica")
+            : (isPlaying ? "Silenciar trilha elfica" : "Ativar trilha elfica");
         control.setAttribute("aria-pressed", String(isPlaying));
+        control.setAttribute("aria-label", isPlaying ? "Silenciar trilha elfica" : "Ativar trilha elfica");
         control.dataset.audioState = isPlaying ? "on" : "off";
     });
 

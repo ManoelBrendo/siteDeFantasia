@@ -29,6 +29,8 @@ O Bosque da Fantasia e uma experiencia web/PWA para orientar leitores iniciantes
 | PWA/offline | `pwa.js`, `sw.js`, `manifest.webmanifest` | Instala app, cacheia shell e mostra status de rede. | Nao interceptar `/api/`, versionar cache, funcionar em HTTPS. | Registrar SW, testar offline e status. |
 | Audio ambiente | `audio-player.js` | Gera trilha elfica opcional em volume baixo no navegador. | Respeitar autoplay, persistir preferencia, nao depender de arquivo/API externa. | Alternar botao, recarregar e confirmar que pede toque para reativar. |
 | Densidade visual global | `index.html` | Reduz altura dos cards e paineis sem remover conteudo. | Usar truncamento visual, grids responsivos, botoes acessiveis e leitura clara no mobile. | Conferir acervo, estante, glossario, autores, oraculo e ficha em desktop/mobile. |
+| Navegacao mobile | `index.html`, `app.js` | Compacta o menu principal em telas pequenas. | Botao com `aria-expanded`, fechamento ao tocar em link e menu completo no desktop. | Abrir/fechar menu no celular e navegar para secoes. |
+| Filtros mobile | `index.html`, `app.js` | Recolhe filtros no celular para reduzir rolagem inicial. | Manter filtros ativos visiveis, preservar limpar filtros e abrir no desktop. | Alternar painel, aplicar filtro e limpar filtros. |
 | Backend legado/local | `backend/server.mjs`, `backend/lib/*.mjs` | API de auth, usuario, arquivos e Amazon. | Health JSON, CORS, hash de senha, payload limitado. | `/api/health`, cadastro, login, `/api/me`. |
 
 ## Modelo de requisito por nova funcionalidade

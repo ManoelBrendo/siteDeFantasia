@@ -35,6 +35,18 @@ const escapeHtml = (value) => {
         .replace(/'/g, "&#39;");
 };
 
+const listenToMediaChange = (query, handler) => {
+    const mediaQuery = window.matchMedia(query);
+
+    if (typeof mediaQuery.addEventListener === "function") {
+        mediaQuery.addEventListener("change", handler);
+        return mediaQuery;
+    }
+
+    mediaQuery.addListener(handler);
+    return mediaQuery;
+};
+
 const elements = {
     oraculoSection: getRequiredElement("oraculo"),
     compraSection: getRequiredElement("compra"),
@@ -93,7 +105,11 @@ const elements = {
 
 const optionalElements = {
     recentShell: document.getElementById("recent-shell"),
-    relicarioSection: document.getElementById("relicario")
+    relicarioSection: document.getElementById("relicario"),
+    navToggle: document.getElementById("nav-toggle"),
+    topnav: document.getElementById("topnav"),
+    filtersShell: document.getElementById("filters-shell"),
+    filtersToggle: document.getElementById("filters-toggle")
 };
 
 const state = {
@@ -120,6 +136,10 @@ const state = {
 const humanFilterLabel = (groupId, value) => {
     const group = advancedFilters.find((entry) => entry.id === groupId);
     return group?.options.find((option) => option.value === value)?.label || value;
+};
+
+const hasActiveFilters = () => {
+    return advancedFilters.some((group) => state.filters[group.id] !== group.defaultValue);
 };
 
 const motifLabel = (value) => humanFilterLabel("motivo", value);
@@ -534,6 +554,25 @@ const renderFilterSummary = () => {
         : "Nenhum filtro extra ativo.";
 };
 
+const setFiltersOpen = (isOpen) => {
+    if (!optionalElements.filtersShell || !optionalElements.filtersToggle) {
+        return;
+    }
+
+    optionalElements.filtersShell.classList.toggle("is-open", isOpen);
+    optionalElements.filtersToggle.setAttribute("aria-expanded", String(isOpen));
+    optionalElements.filtersToggle.textContent = isOpen ? "Ocultar filtros" : "Mostrar filtros";
+};
+
+const syncFilterPanelState = () => {
+    if (!optionalElements.filtersShell || !optionalElements.filtersToggle) {
+        return;
+    }
+
+    const isCompact = window.matchMedia("(max-width: 780px)").matches;
+    setFiltersOpen(!isCompact || hasActiveFilters());
+};
+
 const syncAuthorSelection = () => {
     elements.authorsGrid.querySelectorAll("[data-author-id]").forEach((button) => {
         button.classList.toggle("is-active", button.dataset.authorId === state.activeAuthorId);
@@ -912,12 +951,14 @@ const initFilterInteractions = () => {
 
         state.filters[button.dataset.filterGroup] = button.dataset.filterValue;
         applyFiltersAndRender();
+        setFiltersOpen(true);
         scheduleUiStateSave();
     });
 
     elements.clearFilters.addEventListener("click", () => {
         state.filters = { ...defaultFilters };
         applyFiltersAndRender();
+        syncFilterPanelState();
         scheduleUiStateSave();
     });
 };
@@ -998,6 +1039,50 @@ const initRecentInteractions = () => {
     });
 };
 
+const initMobileNavigation = () => {
+    if (!optionalElements.navToggle || !optionalElements.topnav) {
+        return;
+    }
+
+    const setOpen = (isOpen) => {
+        optionalElements.topnav.classList.toggle("is-open", isOpen);
+        optionalElements.navToggle.setAttribute("aria-expanded", String(isOpen));
+        optionalElements.navToggle.setAttribute("aria-label", isOpen ? "Fechar menu principal" : "Abrir menu principal");
+        optionalElements.navToggle.textContent = isOpen ? "Fechar" : "Menu";
+    };
+
+    optionalElements.navToggle.addEventListener("click", () => {
+        setOpen(!optionalElements.topnav.classList.contains("is-open"));
+    });
+
+    optionalElements.topnav.addEventListener("click", (event) => {
+        if (event.target.closest("a")) {
+            setOpen(false);
+        }
+    });
+
+    listenToMediaChange("(min-width: 781px)", (event) => {
+        if (event.matches) {
+            setOpen(false);
+        }
+    });
+
+    setOpen(false);
+};
+
+const initMobileFilters = () => {
+    if (!optionalElements.filtersShell || !optionalElements.filtersToggle) {
+        return;
+    }
+
+    optionalElements.filtersToggle.addEventListener("click", () => {
+        setFiltersOpen(!optionalElements.filtersShell.classList.contains("is-open"));
+    });
+
+    listenToMediaChange("(max-width: 780px)", syncFilterPanelState);
+    syncFilterPanelState();
+};
+
 const initGlobalBookClicks = () => {
     document.body.addEventListener("click", (event) => {
         const saveButton = event.target.closest("[data-book-save]");
@@ -1074,6 +1159,8 @@ const init = async () => {
     initSearchInteractions();
     initFilterInteractions();
     initRecentInteractions();
+    initMobileNavigation();
+    initMobileFilters();
     initGlobalBookClicks();
     updatePurchasePanel(featuredBooks[0]);
 

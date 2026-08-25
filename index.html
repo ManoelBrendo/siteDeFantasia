@@ -333,6 +333,19 @@
             color: var(--gold-soft);
         }
 
+        .nav-toggle {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            min-height: 2.45rem;
+            padding: 0.48rem 0.78rem;
+            border-radius: 999px;
+            border: 1px solid rgba(220, 191, 131, 0.2);
+            background: rgba(255, 247, 232, 0.05);
+            color: var(--gold-soft);
+            cursor: pointer;
+        }
+
         .hero {
             width: var(--content-width);
             margin: 0 auto;
@@ -1252,6 +1265,12 @@
             background: rgba(18, 35, 29, 0.9);
         }
 
+        .ambient-dock[data-audio-state="on"] {
+            border-color: rgba(154, 209, 177, 0.42);
+            background: rgba(52, 99, 70, 0.88);
+            color: #e8f7df;
+        }
+
         .authors-layout {
             display: grid;
             grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
@@ -1466,6 +1485,16 @@
         .filters-head p {
             margin: 0;
             color: var(--muted);
+        }
+
+        .filters-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+        }
+
+        .filters-toggle {
+            display: none;
         }
 
         .filters-grid {
@@ -1831,7 +1860,7 @@
             }
 
             .topbar-inner {
-                grid-template-columns: minmax(0, 1fr);
+                grid-template-columns: minmax(0, 1fr) auto;
                 gap: 0.55rem;
                 padding: 0.55rem 0;
                 min-height: 0;
@@ -1848,8 +1877,35 @@
             }
 
             .topnav {
+                grid-column: 1 / -1;
                 width: 100%;
                 order: 2;
+                max-height: 0;
+                padding: 0;
+                border-width: 0;
+                opacity: 0;
+                pointer-events: none;
+                overflow: hidden;
+                transition: max-height 220ms ease, opacity 180ms ease, padding 180ms ease;
+            }
+
+            .topnav.is-open {
+                max-height: 14rem;
+                padding: 0.28rem;
+                border-width: 1px;
+                opacity: 1;
+                pointer-events: auto;
+                overflow-x: auto;
+            }
+
+            .topnav a {
+                flex: 1 1 calc(50% - 0.3rem);
+                justify-content: center;
+            }
+
+            .nav-toggle {
+                display: inline-flex;
+                justify-self: end;
             }
 
             .hero {
@@ -1928,6 +1984,22 @@
                 width: 100%;
             }
 
+            .filters-actions {
+                width: 100%;
+            }
+
+            .filters-toggle {
+                display: inline-flex;
+            }
+
+            .filters-shell:not(.is-open) .filters-grid {
+                display: none;
+            }
+
+            .filters-shell:not(.is-open) {
+                padding-bottom: 0.8rem;
+            }
+
             .knot {
                 display: none;
             }
@@ -1970,7 +2042,8 @@
                         <span>Literatura fantástica para começar bem</span>
                     </div>
                 </a>
-                <nav class="topnav" aria-label="Navegação principal">
+                <button id="nav-toggle" class="nav-toggle" type="button" aria-expanded="false" aria-controls="topnav">Menu</button>
+                <nav id="topnav" class="topnav" aria-label="Navegação principal">
                     <a href="#panorama">Como começar</a>
                     <a href="#afinidade">Seu perfil</a>
                     <a href="#autores">Autores</a>
@@ -2213,13 +2286,16 @@
                             </div>
                             <div id="recent-queries" class="recent-query-row" aria-live="polite"></div>
                         </div>
-                        <div class="filters-shell">
+                        <div id="filters-shell" class="filters-shell is-open">
                             <div class="filters-head">
                                 <div>
                                     <h3>Refinar resultados</h3>
                                     <p id="filter-summary">Sem filtros extras no momento.</p>
                                 </div>
-                                <button id="clear-filters" class="button ghost" type="button">Limpar filtros</button>
+                                <div class="filters-actions">
+                                    <button id="filters-toggle" class="button ghost filters-toggle" type="button" aria-expanded="true" aria-controls="filters-grid">Ocultar filtros</button>
+                                    <button id="clear-filters" class="button ghost" type="button">Limpar filtros</button>
+                                </div>
                             </div>
                             <div id="filters-grid" class="filters-grid" aria-live="polite"></div>
                         </div>
