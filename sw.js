@@ -1,5 +1,5 @@
-const SHELL_CACHE = "bosque-shell-v14";
-const RUNTIME_CACHE = "bosque-runtime-v14";
+const SHELL_CACHE = "bosque-shell-v15";
+const RUNTIME_CACHE = "bosque-runtime-v15";
 const APP_SHELL = [
     "./",
     "./index.html",

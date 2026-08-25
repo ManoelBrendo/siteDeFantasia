@@ -39,7 +39,7 @@ Se o terminal ainda nao reconhecer `node` ou `npm`, feche e abra o terminal nova
 - `sw.js`: service worker para cache offline.
 - `manifest.webmanifest`: manifesto da aplicacao instalavel.
 - `bosque-icon.svg`: icone do app.
-- `audio-player.js`: player customizado da trilha ambiente com Play/Pause e volume.
+- `audio-player.js`: player customizado da trilha ambiente com Play/Pause, volume e escolha de faixa.
 - `scripts/check.mjs`: validacao automatizada da estrutura do projeto.
 - `scripts/dev-server.mjs`: servidor local leve, sem dependencias externas.
 - `scripts/build.mjs`: geracao de `dist` para entrega e deploy.
@@ -67,5 +67,5 @@ Se o terminal ainda nao reconhecer `node` ou `npm`, feche e abra o terminal nova
 - O projeto continua sem build e sem dependencias de instalacao.
 - O modo offline completo funciona quando o site esta publicado em HTTPS, como no GitHub Pages.
 - O login usa modo local no navegador por padrao e nao precisa de API rodando. Para contas centralizadas, publique o backend e defina `window.BOSQUE_API_BASE`.
-- A trilha ambiente usa audio aberto do Wikimedia Commons com fontes MP3/OGG, player customizado e controle de volume.
+- A trilha ambiente usa audios abertos do Wikimedia Commons com fontes MP3/OGG, player customizado, controle de volume e opcoes de faixa.
 - O audio ambiente e algumas imagens dependem de fontes externas na primeira visita, mas passam a se beneficiar do cache offline depois de acessados.

@@ -65,6 +65,24 @@ As imagens e o audio usados no site foram escolhidos com prioridade para licenca
 - Arquivo direto: https://upload.wikimedia.org/wikipedia/commons/a/ad/O_frondens_2.ogg
 - Status informado na fonte: composicao em dominio publico; performance publicada sob GFDL e CC BY-SA 3.0.
 
+### 2. Ut Queant Laxis.ogg
+- Uso: opcao alternativa de trilha medieval no player.
+- Fonte: https://commons.wikimedia.org/wiki/File:Ut_Queant_Laxis.ogg
+- Arquivo direto: https://upload.wikimedia.org/wikipedia/commons/9/93/Ut_Queant_Laxis.ogg
+- Status informado na fonte: dominio publico.
+
+### 3. Santa Maria.ogg
+- Uso: opcao alternativa de trilha medieval no player.
+- Fonte: https://commons.wikimedia.org/wiki/File:Santa_Maria.ogg
+- Arquivo direto: https://upload.wikimedia.org/wikipedia/commons/1/13/Santa_Maria.ogg
+- Status informado na fonte: dominio publico.
+
+### 4. A Chantar2.ogg
+- Uso: opcao alternativa de trilha medieval no player.
+- Fonte: https://commons.wikimedia.org/wiki/File:A_Chantar2.ogg
+- Arquivo direto: https://upload.wikimedia.org/wikipedia/commons/d/d4/A_Chantar2.ogg
+- Status informado na fonte: CC BY 2.5.
+
 ## Observacoes
 
 - A Open Library Covers API pode devolver capas de edicoes especificas do acervo. A disponibilidade varia conforme a obra e a edicao.
