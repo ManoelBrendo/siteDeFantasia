@@ -1455,6 +1455,24 @@ const initMobileFilters = () => {
     syncFilterPanelState();
 };
 
+const initMobileAudio = () => {
+    const toggle = document.getElementById("mobile-audio-toggle");
+    const player = document.getElementById("ambient-player");
+
+    if (!toggle || !player) {
+        return;
+    }
+
+    const syncAudioPanel = (expanded) => {
+        player.classList.toggle("is-collapsed", !expanded);
+        toggle.setAttribute("aria-expanded", String(expanded));
+        toggle.textContent = expanded ? "Ocultar controles da trilha" : "Mostrar controles da trilha";
+    };
+
+    toggle.addEventListener("click", () => syncAudioPanel(player.classList.contains("is-collapsed")));
+    syncAudioPanel(false);
+};
+
 const initGlobalBookClicks = () => {
     document.body.addEventListener("click", (event) => {
         const saveButton = event.target.closest("[data-book-save]");
@@ -1589,6 +1607,7 @@ const init = async () => {
     initRecentInteractions();
     initMobileNavigation();
     initMobileFilters();
+    initMobileAudio();
     initGlobalBookClicks();
     updatePurchasePanel(featuredBooks[0]);
 
