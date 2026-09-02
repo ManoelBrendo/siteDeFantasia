@@ -16,7 +16,8 @@ const OPEN_LIBRARY_FIELDS = [
     "has_fulltext",
     "ia",
     "public_scan_b",
-    "subject"
+    "subject",
+    "language"
 ].join(",");
 
 const SUBJECT_TRANSLATIONS = new Map([
@@ -53,6 +54,18 @@ const SUBJECT_TRANSLATIONS = new Map([
     ["young adult fiction", "fantasia jovem"],
     ["sword and sorcery", "espada e feiticaria"]
 ]);
+
+const TITLE_TRANSLATIONS = new Map([
+    ["the king of elfland's daughter", "A Filha do Rei de Elfland"],
+    ["the princess and the goblin", "A Princesa e o Goblin"],
+    ["the well at the world's end", "O Poço no Fim do Mundo"],
+    ["alice's adventures in wonderland", "Alice no País das Maravilhas"],
+    ["the wonderful wizard of oz", "O Maravilhoso Mágico de Oz"],
+    ["peter and wendy", "Peter Pan"],
+    ["a wizard of earthsea", "Um Feiticeiro de Terramar"]
+]);
+
+const translateBookTitle = (title) => TITLE_TRANSLATIONS.get(String(title || "").replace(/\s+/g, " ").trim().toLowerCase()) || title;
 
 const OPEN_LICENSE_FALLBACKS = [
     {
@@ -464,7 +477,7 @@ const buildBookRecord = (doc, placeholderCover) => {
 
     return {
         id: doc.key.replace("/works/", "") || `${doc.title}-${doc.first_publish_year || "sem-ano"}`,
-        title: doc.title,
+        title: translateBookTitle(doc.title),
         originalTitle: doc.title,
         author,
         year,
@@ -507,6 +520,17 @@ const buildBookRecord = (doc, placeholderCover) => {
     };
 };
 
+const hasPortugueseEdition = (doc) => {
+    if (!Array.isArray(doc.language) || doc.language.length === 0) {
+        return true;
+    }
+
+    return doc.language.some((language) => {
+        const code = typeof language === "string" ? language : language.key || language.code || "";
+        return code === "por" || code.endsWith("/por");
+    });
+};
+
 export class OpenLibraryCatalogApi {
     constructor() {
         this.cache = new Map();
@@ -515,7 +539,8 @@ export class OpenLibraryCatalogApi {
 
     buildUrl({ query, page = 1, limit = 9 }) {
         const url = new URL(OPEN_LIBRARY_SEARCH_URL);
-        url.searchParams.set("q", query);
+        const normalizedQuery = query.includes("language:") ? query : `${query} language:por`;
+        url.searchParams.set("q", normalizedQuery);
         url.searchParams.set("fields", OPEN_LIBRARY_FIELDS);
         url.searchParams.set("page", String(page));
         url.searchParams.set("limit", String(limit));
@@ -554,7 +579,7 @@ export class OpenLibraryCatalogApi {
             total: payload.numFound || 0,
             page,
             books: (payload.docs || [])
-                .filter((doc) => doc.title && doc.key)
+                .filter((doc) => doc.title && doc.key && hasPortugueseEdition(doc))
                 .map((doc) => buildBookRecord(doc, this.placeholderCover))
         };
 

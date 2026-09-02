@@ -4,6 +4,7 @@ import { OpenLibraryCatalogApi } from "./open-library-api.js";
 const UI_STATE_KEY = "ui-state";
 const FAVORITES_KEY = "favorites";
 const RECENT_QUERIES_KEY = "recent-queries";
+const READING_STATUS_KEY = "reading-status";
 
 const buildQueryId = ({ query, page, limit }) => {
     return `${query}::${page}::${limit}`;
@@ -103,6 +104,20 @@ export class BosqueCatalogApi {
             : [bookId, ...favorites];
 
         return this.saveFavorites(nextFavorites);
+    }
+
+    async getReadingStatus() {
+        const statuses = await this.database.getState(READING_STATUS_KEY).catch(() => null);
+        return statuses && typeof statuses === "object" ? statuses : {};
+    }
+
+    async saveReadingStatus(statuses) {
+        const validStatuses = new Set(["want-to-read", "reading", "read"]);
+        const cleanedStatuses = Object.fromEntries(
+            Object.entries(statuses || {}).filter(([, status]) => validStatuses.has(status))
+        );
+        await this.database.setState(READING_STATUS_KEY, cleanedStatuses).catch(() => null);
+        return cleanedStatuses;
     }
 
     async getRecentQueries() {

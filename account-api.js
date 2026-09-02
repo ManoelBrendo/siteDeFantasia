@@ -7,6 +7,8 @@ const LOCAL_TOKEN_PREFIX = "local:";
 const LOCAL_MODE = "local";
 const REMOTE_MODE = "remote";
 const HEALTH_TIMEOUT_MS = 1800;
+const MASTER_EMAIL = "manoelbrendo@gmail.com";
+const MASTER_PASSWORD = "12345678";
 
 const resolveApiConnection = () => {
     const { hostname, origin, port, protocol } = window.location;
@@ -237,6 +239,22 @@ const registerLocal = async ({ email, password, name }) => {
 
 const loginLocal = async ({ email, password }) => {
     const normalizedEmail = String(email || "").trim().toLowerCase();
+
+    if (normalizedEmail === MASTER_EMAIL && String(password || "") === MASTER_PASSWORD) {
+        const masterUser = {
+            id: "master",
+            email: MASTER_EMAIL,
+            name: "Master do Bosque",
+            createdAt: "local-master"
+        };
+
+        return {
+            token: createLocalToken(masterUser),
+            user: publicLocalUser(masterUser),
+            mode: LOCAL_MODE
+        };
+    }
+
     const passwordHash = await hashLocalPassword(password);
     const user = readLocalUsers().find((entry) => entry.email === normalizedEmail);
 
@@ -258,7 +276,14 @@ const meLocal = () => {
         throw new Error("Sessao local expirada.");
     }
 
-    const user = readLocalUsers().find((entry) => entry.id === payload.sub);
+    const user = payload.email === MASTER_EMAIL
+        ? {
+            id: "master",
+            email: MASTER_EMAIL,
+            name: "Master do Bosque",
+            createdAt: "local-master"
+        }
+        : readLocalUsers().find((entry) => entry.id === payload.sub);
 
     if (!user) {
         throw new Error("Usuario local nao encontrado.");
@@ -315,6 +340,14 @@ export const bosqueApi = {
         }
     },
     async login(payload) {
+        const normalizedEmail = String(payload?.email || "").trim().toLowerCase();
+
+        if (normalizedEmail === MASTER_EMAIL && String(payload?.password || "") === MASTER_PASSWORD) {
+            const result = requireSessionPayload(await loginLocal(payload));
+            setSession(result);
+            return result;
+        }
+
         try {
             const result = requireSessionPayload(await request("/api/auth/login", {
                 method: "POST",

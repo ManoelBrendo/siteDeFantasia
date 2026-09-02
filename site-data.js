@@ -80,7 +80,7 @@ export const featuredBooks = [
     },
     {
         id: "well-world-end",
-        title: "O Poco no Fim do Mundo",
+        title: "O Poço no Fim do Mundo",
         originalTitle: "The Well at the World's End",
         author: "William Morris",
         year: "1896",
@@ -246,6 +246,72 @@ export const authorsCatalog = [
         startWith: "Lud-in-the-Mist.",
         legacy: "Virou referencia cult para escritores que procuram fantasia com estranheza e refinamento literario.",
         works: ["Lud-in-the-Mist"]
+    },
+    {
+        id: "lewis",
+        name: "C. S. Lewis",
+        status: "Renomado",
+        summary: "Construiu uma fantasia de portal marcada por simbolismo, aventura, alegoria e a descoberta de um mundo além do cotidiano.",
+        bestFor: "Quem quer uma entrada acessível, imaginativa e cheia de criaturas, reinos e escolhas morais.",
+        climate: "Aventureiro, simbólico e luminoso.",
+        startWith: "O Leão, a Feiticeira e o Guarda-Roupa.",
+        legacy: "As Crônicas de Nárnia se tornaram uma das portas mais populares para a fantasia de mundos paralelos.",
+        works: ["O Leão, a Feiticeira e o Guarda-Roupa", "A Viagem do Peregrino da Alvorada", "A Última Batalha"]
+    },
+    {
+        id: "eddison",
+        name: "E. R. Eddison",
+        status: "Cultuado",
+        summary: "Escreveu fantasias de escala mítica, linguagem arcaica e conflitos grandiosos entre reinos de beleza perigosa.",
+        bestFor: "Leitores que desejam épica antiga, prosa solene e disputas de poder em mundos inventados.",
+        climate: "Heroico, trágico e cerimonial.",
+        startWith: "A Serpente Uróboros.",
+        legacy: "Sua prosa influenciou a fantasia épica ao tratar o mundo imaginário como uma saga de proporções lendárias.",
+        works: ["A Serpente Uróboros", "Meysor de Zimiamvia"]
+    },
+    {
+        id: "peake",
+        name: "Mervyn Peake",
+        status: "Cultuado",
+        summary: "Criou um castelo labiríntico e uma fantasia gótica de atmosfera densa, personagens excêntricos e decadência familiar.",
+        bestFor: "Quem prefere ambientes sombrios, arquitetura imaginária e personagens mais estranhos do que heroicos.",
+        climate: "Gótico, claustrofóbico e barroco.",
+        startWith: "Titus Groan.",
+        legacy: "A trilogia de Gormenghast ampliou os limites da fantasia ao trocar a aventura convencional por atmosfera e obsessão.",
+        works: ["Titus Groan", "Gormenghast", "Titus Alone"]
+    },
+    {
+        id: "diana-wynne-jones",
+        name: "Diana Wynne Jones",
+        status: "Renomada",
+        summary: "Misturou humor, magia cotidiana, famílias improváveis e mundos paralelos em histórias inteligentes e acolhedoras.",
+        bestFor: "Leitores que querem fantasia inventiva, leve e cheia de personagens carismáticos.",
+        climate: "Brincalhão, mágico e caloroso.",
+        startWith: "O Castelo Animado.",
+        legacy: "Sua obra mostrou que fantasia juvenil pode ser sofisticada, engraçada e estruturalmente surpreendente.",
+        works: ["O Castelo Animado", "O Castelo no Ar", "A Casa dos Muitos Caminhos"]
+    },
+    {
+        id: "pratchett",
+        name: "Terry Pratchett",
+        status: "Renomado",
+        summary: "Usou uma cidade-mundo fantástica para satirizar costumes, instituições e os próprios clichês da literatura de fantasia.",
+        bestFor: "Quem busca humor, crítica social e um universo vasto que pode ser explorado por várias portas.",
+        climate: "Cômico, urbano e irreverente.",
+        startWith: "A Cor da Magia ou Mort.",
+        legacy: "Discworld provou que a fantasia cômica pode ter profundidade, continuidade e uma visão social própria.",
+        works: ["A Cor da Magia", "Mort", "Guardiões! Guardiões!"]
+    },
+    {
+        id: "clarke",
+        name: "Susanna Clarke",
+        status: "Contemporânea",
+        summary: "Reimagina a tradição inglesa de magia com erudição, melancolia e uma relação inquieta entre livros, história e encantamento.",
+        bestFor: "Quem gosta de fantasia histórica, magia sutil e narrativas com humor seco e atmosfera elegante.",
+        climate: "Histórico, melancólico e encantado.",
+        startWith: "Jonathan Strange & Mr Norrell.",
+        legacy: "Sua obra aproximou a fantasia contemporânea da tradição literária, do folclore inglês e da ficção histórica.",
+        works: ["Jonathan Strange & Mr Norrell", "Os Dentes do Cão"]
     }
 ];
 

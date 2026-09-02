@@ -15,6 +15,18 @@ const withErrorHandling = async (handler, request, response) => {
     }
 };
 
+const authAttempts = new Map();
+const checkAuthRateLimit = (request) => {
+    const key = request.socket.remoteAddress || "unknown";
+    const now = Date.now();
+    const recent = (authAttempts.get(key) || []).filter((timestamp) => now - timestamp < 15 * 60 * 1000);
+    if (recent.length >= 10) {
+        throw Object.assign(new Error("Muitas tentativas. Aguarde alguns minutos."), { status: 429 });
+    }
+    recent.push(now);
+    authAttempts.set(key, recent);
+};
+
 const requireUser = async (request) => {
     const user = await getAuthUser(request);
 
@@ -39,6 +51,7 @@ const routeApi = async (request, response) => {
     }
 
     if (request.method === "POST" && route === "/api/auth/register") {
+        checkAuthRateLimit(request);
         const payload = await readJsonBody(request);
         const user = await registerUser(payload);
         sendJson(response, 201, {
@@ -49,6 +62,7 @@ const routeApi = async (request, response) => {
     }
 
     if (request.method === "POST" && route === "/api/auth/login") {
+        checkAuthRateLimit(request);
         const payload = await readJsonBody(request);
         const user = await loginUser(payload);
         sendJson(response, 200, {
@@ -100,7 +114,7 @@ const routeApi = async (request, response) => {
 const server = createServer((request, response) => {
     if (request.method === "OPTIONS") {
         response.writeHead(204, {
-            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Origin": config.corsOrigin,
             "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
             "Access-Control-Allow-Headers": "Content-Type,Authorization"
         });

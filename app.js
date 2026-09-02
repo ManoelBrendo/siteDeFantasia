@@ -1,4 +1,4 @@
-import { BosqueCatalogApi } from "./catalog-api.js";
+import { BosqueCatalogApi } from "./catalog-api.js?v=authors-pagination-v2";
 import {
     DEFAULT_LABEL,
     DEFAULT_QUERY,
@@ -10,8 +10,8 @@ import {
     glossaryTerms,
     readingPaths,
     topicThemes
-} from "./site-data.js";
-import { recommendFromAnswers } from "./recommendation-engine.js";
+} from "./site-data.js?v=authors-pagination-v1";
+import { recommendBooksFromFavorites, recommendFromAnswers } from "./recommendation-engine.js?v=authors-pagination-v2";
 
 const api = new BosqueCatalogApi();
 const defaultFilters = Object.fromEntries(advancedFilters.map((group) => [group.id, group.defaultValue]));
@@ -35,6 +35,20 @@ const escapeHtml = (value) => {
         .replace(/'/g, "&#39;");
 };
 
+const sessionStartedAt = Date.now();
+const trackEvent = (name, params = {}) => {
+    const event = { name, params, timestamp: new Date().toISOString() };
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push(event);
+    if (typeof window.gtag === "function") {
+        window.gtag("event", name, params);
+    }
+    if (typeof window.plausible === "function") {
+        window.plausible(name, { props: params });
+    }
+    window.dispatchEvent(new CustomEvent("bosque:analytics", { detail: event }));
+};
+
 const listenToMediaChange = (query, handler) => {
     const mediaQuery = window.matchMedia(query);
 
@@ -48,6 +62,17 @@ const listenToMediaChange = (query, handler) => {
 };
 
 const elements = {
+    onboardingShell: document.getElementById("welcome-onboarding"),
+    onboardingClose: document.getElementById("onboarding-close"),
+    onboardingPrimary: document.getElementById("onboarding-primary"),
+    onboardingSecondary: document.getElementById("onboarding-secondary"),
+    guidedTour: document.getElementById("guided-tour"),
+    guidedTourProgress: document.getElementById("guided-tour-progress"),
+    guidedTourTitle: document.getElementById("guided-tour-title"),
+    guidedTourDescription: document.getElementById("guided-tour-description"),
+    guidedTourSkip: document.getElementById("guided-tour-skip"),
+    guidedTourPrevious: document.getElementById("guided-tour-previous"),
+    guidedTourNext: document.getElementById("guided-tour-next"),
     oraculoSection: getRequiredElement("oraculo"),
     compraSection: getRequiredElement("compra"),
     affinityQuestions: getRequiredElement("affinity-questions"),
@@ -62,7 +87,17 @@ const elements = {
     affinityReset: getRequiredElement("affinity-reset"),
     affinityProgress: getRequiredElement("affinity-progress"),
     affinityExplore: getRequiredElement("affinity-explore"),
+    heroCarousel: getRequiredElement("hero-carousel"),
+    heroCarouselImage: getRequiredElement("hero-carousel-image"),
+    heroCarouselTitle: getRequiredElement("hero-carousel-title"),
+    heroCarouselDescription: getRequiredElement("hero-carousel-description"),
+    heroCarouselPrevious: getRequiredElement("hero-carousel-previous"),
+    heroCarouselNext: getRequiredElement("hero-carousel-next"),
+    heroCarouselDots: getRequiredElement("hero-carousel-dots"),
     authorsGrid: getRequiredElement("authors-grid"),
+    authorsPaginationInfo: getRequiredElement("authors-pagination-info"),
+    authorsPrevious: getRequiredElement("authors-previous"),
+    authorsNext: getRequiredElement("authors-next"),
     authorFocusName: getRequiredElement("author-focus-name"),
     authorFocusSummary: getRequiredElement("author-focus-summary"),
     authorFocusBestFor: getRequiredElement("author-focus-best-for"),
@@ -87,6 +122,7 @@ const elements = {
     filterSummary: getRequiredElement("filter-summary"),
     clearFilters: getRequiredElement("clear-filters"),
     favoritesGrid: getRequiredElement("favorites-grid"),
+        favoriteRecommendations: getRequiredElement("favorite-recommendations"),
     favoritesEmpty: getRequiredElement("favorites-empty"),
     purchaseTitle: getRequiredElement("purchase-title"),
     purchaseOriginal: getRequiredElement("purchase-original"),
@@ -95,6 +131,8 @@ const elements = {
     purchaseCover: getRequiredElement("purchase-cover"),
     purchaseLink: getRequiredElement("purchase-link"),
     purchaseSave: getRequiredElement("purchase-save"),
+    purchaseShare: getRequiredElement("purchase-share"),
+    purchaseSimilarBooks: getRequiredElement("purchase-similar-books"),
     purchaseHint: getRequiredElement("purchase-hint"),
     purchaseSignalRow: getRequiredElement("purchase-signal-row"),
     purchaseDossierGrid: getRequiredElement("purchase-dossier-grid"),
@@ -125,12 +163,70 @@ const state = {
     affinityAnswers: new Map(),
     filters: { ...defaultFilters },
     activeAuthorId: authorsCatalog[0]?.id || "",
+    authorsPage: 1,
     glossaryQuery: "",
     favorites: [],
+        readingStatus: {},
     recentQueries: [],
     currentBookId: featuredBooks[0]?.id || "",
     lastSource: "remote",
     saveStateTimer: null
+};
+
+const heroGalleries = {
+    elfica: [
+        ["https://commons.wikimedia.org/wiki/Special:FilePath/Rackham_elves.jpg?width=900", "Bosque élfico", "Folhas, luar e uma estranheza suave para começar."],
+        ["https://commons.wikimedia.org/wiki/Special:FilePath/The%20Hunting%20of%20the%20Unicorn%20by%20Samuel%20Simes%2C%20Frontispiece%20to%20The%20King%20of%20Elfland%27s%20Daughter.png?width=900", "Feeria antiga", "Encanto, símbolos e reinos escondidos entre as páginas."],
+        ["https://commons.wikimedia.org/wiki/Special:FilePath/The%20wood%20beyond%20the%20world%20by%20William%20Morris%20%28cropped%29.jpg?width=900", "Estrada encantada", "Uma travessia verde para quem prefere descobrir sem pressa."]
+    ],
+    mitica: [
+        ["https://commons.wikimedia.org/wiki/Special:FilePath/The%20Well%20at%20the%20World%27s%20End%2C%20design%20by%20William%20Morris%2C%20Hammersmith%2C%20Kelmscott%20Press%2C%201896%20-%20National%20Gallery%20of%20Art%2C%20Washington%20-%20DSC09794.JPG?width=900", "Lenda ritual", "Memória oral, símbolos e um chamado que vem de muito longe."],
+        ["https://commons.wikimedia.org/wiki/Special:FilePath/Phantastes%20Title%20Page%201894.jpg?width=900", "Livro de mitos", "Uma porta para imagens antigas e histórias que se transformam."],
+        ["https://commons.wikimedia.org/wiki/Special:FilePath/Lilith%20a%20romance%20by%20George%20MacDonald.jpg?width=900", "Sonho e origem", "O fantástico como linguagem para atravessar o desconhecido."]
+    ],
+    medieval: [
+        ["https://commons.wikimedia.org/wiki/Special:FilePath/The%20Well%20at%20the%20World%27s%20End%2C%20design%20by%20William%20Morris%2C%20Hammersmith%2C%20Kelmscott%20Press%2C%201896%20-%20National%20Gallery%20of%20Art%2C%20Washington%20-%20DSC09794.JPG?width=900", "Estrada de aventura", "Horizonte aberto, companheiros e a promessa de uma jornada."],
+        ["https://commons.wikimedia.org/wiki/Special:FilePath/House%20of%20the%20Wolfings%20Title%20Page%20First%20Edition%201889.jpg?width=900", "Crônica de cavalaria", "Pedra, brasões e coragem para atravessar o reino."],
+        ["https://commons.wikimedia.org/wiki/Special:FilePath/Princess%20and%20the%20Goblin.jpg?width=900", "Castelo e maravilha", "Perigo e encanto reunidos em uma leitura de movimento."]
+    ],
+    iniciatica: [
+        ["https://commons.wikimedia.org/wiki/Special:FilePath/Phantastes%20Title%20Page%201894.jpg?width=900", "Paisagem interior", "Sonho, metáfora e uma travessia que começa dentro do leitor."],
+        ["https://commons.wikimedia.org/wiki/Special:FilePath/Lud-in-the-Mist%201926%20cover.jpg?width=900", "O lado de dentro", "Curiosidade e estranheza para quem lê buscando novas perguntas."],
+        ["https://commons.wikimedia.org/wiki/Special:FilePath/The%20wood%20beyond%20the%20world%20by%20William%20Morris%20%28cropped%29.jpg?width=900", "Travessia simbólica", "Uma imagem de passagem para encontrar seu próprio caminho."]
+    ]
+};
+
+let heroCarouselItems = heroGalleries.elfica;
+let heroCarouselIndex = 0;
+
+const renderHeroCarousel = () => {
+    const [image, title, description] = heroCarouselItems[heroCarouselIndex];
+    elements.heroCarousel.classList.add("is-changing");
+    window.setTimeout(() => {
+        elements.heroCarouselImage.src = image;
+        elements.heroCarouselImage.alt = title;
+        elements.heroCarouselTitle.textContent = title;
+        elements.heroCarouselDescription.textContent = description;
+        elements.heroCarouselDots.querySelectorAll(".carousel-dot").forEach((dot, index) => {
+            dot.classList.toggle("is-active", index === heroCarouselIndex);
+            dot.setAttribute("aria-current", index === heroCarouselIndex ? "true" : "false");
+        });
+        elements.heroCarousel.classList.remove("is-changing");
+    }, 140);
+};
+
+const setHeroGallery = (genre) => {
+    heroCarouselItems = heroGalleries[genre] || heroGalleries.elfica;
+    heroCarouselIndex = 0;
+    elements.heroCarouselDots.innerHTML = heroCarouselItems.map(([, title], index) => `
+        <button class="carousel-dot${index === 0 ? " is-active" : ""}" type="button" aria-label="Mostrar ${title}" aria-current="${index === 0 ? "true" : "false"}" data-hero-slide="${index}"></button>
+    `).join("");
+    renderHeroCarousel();
+};
+
+const moveHeroCarousel = (step) => {
+    heroCarouselIndex = (heroCarouselIndex + step + heroCarouselItems.length) % heroCarouselItems.length;
+    renderHeroCarousel();
 };
 
 const humanFilterLabel = (groupId, value) => {
@@ -319,6 +415,17 @@ const buildCuratedMarkup = (book) => `
     </article>
 `;
 
+const buildFavoriteMarkup = (book) => `${buildCuratedMarkup(book)}
+    <label class="reading-status-control" for="reading-status-${escapeHtml(book.id)}">
+        <span>Status de leitura</span>
+        <select id="reading-status-${escapeHtml(book.id)}" data-reading-status="${escapeHtml(book.id)}">
+            <option value="want-to-read"${state.readingStatus[book.id] === "want-to-read" ? " selected" : ""}>Quero ler</option>
+            <option value="reading"${state.readingStatus[book.id] === "reading" ? " selected" : ""}>Lendo</option>
+            <option value="read"${state.readingStatus[book.id] === "read" ? " selected" : ""}>Lido</option>
+        </select>
+    </label>
+`;
+
 const buildTopicMarkup = (topic) => `
     <button class="theme-card" type="button" data-query="${escapeHtml(topic.query)}" data-label="${escapeHtml(topic.label)}">
         <strong>${escapeHtml(topic.label)}</strong>
@@ -427,14 +534,43 @@ const renderTopics = () => {
     elements.topicsGrid.innerHTML = topicThemes.map(buildTopicMarkup).join("");
 };
 
+const applyGuidedSearch = ({ query, label }) => {
+    const safeLabel = label || prettyQuery(query) || DEFAULT_LABEL;
+    const safeQuery = query || DEFAULT_QUERY;
+    setActiveTheme(safeLabel, safeQuery, { syncInput: true });
+    runSearch({ query: safeQuery, page: 1, append: false, label: safeLabel });
+    trackEvent("guided_search_started", { label: safeLabel });
+    scrollToSection(elements.oraculoSection);
+};
+
 const renderAffinityQuestions = () => {
     elements.affinityQuestions.innerHTML = affinityQuestions.map(buildAffinityQuestionMarkup).join("");
 };
 
 const renderAuthors = () => {
-    elements.authorsGrid.innerHTML = authorsCatalog.map(buildAuthorCardMarkup).join("");
+    const authorsPerPage = 6;
+    const totalPages = Math.max(1, Math.ceil(authorsCatalog.length / authorsPerPage));
+    state.authorsPage = Math.min(Math.max(state.authorsPage, 1), totalPages);
+    const startIndex = (state.authorsPage - 1) * authorsPerPage;
+    const visibleAuthors = authorsCatalog.slice(startIndex, startIndex + authorsPerPage);
+    elements.authorsGrid.innerHTML = visibleAuthors.map(buildAuthorCardMarkup).join("");
+    elements.authorsPaginationInfo.textContent = `Página ${state.authorsPage} de ${totalPages} · ${authorsCatalog.length} autores`;
+    elements.authorsPrevious.disabled = state.authorsPage === 1;
+    elements.authorsNext.disabled = state.authorsPage === totalPages;
     syncAuthorSelection();
     renderAuthorFocus();
+};
+
+const initAuthorPagination = () => {
+    elements.authorsPrevious.addEventListener("click", () => {
+        state.authorsPage -= 1;
+        renderAuthors();
+    });
+    elements.authorsNext.addEventListener("click", () => {
+        state.authorsPage += 1;
+        renderAuthors();
+        elements.authorsGrid.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
 };
 
 const renderAuthorFocus = () => {
@@ -526,10 +662,19 @@ const renderFavorites = () => {
     }
 
     elements.favoritesEmpty.hidden = favoriteBooks.length > 0;
-    elements.favoritesGrid.innerHTML = favoriteBooks.map(buildCuratedMarkup).join("");
+    elements.favoritesGrid.innerHTML = favoriteBooks.map(buildFavoriteMarkup).join("");
+    const recommendations = recommendBooksFromFavorites({
+        favorites: favoriteBooks,
+        books: [...state.registry.values()],
+        limit: 3
+    });
+    elements.favoriteRecommendations.innerHTML = recommendations.length > 0
+        ? `<p class="recommendation-note">Baseado no que você guardou</p>${recommendations.map(buildCuratedMarkup).join("")}`
+        : "";
 
     if (favoriteBooks.length === 0) {
         elements.favoritesEmpty.textContent = "Guarde livros no relic\u00E1rio para montar sua trilha pessoal neste dispositivo.";
+        elements.favoriteRecommendations.innerHTML = "";
         return;
     }
 
@@ -655,6 +800,14 @@ const updatePurchasePanel = (bookInput) => {
             <p>${escapeHtml(motifLabel(book.filters.motivo))}</p>
         </div>
     `;
+    const similarBooks = recommendBooksFromFavorites({
+        favorites: [book],
+        books: [...state.registry.values()],
+        limit: 3
+    });
+    elements.purchaseSimilarBooks.innerHTML = similarBooks.length > 0
+        ? similarBooks.map((similarBook) => `<button class="similar-book-link" type="button" data-book-id="${escapeHtml(similarBook.id)}">${escapeHtml(similarBook.title)} · ${escapeHtml(similarBook.author)}</button>`).join("")
+        : "Nenhum livro semelhante carregado ainda.";
     syncFavoriteButtons();
 };
 
@@ -666,6 +819,10 @@ const renderResults = () => {
                     <div class="book-copy">
                         <h3>Nenhum livro apareceu com essa combinacao</h3>
                         <p class="book-description">Tente limpar os filtros ou mudar a busca para revelar outras trilhas do acervo.</p>
+                        <div class="book-actions">
+                            <button class="button secondary" type="button" data-empty-action="clear-filters">Limpar filtros</button>
+                            <button class="button ghost" type="button" data-empty-query="fantasia" data-empty-label="Explorar fantasia">Explorar fantasia</button>
+                        </div>
                     </div>
                 </div>
             </article>
@@ -715,6 +872,7 @@ const renderAffinityRecommendation = () => {
     elements.affinityExplore.dataset.label = recommendation.bestPath.focusLabel;
     elements.affinityExplore.textContent = `Explorar ${recommendation.bestPath.focusLabel}`;
     renderAffinityMap(recommendation.scoreMap);
+    setHeroGallery(recommendation.bestPath.id);
 };
 
 const applyActiveFilters = (books) => {
@@ -859,6 +1017,12 @@ const runSearch = async ({ query, append = false, page = 1, label } = {}) => {
         syncQueryUrl();
 
         if (!append) {
+            const firstSearch = sessionStorage.getItem("bosque_first_search_recorded") !== "true";
+            trackEvent("search_executed", { query, firstSearch, elapsedMs: Date.now() - sessionStartedAt });
+            sessionStorage.setItem("bosque_first_search_recorded", "true");
+        }
+
+        if (!append) {
             state.recentQueries = await api.pushRecentQuery({
                 query,
                 label: label || prettyQuery(query)
@@ -881,6 +1045,9 @@ const selectBookById = (id) => {
 
     if (selectedBook) {
         updatePurchasePanel(selectedBook);
+        const nextUrl = new URL(window.location.href);
+        nextUrl.searchParams.set("livro", selectedBook.id);
+        history.replaceState({}, "", nextUrl);
     }
 };
 
@@ -895,6 +1062,155 @@ const scheduleCatalogWarmup = (callback) => {
     }
 
     window.setTimeout(callback, 180);
+};
+
+const initOnboardingInteractions = () => {
+    const persistOnboarding = () => {
+        try {
+            window.localStorage.setItem("bosque_onboarding_seen", "true");
+        } catch {
+            // sem armazenamento local, a UI segue funcionando sem persistencia
+        }
+    };
+
+    const hideOnboarding = () => {
+        if (elements.onboardingShell) {
+            elements.onboardingShell.hidden = true;
+        }
+        persistOnboarding();
+    };
+
+    if (elements.onboardingShell) {
+        try {
+            const seen = window.localStorage.getItem("bosque_onboarding_seen") === "true";
+            elements.onboardingShell.hidden = seen;
+        } catch {
+            elements.onboardingShell.hidden = false;
+        }
+
+        if (!elements.onboardingShell.hidden) {
+            trackEvent("onboarding_impression");
+        }
+    }
+
+    elements.onboardingClose?.addEventListener("click", hideOnboarding);
+    elements.onboardingClose?.addEventListener("click", () => trackEvent("onboarding_closed"));
+    elements.onboardingSecondary?.addEventListener("click", () => {
+        trackEvent("onboarding_closed");
+        hideOnboarding();
+    });
+    elements.onboardingPrimary?.addEventListener("click", () => {
+        trackEvent("onboarding_primary_click");
+        hideOnboarding();
+        scrollToSection(elements.oraculoSection);
+        startGuidedTour();
+    });
+};
+
+const initGuidedTour = () => {
+    const steps = [
+        {
+            title: "Busque por uma vontade",
+            description: "Escreva algo como “quero ler fantasia épica” ou escolha uma intenção pronta.",
+            target: elements.searchInput
+        },
+        {
+            title: "Aplique filtros",
+            description: "Refine por clima, nível de leitura e motivo central para encontrar uma trilha mais precisa.",
+            target: optionalElements.filtersShell
+        },
+        {
+            title: "Salve no Relicário",
+            description: "Use Guardar em qualquer livro para montar sua trilha pessoal e continuar depois.",
+            target: elements.curatedGrid
+        }
+    ];
+    let stepIndex = 0;
+
+    const closeTour = () => {
+        elements.guidedTour.hidden = true;
+        window.sessionStorage.setItem("bosque_guided_tour_seen", "true");
+    };
+
+    const renderStep = () => {
+        const step = steps[stepIndex];
+        elements.guidedTourProgress.textContent = `Passo ${stepIndex + 1} de ${steps.length}`;
+        elements.guidedTourTitle.textContent = step.title;
+        elements.guidedTourDescription.textContent = step.description;
+        elements.guidedTourNext.textContent = stepIndex === steps.length - 1 ? "Concluir" : "Próximo";
+        step.target?.scrollIntoView({ behavior: "smooth", block: "center" });
+    };
+
+    window.startGuidedTour = () => {
+        if (window.sessionStorage.getItem("bosque_guided_tour_seen") === "true") {
+            return;
+        }
+        stepIndex = 0;
+        elements.guidedTour.hidden = false;
+        trackEvent("tour_step_view", { step: 1 });
+        renderStep();
+    };
+
+    elements.guidedTourNext?.addEventListener("click", () => {
+        if (stepIndex === steps.length - 1) {
+            trackEvent("tour_completed");
+            closeTour();
+            return;
+        }
+        stepIndex += 1;
+        trackEvent("tour_step_view", { step: stepIndex + 1 });
+        renderStep();
+    });
+    elements.guidedTourPrevious?.addEventListener("click", () => {
+        if (stepIndex === 0) {
+            return;
+        }
+        stepIndex -= 1;
+        trackEvent("tour_step_view", { step: stepIndex + 1 });
+        renderStep();
+    });
+    elements.guidedTourSkip?.addEventListener("click", () => {
+        trackEvent("tour_skipped", { step: stepIndex + 1 });
+        closeTour();
+    });
+};
+
+const initGuidedHomeInteractions = () => {
+    const activateSelection = (button, selectorClass) => {
+        document.querySelectorAll(`.${selectorClass}`).forEach((item) => {
+            item.classList.toggle("is-active", item === button);
+        });
+    };
+
+    document.querySelectorAll(".quick-start-button").forEach((button) => {
+        button.addEventListener("click", () => {
+            activateSelection(button, "quick-start-button");
+            applyGuidedSearch({
+                query: button.dataset.query || DEFAULT_QUERY,
+                label: button.dataset.label || button.textContent.trim()
+            });
+        });
+    });
+
+    document.querySelectorAll(".intent-tag").forEach((button) => {
+        button.addEventListener("click", () => {
+            document.querySelectorAll(".intent-tag").forEach((item) => item.classList.toggle("is-active", item === button));
+            applyGuidedSearch({
+                query: button.dataset.query || DEFAULT_QUERY,
+                label: button.dataset.label || button.textContent.trim()
+            });
+        });
+    });
+
+    document.querySelectorAll(".atmosphere-card").forEach((card) => {
+        card.addEventListener("click", () => {
+            activateSelection(card, "atmosphere-card");
+            applyGuidedSearch({
+                query: card.dataset.query || DEFAULT_QUERY,
+                label: card.dataset.label || card.textContent.trim()
+            });
+        });
+    });
 };
 
 const initSearchInteractions = () => {
@@ -939,6 +1255,19 @@ const initSearchInteractions = () => {
     elements.loadMoreButton.addEventListener("click", () => {
         runSearch({ query: state.query, page: state.page + 1, append: true, label: state.activeLabel });
     });
+
+    elements.resultsGrid.addEventListener("click", (event) => {
+        const action = event.target.closest("[data-empty-action]");
+        const queryButton = event.target.closest("[data-empty-query]");
+
+        if (action?.dataset.emptyAction === "clear-filters") {
+            elements.clearFilters.click();
+        }
+
+        if (queryButton) {
+            applyGuidedSearch({ query: queryButton.dataset.emptyQuery, label: queryButton.dataset.emptyLabel });
+        }
+    });
 };
 
 const initFilterInteractions = () => {
@@ -950,6 +1279,10 @@ const initFilterInteractions = () => {
         }
 
         state.filters[button.dataset.filterGroup] = button.dataset.filterValue;
+        trackEvent("filter_applied", {
+            group: button.dataset.filterGroup,
+            value: button.dataset.filterValue
+        });
         applyFiltersAndRender();
         setFiltersOpen(true);
         scheduleUiStateSave();
@@ -1024,6 +1357,22 @@ const initAffinityInteractions = () => {
     });
 };
 
+const initHeroCarousel = () => {
+    setHeroGallery("elfica");
+    elements.heroCarouselPrevious.addEventListener("click", () => moveHeroCarousel(-1));
+    elements.heroCarouselNext.addEventListener("click", () => moveHeroCarousel(1));
+    elements.heroCarouselDots.addEventListener("click", (event) => {
+        const button = event.target.closest("[data-hero-slide]");
+
+        if (!button) {
+            return;
+        }
+
+        heroCarouselIndex = Number(button.dataset.heroSlide);
+        renderHeroCarousel();
+    });
+};
+
 const initRecentInteractions = () => {
     elements.recentQueries.addEventListener("click", (event) => {
         const button = event.target.closest("[data-recent-query][data-recent-label]");
@@ -1092,6 +1441,7 @@ const initGlobalBookClicks = () => {
             api.toggleFavorite(bookSave)
                 .then((favorites) => {
                     state.favorites = favorites;
+                    trackEvent("favorite_toggled", { bookId: bookSave, active: favorites.includes(bookSave) });
                     syncFavoriteButtons();
                     renderFavorites();
                 })
@@ -1110,6 +1460,21 @@ const initGlobalBookClicks = () => {
         scrollToSection(elements.compraSection);
     });
 
+    document.body.addEventListener("change", (event) => {
+        const statusSelect = event.target.closest("[data-reading-status]");
+
+        if (!statusSelect) {
+            return;
+        }
+
+        state.readingStatus[statusSelect.dataset.readingStatus] = statusSelect.value;
+        api.saveReadingStatus(state.readingStatus).catch(() => null);
+        trackEvent("reading_status_changed", {
+            bookId: statusSelect.dataset.readingStatus,
+            status: statusSelect.value
+        });
+    });
+
     elements.purchaseSave.addEventListener("click", () => {
         if (!state.currentBookId) {
             return;
@@ -1118,10 +1483,42 @@ const initGlobalBookClicks = () => {
         api.toggleFavorite(state.currentBookId)
             .then((favorites) => {
                 state.favorites = favorites;
+                trackEvent("favorite_toggled", { bookId: state.currentBookId, active: favorites.includes(state.currentBookId) });
                 syncFavoriteButtons();
                 renderFavorites();
             })
             .catch(() => null);
+    });
+
+    elements.purchaseShare.addEventListener("click", async () => {
+        const book = getRegisteredBook(state.currentBookId);
+        if (!book) {
+            return;
+        }
+        const shareUrl = new URL(window.location.href);
+        shareUrl.searchParams.set("livro", book.id);
+        shareUrl.hash = "compra";
+        const shareData = { title: book.title, text: `Descubra ${book.title} no Bosque da Fantasia.`, url: shareUrl.toString() };
+        try {
+            if (navigator.share) {
+                await navigator.share(shareData);
+            } else {
+                await navigator.clipboard.writeText(shareData.url);
+                elements.purchaseShare.textContent = "Link copiado";
+                window.setTimeout(() => { elements.purchaseShare.textContent = "Compartilhar livro"; }, 1800);
+            }
+            trackEvent("book_shared", { bookId: book.id });
+        } catch {
+            elements.purchaseShare.textContent = "Compartilhamento cancelado";
+            window.setTimeout(() => { elements.purchaseShare.textContent = "Compartilhar livro"; }, 1800);
+        }
+    });
+
+    elements.purchaseSimilarBooks.addEventListener("click", (event) => {
+        const link = event.target.closest("[data-book-id]");
+        if (link) {
+            selectBookById(link.dataset.bookId);
+        }
     });
 };
 
@@ -1132,15 +1529,17 @@ const init = async () => {
         glossary: glossaryTerms
     }).catch(() => null);
 
-    const [savedUiState, savedFavorites, savedRecentQueries] = await Promise.all([
+    const [savedUiState, savedFavorites, savedRecentQueries, savedReadingStatus] = await Promise.all([
         api.loadUiState().catch(() => null),
         api.getFavorites().catch(() => []),
-        api.getRecentQueries().catch(() => [])
+        api.getRecentQueries().catch(() => []),
+        api.getReadingStatus().catch(() => ({}))
     ]);
 
     hydrateSavedState(savedUiState);
     state.favorites = savedFavorites;
     state.recentQueries = savedRecentQueries;
+    state.readingStatus = savedReadingStatus;
 
     renderCuratedShelf();
     renderTopics();
@@ -1152,8 +1551,13 @@ const init = async () => {
     renderFavorites();
     renderAffinityQuestions();
     syncAffinityChoices();
+    initHeroCarousel();
+    initGuidedTour();
+    initOnboardingInteractions();
+    initGuidedHomeInteractions();
     renderAffinityRecommendation();
     initAuthorInteractions();
+    initAuthorPagination();
     initGlossaryInteractions();
     initAffinityInteractions();
     initSearchInteractions();
@@ -1167,6 +1571,10 @@ const init = async () => {
     const queryFromUrl = new URLSearchParams(window.location.search).get("busca")
         || savedUiState?.query
         || DEFAULT_QUERY;
+    const bookFromUrl = new URLSearchParams(window.location.search).get("livro");
+    if (bookFromUrl && getRegisteredBook(bookFromUrl)) {
+        updatePurchasePanel(getRegisteredBook(bookFromUrl));
+    }
     const matchedTheme = resolveThemeByQuery(queryFromUrl);
     const initialLabel = matchedTheme?.label || savedUiState?.activeLabel || prettyQuery(queryFromUrl) || DEFAULT_LABEL;
 

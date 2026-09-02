@@ -25,17 +25,25 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <link rel="manifest" href="./manifest.webmanifest">
     <link rel="icon" href="./bosque-icon.svg" type="image/svg+xml">
-    <link rel="modulepreload" href="./app.js">
+    <link rel="modulepreload" href="./app.js?v=authors-pagination-v2">
     <link rel="modulepreload" href="./audio-player.js">
-    <link rel="modulepreload" href="./catalog-api.js">
+    <link rel="modulepreload" href="./catalog-api.js?v=authors-pagination-v2">
     <link rel="modulepreload" href="./library-db.js">
     <link rel="modulepreload" href="./open-library-api.js">
     <link rel="modulepreload" href="./pwa.js">
     <link rel="modulepreload" href="./site-data.js">
-    <link rel="modulepreload" href="./recommendation-engine.js">
+    <link rel="modulepreload" href="./recommendation-engine.js?v=authors-pagination-v2">
     <link rel="modulepreload" href="./fantasy-effects.js">
-    <link rel="modulepreload" href="./account-api.js?v=local-auth-v2">
-    <link rel="modulepreload" href="./account-panel.js?v=topbar-layout-v1">
+    <link rel="modulepreload" href="./account-api.js?v=local-auth-v3">
+    <link rel="modulepreload" href="./account-panel.js?v=public-entry-v3">
+    <script>
+        window.BOSQUE_ANALYTICS = {
+            provider: "",
+            id: "",
+            domain: ""
+        };
+    </script>
+    <script src="./analytics.js"></script>
     <script type="application/ld+json">
         {
             "@context": "https://schema.org",
@@ -112,7 +120,7 @@
             --radius-lg: 24px;
             --radius-md: 18px;
             --topbar-width: min(1280px, calc(100% - 2rem));
-            --content-width: min(1040px, calc(100% - 1.5rem));
+            --content-width: min(1200px, calc(100% - 2.5rem));
         }
 
         * {
@@ -350,12 +358,12 @@
         .hero {
             width: var(--content-width);
             margin: 0 auto;
-            max-width: 980px;
+            max-width: 1220px;
             padding: 2.1rem 0 1.15rem;
             display: grid;
-            grid-template-columns: minmax(0, 1fr) minmax(250px, 340px);
-            gap: clamp(1rem, 2.6vw, 1.45rem);
-            align-items: end;
+            grid-template-columns: minmax(0, 1.28fr) minmax(360px, 500px);
+            gap: clamp(1.1rem, 2.5vw, 1.8rem);
+            align-items: start;
         }
 
         .hero-copy {
@@ -439,26 +447,264 @@
             font-size: 0.9rem;
         }
 
+        .onboarding-shell {
+            width: var(--content-width);
+            margin: 0 auto 1rem;
+        }
+
+        .onboarding-card {
+            position: relative;
+            background: linear-gradient(180deg, rgba(13, 29, 24, 0.96), rgba(10, 17, 15, 0.96));
+            border: 1px solid rgba(220, 191, 131, 0.2);
+            border-radius: 28px;
+            box-shadow: var(--shadow);
+            padding: 1.4rem 1.35rem 1.1rem;
+            overflow: hidden;
+        }
+
+        .onboarding-card::before {
+            content: "";
+            position: absolute;
+            inset: 0 auto 0 0;
+            width: 4px;
+            background: linear-gradient(180deg, rgba(220, 191, 131, 0.9), rgba(158, 135, 98, 0.2));
+        }
+
+        .onboarding-card h2 {
+            margin: 0.3rem 0 1rem;
+            font-size: clamp(1.6rem, 3vw, 2.45rem);
+            line-height: 1.08;
+        }
+
+        .onboarding-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.9rem;
+        }
+
+        .onboarding-item {
+            background: rgba(255, 247, 230, 0.03);
+            border: 1px solid rgba(220, 191, 131, 0.16);
+            border-radius: 18px;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .onboarding-item span {
+            color: var(--gold-soft);
+            font-size: 0.72rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .onboarding-item strong {
+            color: var(--text);
+            font-size: 1rem;
+            line-height: 1.45;
+        }
+
+        .onboarding-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-top: 1.2rem;
+        }
+
+        .onboarding-close {
+            position: absolute;
+            top: 0.8rem;
+            right: 0.9rem;
+            width: 2.1rem;
+            height: 2.1rem;
+            background: rgba(255, 247, 230, 0.05);
+            border: 1px solid rgba(220, 191, 131, 0.18);
+            border-radius: 999px;
+            color: var(--text);
+            font-size: 1.35rem;
+            cursor: pointer;
+        }
+
+        .guided-tour {
+            position: fixed;
+            right: 1.25rem;
+            bottom: 1.25rem;
+            z-index: 30;
+            width: min(24rem, calc(100vw - 2rem));
+            padding: 1rem;
+            border: 1px solid rgba(220, 191, 131, 0.3);
+            border-radius: 20px;
+            background: rgba(8, 17, 13, 0.96);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+        }
+
+        .guided-tour[hidden] {
+            display: none;
+        }
+
+        .guided-tour h3 {
+            margin: 0.25rem 0 0.4rem;
+            font-size: 1.35rem;
+        }
+
+        .guided-tour p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 0.92rem;
+        }
+
+        .guided-tour-progress {
+            color: var(--gold-soft);
+            font-size: 0.72rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .guided-tour-actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 0.6rem;
+            margin-top: 0.85rem;
+        }
+
+        .guided-tour-actions .button {
+            min-height: 2.45rem;
+            padding: 0.55rem 0.85rem;
+        }
+
+        .quick-start-section {
+            padding-top: 2.5rem;
+        }
+
+        .quick-start-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1rem;
+            margin-top: 1.2rem;
+        }
+
+        .quick-start-button {
+            background: rgba(10, 17, 15, 0.82);
+            border: 1px solid rgba(220, 191, 131, 0.18);
+            border-radius: 22px;
+            padding: 1rem;
+            text-align: left;
+            color: var(--text);
+            cursor: pointer;
+            transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+        }
+
+        .quick-start-button:hover,
+        .quick-start-button:focus-visible,
+        .intent-tag:hover,
+        .intent-tag:focus-visible,
+        .atmosphere-card:hover,
+        .atmosphere-card:focus-visible {
+            transform: translateY(-2px);
+            border-color: rgba(220, 191, 131, 0.42);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.22);
+        }
+
+        .quick-start-button span {
+            display: block;
+            color: var(--gold-soft);
+            font-size: 0.74rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 0.45rem;
+        }
+
+        .quick-start-button strong {
+            display: block;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .intent-tag-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.7rem;
+            margin: 1rem 0 1.2rem;
+        }
+
+        .intent-tag {
+            background: rgba(255, 247, 230, 0.04);
+            border: 1px solid rgba(220, 191, 131, 0.18);
+            border-radius: 999px;
+            color: var(--text);
+            padding: 0.7rem 1rem;
+            cursor: pointer;
+            transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+        }
+
+        .intent-tag.is-active,
+        .quick-start-button.is-active,
+        .atmosphere-card.is-active {
+            background: rgba(220, 191, 131, 0.12);
+            border-color: rgba(220, 191, 131, 0.44);
+        }
+
+        .atmosphere-card {
+            width: 100%;
+            color: inherit;
+            font: inherit;
+            text-align: left;
+            cursor: pointer;
+            transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+        }
+
+        .reading-status-control {
+            display: grid;
+            gap: 0.35rem;
+            padding: 0.75rem 0.9rem 0.9rem;
+            color: var(--muted);
+            font-size: 0.78rem;
+        }
+
+        .reading-status-control select {
+            width: 100%;
+            min-height: 2.35rem;
+            padding: 0.45rem 0.6rem;
+            border: 1px solid rgba(220, 191, 131, 0.2);
+            border-radius: 10px;
+            background: rgba(7, 13, 11, 0.7);
+            color: var(--text);
+        }
+
+        .author-work-list .similar-book-link {
+            display: block;
+            color: var(--gold-soft);
+        }
+
+        .recommendation-note {
+            grid-column: 1 / -1;
+            margin: 0.5rem 0 0;
+            color: var(--gold-soft);
+        }
+
         .hero-stage {
             position: relative;
             padding: 1rem;
-            border-radius: 28px;
-            width: min(100%, 340px);
+            border-radius: 30px;
+            width: 100%;
+            min-height: 29rem;
             justify-self: end;
-            align-self: end;
-            border: 1px solid rgba(220, 191, 131, 0.16);
+            align-self: start;
+            margin-top: 0.35rem;
+            border: 1px solid rgba(220, 191, 131, 0.18);
             background:
-                radial-gradient(circle at top, rgba(221, 193, 131, 0.16), transparent 30%),
-                linear-gradient(180deg, rgba(18, 35, 29, 0.88), rgba(8, 15, 13, 0.95));
-            box-shadow: var(--shadow);
+                radial-gradient(circle at top, rgba(221, 193, 131, 0.2), transparent 34%),
+                linear-gradient(180deg, rgba(18, 35, 29, 0.95), rgba(8, 15, 13, 0.98));
+            box-shadow: 0 22px 68px rgba(3, 8, 7, 0.42);
             overflow: hidden;
         }
 
         .hero-stage::before {
             content: "";
             position: absolute;
-            inset: 0.75rem;
-            border-radius: 22px;
+            inset: 0.8rem;
+            border-radius: 24px;
             border: 1px solid rgba(220, 191, 131, 0.14);
             pointer-events: none;
         }
@@ -471,12 +717,80 @@
             gap: 0.75rem;
         }
 
+        .hero-carousel {
+            position: relative;
+        }
+
+        .hero-carousel .hero-visual {
+            min-height: 27rem;
+        }
+
+        .hero-carousel .hero-visual img {
+            transition: opacity 260ms ease, transform 700ms ease;
+        }
+
+        .hero-carousel.is-changing .hero-visual img {
+            opacity: 0.35;
+            transform: scale(1.04);
+        }
+
+        .hero-carousel-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.65rem;
+            margin-top: 0.75rem;
+        }
+
+        .carousel-button {
+            display: grid;
+            width: 2.4rem;
+            height: 2.4rem;
+            place-items: center;
+            flex: none;
+            border: 1px solid rgba(220, 191, 131, 0.25);
+            border-radius: 50%;
+            color: var(--gold-soft);
+            background: rgba(255, 247, 232, 0.06);
+            cursor: pointer;
+            transition: background 180ms ease, transform 180ms ease;
+        }
+
+        .carousel-button:hover,
+        .carousel-button:focus-visible {
+            background: rgba(220, 191, 131, 0.16);
+            transform: translateY(-2px);
+        }
+
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.42rem;
+        }
+
+        .carousel-dot {
+            width: 0.48rem;
+            height: 0.48rem;
+            padding: 0;
+            border: 1px solid rgba(220, 191, 131, 0.5);
+            border-radius: 50%;
+            background: transparent;
+            cursor: pointer;
+        }
+
+        .carousel-dot.is-active {
+            background: var(--gold-soft);
+            box-shadow: 0 0 0 3px rgba(220, 191, 131, 0.12);
+        }
+
         .hero-visual {
             position: relative;
             border-radius: 22px;
             overflow: hidden;
             min-height: 9.4rem;
-            background: rgba(255, 255, 255, 0.04);
+            background:
+                linear-gradient(135deg, rgba(38, 68, 53, 0.92), rgba(8, 18, 14, 0.96)),
+                url("https://commons.wikimedia.org/wiki/Special:FilePath/Rackham_elves.jpg?width=900") center / cover;
         }
 
         .hero-visual img {
@@ -484,34 +798,40 @@
             height: 100%;
             object-fit: cover;
             filter: saturate(0.92) contrast(1.05) brightness(0.88);
+            min-height: inherit;
         }
 
         .hero-visual-tall {
             grid-row: span 2;
-            min-height: 17.5rem;
+            min-height: 24rem;
         }
 
         .hero-plaque {
             position: absolute;
-            left: 1.1rem;
-            right: 1.1rem;
-            bottom: 1.1rem;
+            left: 1rem;
+            right: 1rem;
+            bottom: 1rem;
             padding: 1rem 1.1rem;
-            border-radius: 20px;
-            background: rgba(7, 13, 11, 0.62);
-            border: 1px solid rgba(220, 191, 131, 0.18);
+            border-radius: 18px;
+            background: rgba(7, 13, 11, 0.7);
+            border: 1px solid rgba(220, 191, 131, 0.2);
             backdrop-filter: blur(10px);
+            box-shadow: 0 14px 35px rgba(0, 0, 0, 0.18);
         }
 
         .hero-plaque strong {
             display: block;
             color: var(--gold-soft);
-            font-size: 1.05rem;
+            font-size: 1.16rem;
+            line-height: 1.2;
         }
 
         .hero-plaque span {
+            display: block;
             color: var(--mist);
-            font-size: 0.92rem;
+            font-size: 0.94rem;
+            line-height: 1.5;
+            margin-top: 0.35rem;
         }
 
         .section {
@@ -1392,6 +1712,33 @@
                 var(--panel);
         }
 
+        .authors-pagination {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.8rem;
+            margin-top: 1rem;
+            padding: 0.75rem;
+            border: 1px solid rgba(220, 191, 131, 0.14);
+            border-radius: 16px;
+            background: rgba(255, 247, 232, 0.03);
+        }
+
+        .authors-pagination-info {
+            color: var(--muted);
+            font-size: 0.86rem;
+        }
+
+        .authors-pagination-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .authors-pagination .button {
+            min-height: 2.35rem;
+            padding: 0.5rem 0.8rem;
+        }
+
         .author-focus-panel,
         .filters-shell,
         .recent-shell,
@@ -2056,12 +2403,18 @@
                 border-radius: 18px;
             }
 
+            .hero-carousel .hero-visual {
+                min-height: 19rem;
+            }
+
             .topbar,
             .hero-plaque {
                 backdrop-filter: none;
             }
 
             .hero-ritual,
+            .onboarding-grid,
+            .quick-start-grid,
             .panorama-grid,
             .affinity-choice-grid,
             .authors-grid,
@@ -2227,22 +2580,83 @@
                         <article><strong>3</strong><span>Pesquise autores, temas e criaturas em um acervo maior.</span></article>
                     </div>
                 </div>
-                <div class="hero-stage animate__animated animate__fadeInUp" aria-label="Painel visual do universo fantástico">
-                    <div class="hero-stage-grid">
+                <div class="hero-stage animate__animated animate__fadeInUp" aria-label="Carrossel visual da trilha escolhida">
+                    <div id="hero-carousel" class="hero-carousel" data-hero-carousel>
                         <figure class="hero-visual hero-visual-tall">
-                            <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Rackham_elves.jpg?width=900" alt="Ilustração histórica de elfos em um bosque" decoding="async" fetchpriority="high">
+                            <img id="hero-carousel-image" src="https://commons.wikimedia.org/wiki/Special:FilePath/Rackham_elves.jpg?width=900" alt="Ilustração histórica de elfos em um bosque" decoding="async" fetchpriority="high">
                             <figcaption class="hero-plaque">
-                                <strong>Tom élfico e crepuscular</strong>
-                                <span>Feeria, mata antiga e um brilho de lenda em volta dos livros.</span>
+                                <strong id="hero-carousel-title">Tom élfico e crepuscular</strong>
+                                <span id="hero-carousel-description">Feeria, mata antiga e um brilho de lenda em volta dos livros.</span>
                             </figcaption>
                         </figure>
-                        <figure class="hero-visual">
-                            <img src="https://commons.wikimedia.org/wiki/Special:FilePath/The%20Hunting%20of%20the%20Unicorn%20by%20Samuel%20Simes%2C%20Frontispiece%20to%20The%20King%20of%20Elfland%27s%20Daughter.png?width=720" alt="Frontispício histórico de A Filha do Rei de Elfland" loading="lazy" decoding="async">
-                        </figure>
-                        <figure class="hero-visual">
-                            <img src="https://commons.wikimedia.org/wiki/Special:FilePath/The%20Well%20at%20the%20World%27s%20End%2C%20design%20by%20William%20Morris%2C%20Hammersmith%2C%20Kelmscott%20Press%2C%201896%20-%20National%20Gallery%20of%20Art%2C%20Washington%20-%20DSC09794.JPG?width=720" alt="Edição histórica ornamentada de O Poço no Fim do Mundo" loading="lazy" decoding="async">
-                        </figure>
+                        <div class="hero-carousel-controls" aria-label="Controles do carrossel">
+                            <button class="carousel-button" id="hero-carousel-previous" type="button" aria-label="Imagem anterior">&#8592;</button>
+                            <div class="carousel-dots" id="hero-carousel-dots" aria-label="Imagens da trilha"></div>
+                            <button class="carousel-button" id="hero-carousel-next" type="button" aria-label="Próxima imagem">&#8594;</button>
+                        </div>
                     </div>
+                </div>
+            </section>
+
+            <section id="welcome-onboarding" class="onboarding-shell" aria-live="polite">
+                <div class="onboarding-card">
+                    <button id="onboarding-close" class="onboarding-close" type="button" aria-label="Fechar onboarding">×</button>
+                    <div class="eyebrow">Primeira visita</div>
+                    <h2>Comece pelo que você quer sentir.</h2>
+                    <div class="onboarding-grid">
+                        <article class="onboarding-item">
+                            <span>Descobrir por tema</span>
+                            <strong>Quero fantasia épica, mistério e magia viva.</strong>
+                        </article>
+                        <article class="onboarding-item">
+                            <span>Explorar por clima</span>
+                            <strong>Quero um bosque encantado, um reino sombrio ou uma jornada íntima.</strong>
+                        </article>
+                        <article class="onboarding-item">
+                            <span>Salvar e continuar depois</span>
+                            <strong>Guarde os favoritos e retorne quando quiser continuar a trilha.</strong>
+                        </article>
+                    </div>
+                    <div class="onboarding-actions">
+                        <button id="onboarding-primary" class="button primary" type="button">Começar a explorar</button>
+                        <button id="onboarding-secondary" class="button secondary" type="button">Entendi</button>
+                    </div>
+                </div>
+            </section>
+
+            <aside id="guided-tour" class="guided-tour" hidden aria-live="polite" aria-label="Tour guiado">
+                <span id="guided-tour-progress" class="guided-tour-progress">Passo 1 de 3</span>
+                <h3 id="guided-tour-title">Busque por uma vontade</h3>
+                <p id="guided-tour-description">Escreva algo como “quero ler fantasia épica” ou escolha uma intenção pronta.</p>
+                <div class="guided-tour-actions">
+                    <button id="guided-tour-skip" class="button ghost" type="button">Pular</button>
+                    <button id="guided-tour-previous" class="button ghost" type="button">Anterior</button>
+                    <button id="guided-tour-next" class="button primary" type="button">Próximo</button>
+                </div>
+            </aside>
+
+            <section id="quick-start" class="section quick-start-section" aria-labelledby="quick-start-titulo" data-aos="fade-up">
+                <div class="section-header">
+                    <div class="section-header-copy">
+                        <div class="eyebrow">Começo rapido</div>
+                        <h2 id="quick-start-titulo">Escolha por onde entrar hoje.</h2>
+                        <p>As trilhas abaixo evitam a indecisao inicial e levam o usuario diretamente ao que mais combina com o momento.</p>
+                    </div>
+                    <div class="knot" aria-hidden="true"></div>
+                </div>
+                <div class="quick-start-grid">
+                    <button class="quick-start-button" type="button" data-query="fantasia" data-label="Para iniciantes">
+                        <span>Para iniciantes</span>
+                        <strong>Um começo acolhedor para entrar no universo da fantasia.</strong>
+                    </button>
+                    <button class="quick-start-button" type="button" data-query="mistério mágico" data-label="Para quem ama mistério">
+                        <span>Para quem ama mistério</span>
+                        <strong>Enigmas, criaturas e segredos antigos para narrativas sedutoras.</strong>
+                    </button>
+                    <button class="quick-start-button" type="button" data-query="fantasia épica" data-label="Para quem gosta de épica">
+                        <span>Para quem gosta de épica</span>
+                        <strong>Reinos, caminhos e jornadas maiores do que a vida comum.</strong>
+                    </button>
                 </div>
             </section>
 
@@ -2255,22 +2669,29 @@
                     </div>
                     <div class="knot" aria-hidden="true"></div>
                 </div>
+                <div class="intent-tag-row" aria-label="Intencao de leitura">
+                    <button class="intent-tag" type="button" data-query="fantasia épica" data-label="Fantasia Épica">Fantasia Épica</button>
+                    <button class="intent-tag" type="button" data-query="mistério mágico" data-label="Mistério Mágico">Mistério Mágico</button>
+                    <button class="intent-tag" type="button" data-query="romance de fantasia" data-label="Romance de Fantasia">Romance de Fantasia</button>
+                    <button class="intent-tag" type="button" data-query="leitura leve" data-label="Leitura Leve">Leitura Leve</button>
+                    <button class="intent-tag" type="button" data-query="aventura sombria" data-label="Aventura Sombria">Aventura Sombria</button>
+                </div>
                 <div class="panorama-grid">
-                    <article class="lore-card">
-                        <span>Porta I</span>
+                    <button class="lore-card atmosphere-card" type="button" data-query="feeria" data-label="Sombrio">
+                        <span>Atmosfera I</span>
                         <h3>Feeria e encanto</h3>
                         <p>Ideal para quem quer elfos, bosques, reinos alem do mundo comum e uma sensacao de maravilha antiga.</p>
-                    </article>
-                    <article class="lore-card">
-                        <span>Porta II</span>
+                    </button>
+                    <button class="lore-card atmosphere-card" type="button" data-query="mitologia celta" data-label="Encantado">
+                        <span>Atmosfera II</span>
                         <h3>Mitologia celta e memoria oral</h3>
                         <p>Para leitores atraidos por sidhe, druidas, Avalon, simbolos antigos e historias que parecem ter sido guardadas por bardos.</p>
-                    </article>
-                    <article class="lore-card">
-                        <span>Porta III</span>
+                    </button>
+                    <button class="lore-card atmosphere-card" type="button" data-query="idade media" data-label="Épico">
+                        <span>Atmosfera III</span>
                         <h3>Idade Media sonhada</h3>
                         <p>Aqui entram cavaleiros, castelos, jornadas e livros com peso de cronica antiga.</p>
-                    </article>
+                    </button>
                 </div>
             </section>
 
@@ -2319,7 +2740,16 @@
                     <div class="knot" aria-hidden="true"></div>
                 </div>
                 <div class="authors-layout">
-                    <div id="authors-grid" class="authors-grid" aria-live="polite"></div>
+                    <div>
+                        <div id="authors-grid" class="authors-grid" aria-live="polite"></div>
+                        <div class="authors-pagination" aria-label="Paginação de autores">
+                            <span id="authors-pagination-info" class="authors-pagination-info">Página 1</span>
+                            <div class="authors-pagination-actions">
+                                <button id="authors-previous" class="button ghost" type="button" disabled>Anterior</button>
+                                <button id="authors-next" class="button secondary" type="button">Mais autores</button>
+                            </div>
+                        </div>
+                    </div>
                     <article class="author-focus-panel">
                         <div class="author-focus-copy">
                             <div class="eyebrow">Ficha do autor</div>
@@ -2393,6 +2823,7 @@
                 </div>
                 <div id="favorites-grid" class="featured-grid" aria-live="polite"></div>
                 <p id="favorites-empty" class="favorites-empty">Guarde livros no relicario para montar sua propria trilha pessoal neste dispositivo.</p>
+                <div id="favorite-recommendations" class="featured-grid" aria-live="polite"></div>
             </section>
 
             <section id="oraculo" class="section" aria-labelledby="oraculo-titulo" data-aos="fade-up">
@@ -2503,9 +2934,14 @@
                         <div class="purchase-actions">
                             <a id="purchase-link" class="button primary" href="#compra">Abrir link de compra</a>
                             <button id="purchase-save" class="button ghost" type="button" aria-pressed="false">Guardar no relicario</button>
+                            <button id="purchase-share" class="button ghost" type="button">Compartilhar livro</button>
                             <a class="button secondary" href="#oraculo">Voltar a busca</a>
                         </div>
                         <p id="purchase-hint" class="purchase-hint">Quando o link real estiver pronto, basta trocar o destino deste botao para a loja escolhida.</p>
+                        <div class="purchase-inline-note">
+                            <strong>Livros semelhantes</strong>
+                            <div id="purchase-similar-books" class="author-work-list" aria-live="polite"></div>
+                        </div>
                     </div>
                 </article>
             </section>
@@ -2576,7 +3012,7 @@
         }
     </script>
     <script type="module" src="./fantasy-effects.js"></script>
-    <script type="module" src="./account-panel.js?v=topbar-layout-v1"></script>
+    <script type="module" src="./account-panel.js?v=public-entry-v3"></script>
     <script type="module">
         import { initAudioPlayer } from "./audio-player.js";
         import { initPwaFeatures } from "./pwa.js";
@@ -2593,6 +3029,6 @@
             console.error("Falha ao iniciar os recursos PWA:", error);
         }
     </script>
-    <script type="module" src="./app.js"></script>
+    <script type="module" src="./app.js?v=authors-pagination-v2"></script>
 </body>
 </html>

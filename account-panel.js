@@ -1,4 +1,4 @@
-import { bosqueApi } from "./account-api.js?v=local-auth-v2";
+import { bosqueApi } from "./account-api.js?v=local-auth-v3";
 import { BosqueLibraryDb } from "./library-db.js";
 import { affinityQuestions, readingPaths } from "./site-data.js";
 import { recommendFromAnswers } from "./recommendation-engine.js";
@@ -29,7 +29,15 @@ style.textContent = `
             radial-gradient(circle at 50% 30%, rgba(240, 223, 176, 0.12), transparent 28%),
             radial-gradient(circle at 16% 74%, rgba(139, 186, 153, 0.14), transparent 24%),
             rgba(4, 8, 7, 0.88);
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
         transition: opacity 560ms ease, visibility 560ms ease;
+    }
+    .auth-gate.is-required {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
     }
     .auth-gate.is-open {
         opacity: 0;
@@ -1052,10 +1060,12 @@ const showDeniedLogin = () => {
 const lockSite = () => {
     document.body.classList.add("auth-locked");
     ensureAuthGate().classList.remove("is-open");
+    ensureAuthGate().classList.add("is-required");
 };
 
 const unlockSite = ({ withPortal = false } = {}) => {
     const gate = ensureAuthGate();
+    gate.classList.remove("is-required");
 
     if (withPortal) {
         openLoginPortal();
@@ -1159,7 +1169,7 @@ const initAuthGate = async () => {
 
     if (!bosqueApi.getToken()) {
         closeAccountWidget();
-        lockSite();
+        unlockSite();
         return;
     }
 
@@ -1167,8 +1177,8 @@ const initAuthGate = async () => {
 
     try {
         const { user } = await bosqueApi.me();
-        await renderAccountWidget(user, { refresh: true });
         unlockSite();
+        renderAccountWidget(user, { refresh: true }).catch(() => null);
     } catch {
         bosqueApi.clearSession();
         closeAccountWidget();
