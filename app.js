@@ -109,6 +109,7 @@ const elements = {
     glossaryCount: getRequiredElement("glossary-count"),
     glossaryGrid: getRequiredElement("glossary-grid"),
     curatedGrid: getRequiredElement("curated-grid"),
+    curatedTabs: document.querySelectorAll("[data-curated-category]"),
     topicsGrid: getRequiredElement("topics-grid"),
     searchForm: getRequiredElement("catalog-search-form"),
     searchInput: getRequiredElement("catalog-search"),
@@ -169,6 +170,7 @@ const state = {
         readingStatus: {},
     recentQueries: [],
     currentBookId: featuredBooks[0]?.id || "",
+    curatedCategory: "start",
     lastSource: "remote",
     saveStateTimer: null
 };
@@ -523,11 +525,32 @@ const buildFilterGroupMarkup = (group) => `
 `;
 
 const renderCuratedShelf = () => {
-    const sortedBooks = sortBooksByTitle(featuredBooks.map(normalizeBook));
+    const books = featuredBooks.map(normalizeBook);
+    const categoryBooks = state.curatedCategory === "popular"
+        ? books.filter((book) => book.difficultyKey === "entrada" || book.publicDomain)
+        : state.curatedCategory === "recommended"
+            ? books.filter((book) => book.paths?.includes("elfica") || book.paths?.includes("iniciatica"))
+            : books;
+    const sortedBooks = sortBooksByTitle(categoryBooks.length > 0 ? categoryBooks : books);
     registerBooks(sortedBooks);
     elements.curatedGrid.innerHTML = sortedBooks.map(buildCuratedMarkup).join("");
     hydrateBookImages(elements.curatedGrid);
+    elements.curatedTabs.forEach((tab) => {
+        const active = tab.dataset.curatedCategory === state.curatedCategory;
+        tab.classList.toggle("is-active", active);
+        tab.setAttribute("aria-selected", String(active));
+    });
     syncFavoriteButtons();
+};
+
+const initCuratedShelf = () => {
+    elements.curatedTabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+            state.curatedCategory = tab.dataset.curatedCategory;
+            renderCuratedShelf();
+            trackEvent("curated_shelf_selected", { category: state.curatedCategory });
+        });
+    });
 };
 
 const renderTopics = () => {
@@ -1542,6 +1565,7 @@ const init = async () => {
     state.readingStatus = savedReadingStatus;
 
     renderCuratedShelf();
+    initCuratedShelf();
     renderTopics();
     renderAuthors();
     elements.glossarySearch.value = state.glossaryQuery;

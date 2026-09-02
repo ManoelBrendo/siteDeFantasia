@@ -25,7 +25,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <link rel="manifest" href="./manifest.webmanifest">
     <link rel="icon" href="./bosque-icon.svg" type="image/svg+xml">
-    <link rel="modulepreload" href="./app.js?v=authors-pagination-v2">
+    <link rel="modulepreload" href="./app.js?v=curated-shelves-v1">
     <link rel="modulepreload" href="./audio-player.js">
     <link rel="modulepreload" href="./catalog-api.js?v=authors-pagination-v2">
     <link rel="modulepreload" href="./library-db.js">
@@ -680,6 +680,31 @@
         .recommendation-note {
             grid-column: 1 / -1;
             margin: 0.5rem 0 0;
+            color: var(--gold-soft);
+        }
+
+        .curated-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.65rem;
+            margin: 1rem 0 1.25rem;
+        }
+
+        .curated-tab {
+            min-height: 2.5rem;
+            padding: 0.55rem 0.9rem;
+            border: 1px solid rgba(220, 191, 131, 0.18);
+            border-radius: 999px;
+            background: rgba(255, 247, 232, 0.04);
+            color: var(--mist);
+            cursor: pointer;
+        }
+
+        .curated-tab.is-active,
+        .curated-tab:hover,
+        .curated-tab:focus-visible {
+            border-color: rgba(220, 191, 131, 0.44);
+            background: rgba(220, 191, 131, 0.12);
             color: var(--gold-soft);
         }
 
@@ -2809,6 +2834,11 @@
                     </div>
                     <div class="knot" aria-hidden="true"></div>
                 </div>
+                <div class="curated-tabs" role="tablist" aria-label="Curadorias da estante">
+                    <button class="curated-tab is-active" type="button" role="tab" aria-selected="true" data-curated-category="start">Para começar</button>
+                    <button class="curated-tab" type="button" role="tab" aria-selected="false" data-curated-category="popular">Mais populares</button>
+                    <button class="curated-tab" type="button" role="tab" aria-selected="false" data-curated-category="recommended">Recomendados para você</button>
+                </div>
                 <div id="curated-grid" class="featured-grid" aria-live="polite"></div>
             </section>
 
@@ -3029,6 +3059,6 @@
             console.error("Falha ao iniciar os recursos PWA:", error);
         }
     </script>
-    <script type="module" src="./app.js?v=authors-pagination-v2"></script>
+    <script type="module" src="./app.js?v=curated-shelves-v1"></script>
 </body>
 </html>
